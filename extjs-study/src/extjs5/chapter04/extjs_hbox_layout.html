@@ -1,0 +1,37 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/6
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 4. HBox Layout</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				width: 500,
+				height: 500,
+				title: "Horizontal Layout",
+				layout: {
+					type: 'hbox'
+					,align: 'stretch' // stretch가 없을 경우 높이 100%가 되지 않음
+				},
+				items: [
+					 {title: 'First',   flex: 2,   html: 'page 1'}
+					,{title: 'Seconde', flex: 1,   html: 'page 2'}
+					,{title: 'Third',   flex: 0.5, html: 'page 3'}
+					,{title: 'Fourth',  flex: 0.5, html: 'page 4'}
+				],
+				renderTo: Ext.getBody()
+			});
+		})
+	</script>
+</head>
+
+<body></body>
+
+</html>

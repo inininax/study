@@ -1,0 +1,30 @@
+services:
+  redis:
+    image: redis:7.0
+    container_name: my-redis
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
+    env_file:
+      - .env
+
+    command: >
+      sh -c "redis-server /usr/local/etc/redis/redis.conf
+      --requirepass \$REDIS_PASSWORD"
+
+    volumes:
+      # (1) 데이터 영속화 볼륨
+      - redis-data:/data
+
+      # (2) 커스텀 설정 파일 마운트
+      # 공식 redis 이미지에서는 /usr/local/etc/redis/ 이하 설정 파일을 자동 로드
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "PING"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  redis-data:

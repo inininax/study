@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Accordion Component
+   Usage: .ds-accordion > .ds-accordion-item+
+          Add .ds-open to .ds-accordion-item to expand
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Container
+   -------------------------------------------------------------------------- */
+
+.ds-accordion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Item
+   -------------------------------------------------------------------------- */
+
+.ds-accordion-item {
+  border-bottom: var(--border-width-thin) solid var(--color-border-subtle);
+}
+
+.ds-accordion-item:first-child {
+  border-top: var(--border-width-thin) solid var(--color-border-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Trigger (clickable header)
+   -------------------------------------------------------------------------- */
+
+.ds-accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  width: 100%;
+  padding: var(--spacing-4) var(--spacing-2);
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--duration-normal) var(--easing-default);
+}
+
+.ds-accordion-trigger:hover {
+  color: var(--color-interactive-default);
+}
+
+.ds-accordion-trigger:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Chevron Indicator (::after pseudo-element)
+   -------------------------------------------------------------------------- */
+
+.ds-accordion-trigger::after {
+  content: "";
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--color-text-secondary);
+  border-bottom: 2px solid var(--color-text-secondary);
+  transform: rotate(45deg);
+  transition: transform var(--duration-normal) var(--easing-default),
+              border-color var(--duration-normal) var(--easing-default);
+  margin-bottom: 2px;
+}
+
+.ds-accordion-trigger:hover::after {
+  border-color: var(--color-interactive-default);
+}
+
+/* --------------------------------------------------------------------------
+   Content (hidden by default)
+   -------------------------------------------------------------------------- */
+
+.ds-accordion-content {
+  display: none;
+  padding: 0 var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* --------------------------------------------------------------------------
+   Open State
+   -------------------------------------------------------------------------- */
+
+.ds-accordion-item.ds-open .ds-accordion-content {
+  display: block;
+}
+
+.ds-accordion-item.ds-open .ds-accordion-trigger {
+  color: var(--color-interactive-default);
+}
+
+.ds-accordion-item.ds-open .ds-accordion-trigger::after {
+  transform: rotate(-135deg);
+  margin-bottom: -4px;
+  border-color: var(--color-interactive-default);
+}
+
+/* --------------------------------------------------------------------------
+   Disabled State
+   -------------------------------------------------------------------------- */
+
+.ds-accordion-trigger:disabled,
+.ds-accordion-trigger[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: var(--opacity-50);
+  color: var(--color-text-disabled);
+}
+
+/* --------------------------------------------------------------------------
+   Flush Variant (no outer border)
+   -------------------------------------------------------------------------- */
+
+.ds-accordion-flush .ds-accordion-item:first-child {
+  border-top: none;
+}
+
+.ds-accordion-flush .ds-accordion-item:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,23 @@
+{
+  "name": "extjs-example",
+  "version": "1.0.0",
+  "description": "extjs 학습을 위한 예제들입니다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meant4i/extjs-example.git"
+  },
+  "author": "meant4i",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meant4i/extjs-example/issues"
+  },
+  "homepage": "https://github.com/meant4i/extjs-example#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "glob": "^7.1.3"
+  }
+}

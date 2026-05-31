@@ -1,0 +1,165 @@
+// ============================================
+// 예제 08: Docker Pipeline - Docker와 함께 사용
+// ============================================
+// Docker 컨테이너를 활용하여 빌드 환경을
+// 구성하고 사용하는 예제입니다.
+
+pipeline {
+    // Docker agent를 사용하여 특정 환경에서 실행
+    // agent {
+    //     docker {
+    //         image 'node:18-alpine'
+    //         args '-v /tmp:/tmp'
+    //     }
+    // }
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'my-app'
+        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        REGISTRY = 'docker.io'
+        CONTAINER_NAME = 'my-app-container'
+    }
+
+    stages {
+        stage('Docker Info') {
+            steps {
+                echo '=== Docker 환경 확인 ==='
+                sh '''
+                    echo "Docker 버전:"
+                    docker --version || echo "Docker not installed"
+                    echo ""
+                    echo "Docker 이미지: ${DOCKER_IMAGE}"
+                    echo "Docker 태그: ${DOCKER_TAG}"
+                '''
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo '=== Docker 이미지 빌드 ==='
+
+                // Dockerfile이 있는 경우:
+                // sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+
+                // 또는 docker 빌드 에이전트 사용:
+                /*
+                dockerImage = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                */
+
+                sh "echo 'Building Docker image...'"
+                sh "echo '${DOCKER_IMAGE}:${DOCKER_TAG} created'"
+            }
+        }
+
+        stage('Docker Test') {
+            steps {
+                echo '=== Docker 컨테이너에서 테스트 ==='
+
+                // Docker 컨테이너 내에서 명령 실행 예시
+                /*
+                docker.image('node:18-alpine').inside {
+                    sh 'node --version'
+                    sh 'npm --version'
+                    sh 'npm install'
+                    sh 'npm test'
+                }
+                */
+
+                // 또는 python 예시:
+                /*
+                docker.image('python:3.11-slim').inside {
+                    sh 'python --version'
+                    sh 'pip install -r requirements.txt'
+                    sh 'pytest'
+                }
+                */
+
+                sh 'echo "Running tests in Docker container..."'
+                sh 'echo "Tests passed!"'
+            }
+        }
+
+        stage('Docker Push') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '=== Docker 이미지 푸시 ==='
+
+                // 크레덴셜 사용 (Jenkins에 Docker Hub 로그인 정보 등록 필요)
+                /*
+                docker.withRegistry("https://${REGISTRY}", 'docker-hub-credentials') {
+                    dockerImage.push()
+                    dockerImage.push('latest')
+                }
+                */
+
+                sh "echo 'Pushing ${DOCKER_IMAGE}:${DOCKER_TAG} to registry...'"
+                sh "echo 'Image pushed successfully'"
+            }
+        }
+
+        stage('Docker Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '=== Docker 컨테이너 배포 ==='
+
+                // 컨테이너 실행 예시:
+                /*
+                sh """
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
+                    docker run -d \\
+                        --name ${CONTAINER_NAME} \\
+                        -p 8080:8080 \\
+                        -e NODE_ENV=production \\
+                        ${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
+                */
+
+                sh "echo 'Deploying container...'"
+                sh "echo 'Container ${CONTAINER_NAME} started on port 8080'"
+            }
+        }
+
+        stage('Docker Compose') {
+            steps {
+                echo '=== Docker Compose 예제 ==='
+
+                // docker-compose 사용 예시:
+                /*
+                sh 'docker-compose up -d'
+                sh 'docker-compose ps'
+                // 테스트 실행
+                sh 'docker-compose run test-runner'
+                // 정리
+                sh 'docker-compose down'
+                */
+
+                sh 'echo "docker-compose commands would run here"'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Docker 파이프라인이 성공적으로 완료되었습니다!'
+            echo "이미지: ${DOCKER_IMAGE}:${DOCKER_TAG}"
+        }
+        failure {
+            echo 'Docker 파이프라인이 실패했습니다.'
+        }
+        always {
+            // 실제 환경에서는 필요할 때만 Docker 리소스를 정리합니다.
+            // 예: docker system prune -f
+            sh '''
+                echo "Cleaning up Docker resources..."
+                echo "Dry run: docker system prune -f"
+                echo "Cleanup complete"
+            '''
+        }
+    }
+}

@@ -1,0 +1,262 @@
+/* ==========================================================================
+   Checkbox & Radio Components
+   Pattern: <label class="ds-checkbox-label">
+               <input type="checkbox" class="ds-checkbox">
+               <span>Label text</span>
+            </label>
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Shared control base (checkbox + radio)
+   -------------------------------------------------------------------------- */
+
+.ds-checkbox,
+.ds-radio {
+  /* Hide the native control but keep it accessible */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The visible control is rendered on the label's ::before / ::after via a
+   sibling span. We use a wrapper label pattern instead to keep HTML simple. */
+
+.ds-checkbox-label,
+.ds-radio-label {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  user-select: none;
+}
+
+/* The visual indicator — rendered as the first child span (or ::before on the label) */
+.ds-checkbox-label::before,
+.ds-radio-label::before {
+  content: "";
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px; /* optical alignment with text baseline */
+  background-color: var(--color-bg-elevated);
+  border: var(--border-width-thin) solid var(--color-border-default);
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default);
+}
+
+.ds-checkbox-label::before {
+  border-radius: var(--radius-sm);
+}
+
+.ds-radio-label::before {
+  border-radius: var(--radius-full);
+}
+
+/* Checkmark via ::after on the label */
+.ds-checkbox-label::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 7px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid var(--color-text-on-brand);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* Radio dot via ::after on the label */
+.ds-radio-label::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-text-on-brand);
+  border-radius: var(--radius-full);
+}
+
+/* Position labels relatively so ::after can be absolute */
+.ds-checkbox-label,
+.ds-radio-label {
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   Checked states
+   -------------------------------------------------------------------------- */
+
+.ds-checkbox:checked + .ds-checkbox-label::before,
+.ds-checkbox:checked ~ .ds-checkbox-label::before,
+.ds-checkbox[aria-checked="true"] + .ds-checkbox-label::before,
+.ds-checkbox[aria-checked="true"] ~ .ds-checkbox-label::before {
+  background-color: var(--color-interactive-default);
+  border-color: var(--color-interactive-default);
+}
+
+.ds-checkbox:checked + .ds-checkbox-label::after,
+.ds-checkbox:checked ~ .ds-checkbox-label::after,
+.ds-checkbox[aria-checked="true"] + .ds-checkbox-label::after,
+.ds-checkbox[aria-checked="true"] ~ .ds-checkbox-label::after {
+  display: block;
+}
+
+.ds-radio:checked + .ds-radio-label::before,
+.ds-radio:checked ~ .ds-radio-label::before,
+.ds-radio[aria-checked="true"] + .ds-radio-label::before,
+.ds-radio[aria-checked="true"] ~ .ds-radio-label::before {
+  background-color: var(--color-interactive-default);
+  border-color: var(--color-interactive-default);
+}
+
+.ds-radio:checked + .ds-radio-label::after,
+.ds-radio:checked ~ .ds-radio-label::after,
+.ds-radio[aria-checked="true"] + .ds-radio-label::after,
+.ds-radio[aria-checked="true"] ~ .ds-radio-label::after {
+  display: block;
+}
+
+/* Indeterminate checkbox */
+.ds-checkbox:indeterminate + .ds-checkbox-label::before,
+.ds-checkbox:indeterminate ~ .ds-checkbox-label::before {
+  background-color: var(--color-interactive-default);
+  border-color: var(--color-interactive-default);
+}
+
+.ds-checkbox:indeterminate + .ds-checkbox-label::after,
+.ds-checkbox:indeterminate ~ .ds-checkbox-label::after {
+  display: block;
+  width: 8px;
+  height: 0;
+  border-right: none;
+  border-bottom: none;
+  border-top: 2px solid var(--color-text-on-brand);
+  top: 11px;
+  left: 4px;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   Hover states
+   -------------------------------------------------------------------------- */
+
+.ds-checkbox:not(:disabled) + .ds-checkbox-label:hover::before,
+.ds-checkbox:not(:disabled) ~ .ds-checkbox-label:hover::before,
+.ds-radio:not(:disabled) + .ds-radio-label:hover::before,
+.ds-radio:not(:disabled) ~ .ds-radio-label:hover::before {
+  border-color: var(--color-interactive-default);
+}
+
+/* --------------------------------------------------------------------------
+   Focus states
+   -------------------------------------------------------------------------- */
+
+.ds-checkbox:focus-visible + .ds-checkbox-label::before,
+.ds-checkbox:focus-visible ~ .ds-checkbox-label::before,
+.ds-radio:focus-visible + .ds-radio-label::before,
+.ds-radio:focus-visible ~ .ds-radio-label::before {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+/* --------------------------------------------------------------------------
+   Disabled states
+   -------------------------------------------------------------------------- */
+
+.ds-checkbox:disabled + .ds-checkbox-label,
+.ds-checkbox:disabled ~ .ds-checkbox-label,
+.ds-radio:disabled + .ds-radio-label,
+.ds-radio:disabled ~ .ds-radio-label {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-checkbox:disabled + .ds-checkbox-label::before,
+.ds-checkbox:disabled ~ .ds-checkbox-label::before,
+.ds-radio:disabled + .ds-radio-label::before,
+.ds-radio:disabled ~ .ds-radio-label::before {
+  background-color: var(--color-bg-disabled);
+  border-color: var(--color-border-disabled);
+}
+
+.ds-checkbox:disabled:checked + .ds-checkbox-label::before,
+.ds-checkbox:disabled:checked ~ .ds-checkbox-label::before,
+.ds-radio:disabled:checked + .ds-radio-label::before,
+.ds-radio:disabled:checked ~ .ds-radio-label::before {
+  background-color: var(--color-interactive-disabled);
+  border-color: var(--color-interactive-disabled);
+}
+
+/* --------------------------------------------------------------------------
+   Error states
+   -------------------------------------------------------------------------- */
+
+.ds-checkbox-error + .ds-checkbox-label::before,
+.ds-checkbox-error ~ .ds-checkbox-label::before,
+.ds-radio-error + .ds-radio-label::before,
+.ds-radio-error ~ .ds-radio-label::before {
+  border-color: var(--color-status-error);
+}
+
+.ds-checkbox-error:checked + .ds-checkbox-label::before,
+.ds-checkbox-error:checked ~ .ds-checkbox-label::before,
+.ds-radio-error:checked + .ds-radio-label::before,
+.ds-radio-error:checked ~ .ds-radio-label::before {
+  background-color: var(--color-status-error);
+  border-color: var(--color-status-error);
+}
+
+.ds-checkbox-error:focus-visible + .ds-checkbox-label::before,
+.ds-checkbox-error:focus-visible ~ .ds-checkbox-label::before,
+.ds-radio-error:focus-visible + .ds-radio-label::before,
+.ds-radio-error:focus-visible ~ .ds-radio-label::before {
+  outline-color: var(--color-status-error);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-status-error);
+}
+
+/* --------------------------------------------------------------------------
+   Checkbox Group / Radio Group
+   -------------------------------------------------------------------------- */
+
+.ds-checkbox-group,
+.ds-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.ds-checkbox-group[data-orientation="horizontal"],
+.ds-radio-group[data-orientation="horizontal"] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+}
+
+/* Group legend / title */
+.ds-checkbox-group-label,
+.ds-radio-group-label {
+  display: block;
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}

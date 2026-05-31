@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>grid contextmenu</title>
+
+	<!-- reset -->
+	<link href="../css/reset.css" rel="stylesheet" type="text/css" />
+
+	<!-- extjs -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/classic/theme-triton/resources/theme-triton-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/theme-triton/theme-triton-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/locale/locale-ko-debug.js"></script>
+
+	<!-- extjs ux -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/packages/ux/classic/triton/resources/ux-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/packages/ux/classic/ux-debug.js"></script>
+
+	<style>
+		body.x-body {
+			background-color: #ffffff;
+		}
+
+		#playcontainer {
+			margin: 10px;
+		}
+
+		#contextMenuGridExample {
+			margin: 10px;
+		}
+	</style>
+
+	<script>
+		Ext.onReady(function () {
+			var gridData = [
+				['Jaspreet'],
+				['Chahal'],
+				['Yuvraaj']
+			];
+
+			var store = Ext.create('Ext.data.ArrayStore', {
+				fields: [{
+					name: 'name'
+				}],
+				data: gridData // we are feed our array data here
+			});
+
+			var replaceAction = Ext.create('Ext.Action', {
+				text: 'Replace above text with selected value',
+				handler: function (widget, event) {
+					var rec = grid.getSelectionModel().getSelection()[0];
+					if (rec) {
+						// here we are replacing innerHTML of our container with ID <strong>playcontainer</strong>
+						Ext.get("playcontainer").update(rec.get('name'));
+					} else {
+						alert('Please select a name from the grid');
+					}
+				}
+			});
+
+			var gridContextMenu = Ext.create('Ext.menu.Menu', {
+				items: [
+					// we are feeding our declared actions to Context Menu Items array
+					replaceAction,
+					{
+						text: 'test2',
+						handler: function () {
+							alert('test2');
+						}
+					}
+				]
+			});
+
+			var grid = Ext.create('Ext.grid.Panel', {
+				store: store, // our array store is Fed
+				columns: [
+					{
+						text: 'Something Random',
+						flex: 1,
+						dataIndex: 'name'
+					},
+					{
+						xtype: 'actioncolumn',
+						width: 50,
+						// align: 'center',
+
+						items: [
+							{
+								iconCls: 'x-fa fa-cog',
+								tooltip: 'Edit',
+								handler: function (grid, rowIndex, colIndex) {
+									var rec = grid.getStore().getAt(rowIndex);
+									alert("Edit " + rec.get('name'));
+								}
+							},
+							{
+								icon: '../images/icons/delete.png',
+								tooltip: 'Delete',
+								handler: function (grid, rowIndex, colIndex) {
+									var rec = grid.getStore().getAt(rowIndex);
+									alert("Terminate " + rec.get('name'));
+								}
+							}
+						]
+					}
+				],
+				viewConfig: {
+					listeners: {
+						itemcontextmenu: function (view, rec, node, index, event) {
+							event.stopEvent(); // stops the default event. i.e. Windows Context Menu
+							gridContextMenu.showAt(event.getXY()); // show context menu where user right clicked
+							return false;
+						}
+					}
+				},
+				height: 350,
+				width: 400,
+				title: 'context Menu Grid Example',
+				renderTo: 'contextMenuGridExample', // remember this is from Markup that we included earlier
+				stateful: false
+			});
+
+		});
+	</script>
+</head>
+
+<body>
+	<div id="playcontainer">This string will be replaced</div>
+	<div id="contextMenuGridExample">
+	</div>
+</body>
+
+</html>

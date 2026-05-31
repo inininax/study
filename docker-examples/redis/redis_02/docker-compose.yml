@@ -1,0 +1,103 @@
+services:
+  redis-master:
+    image: redis:7.0
+    container_name: redis_master
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - ./config/redis-master.conf:/usr/local/etc/redis/redis.conf
+      - ./data/master:/data
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - redis_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-replica:
+    image: redis:7.0
+    container_name: redis_replica
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - ./config/redis-replica.conf:/usr/local/etc/redis/redis.conf
+      - ./data/replica:/data
+    ports:
+      - "${REDIS_REPLICA_PORT}:6380"
+    depends_on:
+      - redis-master
+    networks:
+      - redis_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-sentinel:
+    image: redis:7.0
+    container_name: redis_sentinel
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - ./config/sentinel.conf:/usr/local/etc/redis/sentinel.conf
+      - ./data/sentinel:/data
+    ports:
+      - "${SENTINEL_PORT}:26379"
+    depends_on:
+      - redis-master
+      - redis-replica
+    networks:
+      - redis_network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis_commander
+    environment:
+      - REDIS_HOSTS=master:redis-master:6379:0:${REDIS_PASSWORD},replica:redis-replica:6380:0:${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_COMMANDER_PORT}:8081"
+    depends_on:
+      - redis-master
+      - redis-replica
+    networks:
+      - redis_network
+
+  redis-exporter:
+    image: oliver006/redis_exporter
+    container_name: redis_exporter
+    command: --redis.password=${REDIS_PASSWORD} --redis.addr=redis-master:6379
+    ports:
+      - "9121:9121"
+    networks:
+      - redis_network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "${PROMETHEUS_PORT}:9090"
+    networks:
+      - redis_network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - redis_network
+
+networks:
+  redis_network:
+    driver: bridge

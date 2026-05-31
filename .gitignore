@@ -1,0 +1,17 @@
+.gradle/
+.idea/
+.settings/
+.vscode/
+
+build/
+gradle/
+node_modules/
+out/
+
+.DS_Store
+gradlew
+gradlew.bat
+
+# AI agent directories
+.serena/
+.omc/

@@ -1,0 +1,122 @@
+// ============================================
+// 예제 09: Pipeline Options - 실행 정책 설정
+// ============================================
+// 빌드 보관 기간, 동시 실행 방지, 타임아웃, 재시도처럼
+// 파이프라인의 실행 정책을 Jenkinsfile 안에서 관리하는 예제입니다.
+
+pipeline {
+    agent any
+
+    // options: 파이프라인 전체 실행 정책
+    options {
+        // 최근 10개 빌드 기록만 보관
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+
+        // 같은 잡이 동시에 여러 번 실행되지 않도록 대기
+        disableConcurrentBuilds()
+
+        // 전체 파이프라인이 30분을 넘기면 중단
+        timeout(time: 30, unit: 'MINUTES')
+
+        // 자동 SCM 체크아웃을 끄고 필요한 stage에서 명시적으로 수행
+        skipDefaultCheckout()
+
+        // 불안정(UNSTABLE) 이후 남은 stage를 건너뛰고 싶을 때 사용
+        // skipStagesAfterUnstable()
+    }
+
+    environment {
+        REPORT_DIR = 'option-reports'
+    }
+
+    stages {
+        stage('Manual Checkout') {
+            steps {
+                echo '=== 체크아웃 정책 ==='
+                echo 'skipDefaultCheckout()으로 자동 체크아웃을 끕니다.'
+                echo '실제 프로젝트에서는 필요한 시점에 checkout scm을 실행합니다.'
+
+                // 실제 SCM 프로젝트에서는 아래 줄을 사용합니다.
+                // checkout scm
+
+                sh '''
+                    mkdir -p src
+                    echo "example source" > src/app.txt
+                '''
+            }
+        }
+
+        stage('Build With Guardrails') {
+            // stage options: 이 stage에만 적용되는 실행 정책
+            options {
+                retry(2)
+                timeout(time: 5, unit: 'MINUTES')
+            }
+            steps {
+                echo '=== 보호 장치가 있는 빌드 ==='
+                echo '일시적인 오류는 retry(2)로 다시 시도합니다.'
+                sh '''
+                    mkdir -p "$REPORT_DIR"
+                    echo "Compiling application..."
+                    echo "Build succeeded" > "$REPORT_DIR/build.txt"
+                '''
+            }
+        }
+
+        stage('Parallel Checks') {
+            parallel {
+                stage('Lint') {
+                    options {
+                        timeout(time: 2, unit: 'MINUTES')
+                    }
+                    steps {
+                        echo '=== Lint 검사 ==='
+                        sh '''
+                            echo "Checking code style..."
+                            echo "Lint: OK" > "$REPORT_DIR/lint.txt"
+                        '''
+                    }
+                }
+
+                stage('Unit Test') {
+                    options {
+                        retry(2)
+                    }
+                    steps {
+                        echo '=== 단위 테스트 ==='
+                        sh '''
+                            echo "Running unit tests..."
+                            echo "Tests: PASSED" > "$REPORT_DIR/tests.txt"
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Policy Summary') {
+            steps {
+                echo '=== 실행 정책 요약 ==='
+                echo '1. buildDiscarder: 오래된 빌드 기록 정리'
+                echo '2. disableConcurrentBuilds: 동시 실행 방지'
+                echo '3. timeout: 오래 걸리는 빌드 자동 중단'
+                echo '4. retry: 일시적인 stage 실패 재시도'
+                echo '5. skipDefaultCheckout: 체크아웃 시점 직접 제어'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '실행 정책 예제가 성공적으로 완료되었습니다!'
+        }
+        failure {
+            echo '실행 정책 예제가 실패했습니다. 타임아웃 또는 재시도 로그를 확인하세요.'
+        }
+        always {
+            echo '=== 결과 보관 ==='
+            sh "mkdir -p ${REPORT_DIR}"
+            sh "echo 'Build #${env.BUILD_NUMBER}: ${currentBuild.currentResult}' > ${REPORT_DIR}/summary.txt"
+            archiveArtifacts artifacts: "${REPORT_DIR}/**", fingerprint: true
+        }
+    }
+}

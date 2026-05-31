@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: k8s-study
+data:
+  APP_MODE: study
+  FEATURE_FLAG: "true"
+  LOG_LEVEL: info
+  app.properties: |
+    greeting=hello-kubernetes
+    owner=platform-study
+

@@ -1,0 +1,193 @@
+/* ==========================================================================
+   Tooltip Component
+   Usage: .ds-tooltip[data-tooltip="text"] — show on hover via ::after
+          Position variants: .ds-tooltip-top (default), -bottom, -left, -right
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Wrapper
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   Tooltip Bubble (::after)
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  z-index: var(--z-index-tooltip);
+
+  /* Appearance */
+  background-color: var(--color-bg-inverse);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+  max-width: 240px;
+  padding: var(--spacing-1-5) var(--spacing-3);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+
+  /* Hidden by default */
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast) var(--easing-default),
+    visibility 0s var(--duration-fast),
+    transform var(--duration-fast) var(--easing-default);
+}
+
+/* --------------------------------------------------------------------------
+   Arrow (::before)
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip::before {
+  content: "";
+  position: absolute;
+  z-index: var(--z-index-tooltip);
+  width: 0;
+  height: 0;
+
+  /* Hidden by default */
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast) var(--easing-default),
+    visibility 0s var(--duration-fast);
+}
+
+/* --------------------------------------------------------------------------
+   Show on Hover / Focus
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip:hover::after,
+.ds-tooltip:hover::before,
+.ds-tooltip:focus-within::after,
+.ds-tooltip:focus-within::before {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity var(--duration-fast) var(--easing-default),
+    visibility 0s 0s,
+    transform var(--duration-fast) var(--easing-default);
+}
+
+/* --------------------------------------------------------------------------
+   Top (default)
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip::after,
+.ds-tooltip-top::after {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+}
+
+.ds-tooltip:hover::after,
+.ds-tooltip-top:hover::after,
+.ds-tooltip:focus-within::after,
+.ds-tooltip-top:focus-within::after {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ds-tooltip::before,
+.ds-tooltip-top::before {
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--color-bg-inverse);
+}
+
+/* --------------------------------------------------------------------------
+   Bottom
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip-bottom::after {
+  bottom: auto;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+.ds-tooltip-bottom:hover::after,
+.ds-tooltip-bottom:focus-within::after {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ds-tooltip-bottom::before {
+  bottom: auto;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: none;
+  border-bottom: 6px solid var(--color-bg-inverse);
+}
+
+/* --------------------------------------------------------------------------
+   Left
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip-left::after {
+  bottom: auto;
+  top: 50%;
+  left: auto;
+  right: calc(100% + 8px);
+  transform: translateY(-50%) translateX(4px);
+}
+
+.ds-tooltip-left:hover::after,
+.ds-tooltip-left:focus-within::after {
+  transform: translateY(-50%) translateX(0);
+}
+
+.ds-tooltip-left::before {
+  bottom: auto;
+  top: 50%;
+  left: auto;
+  right: calc(100% + 2px);
+  transform: translateY(-50%);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid var(--color-bg-inverse);
+  border-right: none;
+}
+
+/* --------------------------------------------------------------------------
+   Right
+   -------------------------------------------------------------------------- */
+
+.ds-tooltip-right::after {
+  bottom: auto;
+  top: 50%;
+  left: calc(100% + 8px);
+  transform: translateY(-50%) translateX(-4px);
+}
+
+.ds-tooltip-right:hover::after,
+.ds-tooltip-right:focus-within::after {
+  transform: translateY(-50%) translateX(0);
+}
+
+.ds-tooltip-right::before {
+  bottom: auto;
+  top: 50%;
+  left: calc(100% + 2px);
+  transform: translateY(-50%);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 6px solid var(--color-bg-inverse);
+  border-left: none;
+}

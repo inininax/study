@@ -1,0 +1,13 @@
+.gradle/
+.settings/
+.venv
+build/
+gradle/
+node_modules/
+out/
+
+.idea
+.vscode
+.DS_Store
+gradlew
+gradlew.bat

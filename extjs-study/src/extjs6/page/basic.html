@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>basic</title>
+
+	<!-- reset -->
+	<link href="../css/reset.css" rel="stylesheet" type="text/css" />
+
+	<!-- extjs -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/classic/theme-triton/resources/theme-triton-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/theme-triton/theme-triton-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/locale/locale-ko-debug.js"></script>
+
+	<!-- extjs ux -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/packages/ux/classic/triton/resources/ux-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/packages/ux/classic/ux-debug.js"></script>
+
+	<style>
+		body.x-body {
+			background-color: #ffffff;
+		}
+
+		h1 {
+			margin: 10px;
+		}
+
+		div,
+		p {
+			margin: 10px;
+			border: 1px solid #999;
+		}
+
+		pre {
+			padding: 10px;
+			background-color: #ffffff;
+			tab-size: 4;
+		}
+	</style>
+
+	<script>
+		Ext.onReady(function () {
+
+			// document.getElementById
+			var dom = document.getElementById('test');
+			var ext = Ext.get('test'); // Ext.dom.Element
+			var extfly = Ext.fly('test'); // Ext.dom.Element
+			var extdom = Ext.getDom('test');
+
+			console.log('document.getElementById');
+			console.log(dom === ext.dom); // true
+			console.log(dom === extfly.dom); // true
+			console.log(dom === extdom); // true
+
+
+
+			// document.body
+			var dombody = document.body;
+			var extbody1 = Ext.getBody();
+			var extbody2 = Ext.get(document.body);
+			var extbody3 = Ext.getDom(document.body);
+
+			console.log('document.body');
+			console.log(dombody === extbody1.dom); // true
+			console.log(dombody === extbody2.dom); // true
+			console.log(dombody === extbody3); // true
+
+
+
+			// document.head
+			var domhead = document.head || document.getElementsByTagName('head')[0];
+			var exthead1 = Ext.getHead();
+			var exthead2 = Ext.get(domhead);
+			var exthead3 = Ext.getDom(domhead);
+
+			console.log('document.head');
+			console.log(domhead === exthead1.dom); // true
+			console.log(domhead === exthead2.dom); // true
+			console.log(domhead === exthead3); // true
+
+
+
+			// getElementsByTagName, getElementsByName - Ext.query
+			var domtagname = document.getElementsByTagName('div');
+			var extquery1 = Ext.query('div'); // HTMLElement[] (Ext.query('div', true))
+			var extquery2 = Ext.query('div', false); // Ext.dom.Element[]
+
+			console.log('getElementsByTagName, getElementsByName - Ext.query');
+			console.log(domtagname[0] === extquery1[0]); // true
+			console.log(domtagname[0] === extquery2[0].dom); // true
+
+
+
+			// getElementsByTagName, getElementsByName - Ext.select, selectNode
+			var extselect = Ext.select('div');
+			var extselectnode1 = Ext.getBody().selectNode('div'); // HTMLElement
+			var extselectnode2 = Ext.getBody().selectNode('div', false); // Ext.dom.Element
+
+			console.log('getElementsByTagName, getElementsByName - Ext.select, selectNode');
+			console.log(extselect.elements[0] == extselectnode1); // true
+			console.log(extselect.elements[0] == extselectnode2.dom); // true
+
+
+
+			// html append, prepend, update(innerHTML), remove
+			var test1 = Ext.get('test1');
+			var test2 = Ext.get('test2');
+			var test3 = Ext.get('test3');
+			var test4 = Ext.get('test4');
+
+			// remove
+			test1.destroy();
+
+			// innserHTML
+			test2.setHtml(test2.getHtml() + ' UPDATE');
+			test3.updateText('test3 updateText');
+
+			// Element prepend, append
+			// (Ext.dom.Element).createChild(obj, target)
+			// Ext.dom.Helper.insertBefore();
+			// Ext.dom.Helper.append();
+
+			// prepend
+			test4.createChild({
+				tag: 'span',
+				id: 'test4_prepend',
+				html: '[prepend]'
+			}, test4.query('span')[0]);
+
+			// append
+			test4.createChild({
+				tag: 'span',
+				id: 'test4_apend',
+				html: '[append]'
+			});
+
+		});
+	</script>
+</head>
+
+<body>
+	<h1>ExtJS DOM (getElementById, getElementsByTagName 등)</h1>
+
+	<p>console을 확인해 주세요.</p>
+
+	<div id="test">test</div>
+	<div id="test1">test1</div>
+	<div id="test2">test2</div>
+	<div id="test3">test3</div>
+	<div id="test4"><span>test4</span></div>
+</body>
+
+</html>

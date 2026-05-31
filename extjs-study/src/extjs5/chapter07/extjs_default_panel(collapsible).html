@@ -1,0 +1,30 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/9
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 7. Default Panel - Collapsible</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				frame: true,
+				width: 300,
+				height: 300,
+				title: 'Title Configs',
+				collapsed: true, // true 인 경우 닫혀 있음, false 인 경우 열려 있음
+				collapsible: true, // 오른쪽 상단에 열고 닫는 버튼이 노출됨
+				renderTo: Ext.getBody()
+			});
+		})
+	</script>
+</head>
+
+<body></body>
+
+</html>

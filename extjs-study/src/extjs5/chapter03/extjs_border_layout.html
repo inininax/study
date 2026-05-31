@@ -1,0 +1,44 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/5
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ExtJS Chapter 3. Border Layout </title>
+    <link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+    <script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+    <script type="text/javascript">
+        Ext.onReady(function () {
+
+            // Ext.create('Ext.Panel', {
+            //     width: 500
+            //     ,height: 500
+            //     ,layout: 'border'
+            //     ,items: [
+            //          {region: 'north',  title: 'North',  layout: 'fit', flex: 1,   split: true}
+            //         ,{region: 'center', title: 'Center', layout: 'fit', flex: 2,   split: true} // w: 2/4
+            //         ,{region: 'east',   title: 'East',   layout: 'fit', flex: 1,   split: true} // w: 1/4
+            //         ,{region: 'west',   title: 'West',   layout: 'fit', flex: 1,   split: true} // w: 1/4
+            //         ,{region: 'south',  title: 'South',  layout: 'fit', flex: 0.5, split: true}
+            //     ]
+            //     ,renderTo: Ext.getBody()
+            // });
+
+            Ext.create('Ext.Viewport', {
+                layout: 'border',
+                items: [
+                     {region: 'north',  title: 'North',  layout: 'fit', flex: 1,   split: true}
+                    ,{region: 'center', title: 'Center', layout: 'fit', flex: 2,   split: true} // w: 2/4
+                    ,{region: 'east',   title: 'East',   layout: 'fit', flex: 1,   split: true} // w: 1/4
+                    ,{region: 'west',   title: 'West',   layout: 'fit', flex: 1,   split: true} // w: 1/4
+                    ,{region: 'south',  title: 'South',  layout: 'fit', flex: 0.5, split: true}
+                ]
+            });
+        })
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/5
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 3. Card Layout </title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				layout: 'card'
+				,width: 1000
+				,height: 500
+				,renderTo: Ext.getBody()
+				,tbar: [{
+					text: 'Before',
+					handler: function (btn) {
+						if (btn.up("panel").getLayout().getPrev()) {
+							btn.up("panel").setActiveItem(btn.up("panel").getLayout().getPrev());
+						} else {
+							Ext.toast({
+								html: 'First Page',
+								width: 200,
+								align: 't',
+								closable: false
+							});
+						}
+					}
+				}, {
+					text: 'Next',
+					handler: function (btn) {
+						if (btn.up("panel").getLayout().getNext()) {
+							btn.up("panel").setActiveItem(btn.up("panel").getLayout().getNext());
+						} else {
+							Ext.toast({
+								html: 'Last Page',
+								width: 200,
+								align: 't',
+								closable: false
+							});
+						}
+					}
+				}]
+				,items: [
+					{title: '1page', html: '<h1>contents 1</h1>'},
+					{title: '2page', html: '<h1>contents 2</h1>'},
+					{title: '3page', html: '<h1>contents 3</h1>'}
+				]
+			});
+		})
+	</script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,216 @@
+// ============================================================
+// Design System — SCSS Mixins
+// Reusable mixins for cross-platform design patterns.
+// ============================================================
+
+@use 'tokens' as *;
+
+// ── Responsive Breakpoints ──────────────────────────────────
+
+/// Apply styles above a given breakpoint
+/// @param {String} $name - Breakpoint name (sm, md, lg, xl, 2xl)
+@mixin breakpoint-up($name) {
+  $value: map-get($breakpoints, $name);
+  @if $value {
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$name}";
+  }
+}
+
+/// Apply styles below a given breakpoint
+/// @param {String} $name - Breakpoint name
+@mixin breakpoint-down($name) {
+  $value: map-get($breakpoints, $name);
+  @if $value {
+    @media (max-width: calc(#{$value} - 1px)) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$name}";
+  }
+}
+
+// ── Typography ──────────────────────────────────────────────
+
+/// Heading style preset
+/// @param {String} $level - Heading level (1-6)
+@mixin heading($level) {
+  font-family: $font-family-sans;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+
+  @if $level == 1 {
+    font-size: $font-size-5xl;
+    letter-spacing: $letter-spacing-tight;
+  } @else if $level == 2 {
+    font-size: $font-size-4xl;
+    letter-spacing: $letter-spacing-tight;
+  } @else if $level == 3 {
+    font-size: $font-size-3xl;
+  } @else if $level == 4 {
+    font-size: $font-size-2xl;
+  } @else if $level == 5 {
+    font-size: $font-size-xl;
+  } @else if $level == 6 {
+    font-size: $font-size-lg;
+  }
+}
+
+/// Body text preset
+/// @param {String} $size - Size variant (sm, base, lg)
+@mixin body-text($size: 'base') {
+  font-family: $font-family-sans;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-normal;
+  letter-spacing: $letter-spacing-normal;
+
+  @if $size == 'sm' {
+    font-size: $font-size-sm;
+  } @else if $size == 'base' {
+    font-size: $font-size-base;
+  } @else if $size == 'lg' {
+    font-size: $font-size-lg;
+  }
+}
+
+// ── Layout ──────────────────────────────────────────────────
+
+/// Flex center shorthand
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/// Flex between (space-between with centered items)
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/// Flex column
+@mixin flex-column($gap: null) {
+  display: flex;
+  flex-direction: column;
+  @if $gap {
+    gap: $gap;
+  }
+}
+
+/// Container mixin
+/// @param {String} $size - Container size key (sm, md, lg, xl, 2xl)
+@mixin container($size: '2xl') {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $spacing-4;
+  padding-right: $spacing-4;
+
+  @if $size == 'sm' {
+    max-width: $container-sm;
+  } @else if $size == 'md' {
+    max-width: $container-md;
+  } @else if $size == 'lg' {
+    max-width: $container-lg;
+  } @else if $size == 'xl' {
+    max-width: $container-xl;
+  } @else {
+    max-width: $container-2xl;
+  }
+}
+
+// ── Interaction ─────────────────────────────────────────────
+
+/// Standard transition
+/// @param {List} $properties - Properties to transition
+@mixin transition($properties: (color, background-color, border-color, box-shadow)) {
+  transition-property: $properties;
+  transition-duration: $duration-normal;
+  transition-timing-function: $easing-default;
+}
+
+/// Focus ring (accessible focus indicator — uses semantic focus tokens)
+@mixin focus-ring {
+  &:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/// Interactive element base (hover, active, focus)
+@mixin interactive {
+  @include transition;
+  @include focus-ring;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// ── Visual ──────────────────────────────────────────────────
+
+/// Text truncation (single line)
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/// Multi-line truncation
+/// @param {Number} $lines - Number of visible lines
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/// Visually hidden but accessible to screen readers
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// ── Elevation ───────────────────────────────────────────────
+
+/// Card elevation
+/// @param {String} $level - Elevation level (sm, base, md, lg, xl)
+@mixin elevation($level: 'base') {
+  border-radius: $radius-base;
+  background-color: var(--color-bg-surface);
+  box-shadow: var(--shadow-#{$level});
+}
+
+// ── Dark Mode ───────────────────────────────────────────────
+
+/// Dark mode styles via prefers-color-scheme or [data-theme="dark"]
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+  [data-theme="dark"] & {
+    @content;
+  }
+}
+
+/// Light mode only styles
+@mixin light-mode {
+  @media (prefers-color-scheme: light) {
+    @content;
+  }
+  [data-theme="light"] & {
+    @content;
+  }
+}

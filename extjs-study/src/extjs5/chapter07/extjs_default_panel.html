@@ -1,0 +1,28 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/9
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 7. Default Panel</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				title: 'title panel',
+				frame: true, // true 시 border가 나타남, false 일 경우 얇은 회색 테두리만 존재
+				width: 300,
+				height: 300,
+				renderTo: Ext.getBody()
+			});
+		})
+	</script>
+</head>
+
+<body></body>
+
+</html>

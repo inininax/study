@@ -1,0 +1,16 @@
+{
+  "duration": {
+    "instant": { "value": "0ms", "description": "No animation" },
+    "fast":    { "value": "100ms", "description": "Micro-interactions" },
+    "normal":  { "value": "200ms", "description": "Standard transitions" },
+    "slow":    { "value": "300ms", "description": "Emphasis transitions" },
+    "slower":  { "value": "500ms", "description": "Page / complex transitions" }
+  },
+  "easing": {
+    "linear":  { "value": "linear", "description": "Constant speed" },
+    "default": { "value": "cubic-bezier(0.4, 0, 0.2, 1)", "description": "Standard (Material)" },
+    "in":      { "value": "cubic-bezier(0.4, 0, 1, 1)", "description": "Accelerate — exit" },
+    "out":     { "value": "cubic-bezier(0, 0, 0.2, 1)", "description": "Decelerate — enter" },
+    "in-out":  { "value": "cubic-bezier(0.42, 0, 0.58, 1)", "description": "Symmetric ease — CSS ease-in-out" }
+  }
+}

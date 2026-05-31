@@ -1,0 +1,72 @@
+{
+  "color": {
+    "bg": {
+      "page":      { "value": "#0E0E0E", "description": "Main page background" },
+      "surface":   { "value": "#1C1917", "description": "Card / panel background" },
+      "subtle":    { "value": "#151515", "description": "Subtle distinction from page" },
+      "elevated":  { "value": "#23272F", "description": "Elevated surface (modals, popovers)" },
+      "overlay":   { "value": "rgba(0, 0, 0, 0.67)", "description": "Scrim / backdrop overlay" },
+      "inverse":   { "value": "{color.neutral.100}", "description": "Inverse background" },
+      "brand":     { "value": "{color.mocha.900}", "description": "Brand-tinted background" },
+      "disabled":  { "value": "#1E1E1E", "description": "Disabled element background" }
+    },
+    "text": {
+      "primary":   { "value": "#F8FAFC", "description": "Strongest text" },
+      "secondary": { "value": "#8895A7", "description": "Supporting text" },
+      "tertiary":  { "value": "#5E6B7A", "description": "Placeholder / hint text" },
+      "disabled":  { "value": "#3D3D3D", "description": "Disabled text" },
+      "inverse":   { "value": "{color.neutral.800}", "description": "Text on inverse backgrounds" },
+      "brand":     { "value": "{color.mocha.300}", "description": "Brand-colored text" },
+      "link":      { "value": "{color.blue.400}", "description": "Link text" },
+      "on-brand":  { "value": "#F8FAFC", "description": "Text on brand background" }
+    },
+    "border": {
+      "subtle":    { "value": "#2C2C2C", "description": "Subtle dividers" },
+      "default":   { "value": "#3A3A3A", "description": "Standard borders" },
+      "strong":    { "value": "#5A5A5A", "description": "Emphasis borders" },
+      "focus":     { "value": "{color.blue.400}", "description": "Focus ring color" },
+      "brand":     { "value": "{color.mocha.400}", "description": "Brand-colored border" },
+      "disabled":  { "value": "#2C2C2C", "description": "Disabled border" }
+    },
+    "accent": {
+      "brand":       { "value": "{color.mocha.300}", "description": "Primary brand color" },
+      "primary":     { "value": "{color.terracotta.400}", "description": "Primary accent" },
+      "secondary":   { "value": "{color.sage.400}", "description": "Secondary accent" },
+      "interactive": { "value": "{color.blue.400}", "description": "Interactive elements" },
+      "teal":        { "value": "{color.teal.400}", "description": "Teal accent" }
+    },
+    "interactive": {
+      "default":  { "value": "{color.blue.400}", "description": "Default interactive color" },
+      "hover":    { "value": "{color.blue.300}", "description": "Hover state" },
+      "pressed":  { "value": "{color.blue.200}", "description": "Pressed / active state" },
+      "disabled": { "value": "#3D3D3D", "description": "Disabled interactive" },
+      "focus":    { "value": "{color.blue.400}", "description": "Focus state" }
+    },
+    "status": {
+      "success":   { "value": "{color.green.400}", "description": "Success foreground" },
+      "error":     { "value": "{color.red.400}", "description": "Error foreground" },
+      "warning":   { "value": "{color.amber.400}", "description": "Warning foreground" },
+      "info":      { "value": "{color.blue.400}", "description": "Info foreground" }
+    },
+    "status-bg": {
+      "success":              { "value": "#0D2818", "description": "Success background (dark-safe)" },
+      "error":                { "value": "#2D1215", "description": "Error background (dark-safe)" },
+      "warning":              { "value": "#2D2006", "description": "Warning background (dark-safe)" },
+      "info":                 { "value": "#0D1B2A", "description": "Info background (dark-safe)" },
+      "destructive-hover":    { "value": "{color.red.500}", "description": "Destructive button hover background (dark mode — brighter for contrast)" },
+      "destructive-pressed":  { "value": "{color.red.600}", "description": "Destructive button pressed background (dark mode)" }
+    }
+  },
+  "focus": {
+    "ring-color":  { "value": "{color.blue.400}", "description": "Focus ring color" },
+    "ring-width":  { "value": "2px", "description": "Focus ring thickness (WCAG 2.2)" },
+    "ring-offset": { "value": "2px", "description": "Focus ring offset from element" }
+  },
+  "shadow": {
+    "sm":   { "value": "{shadow.dark.sm}" },
+    "base": { "value": "{shadow.dark.base}" },
+    "md":   { "value": "{shadow.dark.md}" },
+    "lg":   { "value": "{shadow.dark.lg}" },
+    "xl":   { "value": "{shadow.dark.xl}" }
+  }
+}

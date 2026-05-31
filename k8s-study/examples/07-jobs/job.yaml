@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-sample
+  namespace: k8s-study
+spec:
+  completions: 3
+  parallelism: 2
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: calc
+          image: perl:5.40-slim
+          command:
+            - perl
+            - -Mbignum=bpi
+            - -wle
+            - print bpi(120)
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+

@@ -1,0 +1,61 @@
+// ============================================
+// 예제 01: Hello World - 가장 기본적인 파이프라인
+// ============================================
+// Jenkins에 익숙해지기 위한 첫 번째 예제입니다.
+// "Hello, Jenkins!" 메시지를 출력하는 간단한 파이프라인입니다.
+
+pipeline {
+    // agent any: 어떤 노드(에이전트)에서든 실행 가능
+    agent any
+
+    stages {
+        // stage: 파이프라인의 한 단계
+        stage('Hello') {
+            // steps: 실제 실행할 명령어들
+            steps {
+                echo 'Hello, Jenkins!'
+                echo '이것은 첫 번째 파이프라인입니다.'
+                echo '현재 날짜와 시간:'
+                sh 'date'
+            }
+        }
+
+        stage('Show Environment') {
+            steps {
+                echo '=== Jenkins 환경 정보 ==='
+                // env.JOB_NAME: 현재 잡 이름
+                echo "Job 이름: ${env.JOB_NAME}"
+                // env.BUILD_NUMBER: 빌드 번호
+                echo "빌드 번호: ${env.BUILD_NUMBER}"
+                // env.BUILD_URL: 빌드 URL
+                echo "빌드 URL: ${env.BUILD_URL}"
+            }
+        }
+
+        stage('Simple Commands') {
+            steps {
+                echo '=== 간단한 명령어 실행 ==='
+                sh 'echo "현재 작업 디렉토리:"'
+                sh 'pwd'
+                sh 'echo "운영체제 정보:"'
+                sh 'uname -a'
+            }
+        }
+    }
+
+    // post: 빌드 완료 후 실행할 작업들
+    post {
+        // 성공 시
+        success {
+            echo '파이프라인이 성공적으로 완료되었습니다!'
+        }
+        // 실패 시
+        failure {
+            echo '파이프라인이 실패했습니다.'
+        }
+        // 항상 실행
+        always {
+            echo '빌드가 완료되었습니다.'
+        }
+    }
+}

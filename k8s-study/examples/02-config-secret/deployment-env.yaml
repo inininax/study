@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-demo
+  namespace: k8s-study
+  labels:
+    app: config-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-demo
+  template:
+    metadata:
+      labels:
+        app: config-demo
+    spec:
+      containers:
+        - name: app
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              while true; do
+                echo "mode=${APP_MODE} feature=${FEATURE_FLAG} log=${LOG_LEVEL} user=${DB_USER}"
+                echo "mounted config:"
+                cat /etc/app/app.properties
+                sleep 30
+              done
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secret
+          volumeMounts:
+            - name: app-config
+              mountPath: /etc/app
+              readOnly: true
+          resources:
+            requests:
+              cpu: 20m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+      volumes:
+        - name: app-config
+          configMap:
+            name: app-config
+

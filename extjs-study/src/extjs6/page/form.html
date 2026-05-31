@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>form</title>
+
+	<!-- reset -->
+	<link href="../css/reset.css" rel="stylesheet" type="text/css" />
+
+	<!-- extjs -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/classic/theme-triton/resources/theme-triton-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/theme-triton/theme-triton-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/locale/locale-ko-debug.js"></script>
+
+	<!-- extjs ux -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/packages/ux/classic/triton/resources/ux-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/packages/ux/classic/ux-debug.js"></script>
+
+<script>
+var nameValueTest = function () {
+	var get = Ext.get('nameId');
+	console.log('get', get);
+	console.log('get.component', get.component);
+	console.log('get.dom', get.dom);
+	console.log('');
+
+	console.log('get value : %o', Ext.get('nameInputId').dom.value);
+	console.log('');
+
+	// Ext.getCmp : Ext.ComponentManager#get.
+	// param : id - String - The component id
+	// return : Ext.Component
+	var getcmp = Ext.getCmp('nameId');
+	console.log('getCmp', getcmp);
+	console.log('getcmp === get.component', getcmp === get.component);
+	console.log('');
+
+	// Ext.ComponentQuery.query
+	// param : selector - String - The selector string to filter returned Components.
+	// param : root - Ext.container.Container (optional) - 
+	// return : Ext.Component[]
+	var cmpQuery = Ext.ComponentQuery.query('#nameId')[0];
+	console.log('cmpQuery', cmpQuery);
+	console.log('');
+
+	// Ext.query : Ext.dom.Element.query
+	// param : selector - String - The CSS selector.
+	// param : asDom - Boolean (optional) - false to return an array of Ext.dom.Element, Defaults to true
+	// return : HTMLElement[]/Ext.dom.Element[] 
+	var query1 = Ext.query('#nameId'); // 생략 시 기본 true
+	var query2 = Ext.query('#exFormId [name=name]', false);
+	console.log('query1', query1); // HTMLElement[]
+	console.log('query2', query2); // Ext.dom.Element[]
+	console.log('query2.component', query2[0].component);
+	console.log('query2.dom', query2[0].dom);
+	console.log('');
+
+	// Ext.select : Ext.dom.Element.select
+	// param : selector - String/HTMLElement[] - The CSS selector or an array of elements
+	// param : composite - Boolean - Return a CompositeElement as opposed to a CompositeElementLite. Defaults to false.
+	// return : Ext.dom.CompositeElementLite/Ext.dom.CompositeElement
+	var select = Ext.select('#nameId');
+	console.log('select', select);
+	console.log('select.component', select.component); // Ext.Component
+	console.log('select.elements', select.elements); // HTMLElement[]
+	console.log('');
+
+	// Ext.dom.Element.selectNode
+	// param : selector - String - The selector query
+	// param : asDom - Boolean (optional) - false to return an Ext.dom.Element, Defaults to true
+	// return : HTMLElement/Ext.dom.Element
+	var selectNode1 = Ext.select('#exFormId').selectNode('#nameId');
+	var selectNode2 = Ext.query('#exFormId', false)[0].selectNode('#nameId', false);
+	console.log('selectNode1', selectNode1);
+	console.log('selectNode2', selectNode2);
+	console.log('');
+};
+
+Ext.onReady(function () {
+
+	var center = {
+		region: 'center',
+		xtype: 'form',
+		id: 'exFormId',
+		name: 'exFormName',
+		title: 'Form Title',
+		bodyPadding: 10,
+		// border: true,
+
+		items: [
+			{
+				xtype: 'fieldset',
+				title: 'Fieldset Title',
+				checkboxToggle: true, // true: 체크박스로 펼치고 접기
+				collapsed: false, // true : 숨긴 상태로 시작
+				collapsible: true, // checkboxToggle가 true 일 경우 무시 됨
+				items: [
+					{
+						xtype: 'fieldcontainer',
+						layout: 'hbox',
+						items: [
+							{
+								xtype: 'textfield',
+								id: 'nameId',
+								inputId: 'nameInputId',
+								name: 'name',
+								value: 'name value',
+
+								blankText: 'This field is required', // allowBlank가 false 일 경우, validation 툴팁의 내용
+								// allowBlank : false,
+
+								emptyText : 'Empty Text',	// submit 시 submitEmptyText가 true(기본값) 이면 blank 일 경우 emptyText가 전송 됨
+															// html placeholder와 같이 사용하고 싶을 경우 submit({ submitEmptyText : false })로 설정되야 함
+
+								fieldLabel: 'Name',
+								labelAlign: 'right', // left, right, top
+								labelPad: 5, // default : 5
+								labelSeparator: ':', // default ':'
+								labelWidth: 50,
+								// width: 300
+								flex: 1
+							},
+							{
+								xtype: 'button',
+								text: '값 확인',
+								margin: '0 0 0 5',
+								handler: nameValueTest
+							}
+						]
+					},
+					// radio
+					{
+						xtype: 'fieldcontainer',
+						layout: 'hbox',
+						items: [
+							{
+								xtype: 'radiogroup',
+								id: 'testGroup2',
+								name: 'testGroup2',
+								fieldLabel: 'Test2',
+								labelAlign: 'right',
+								labelWidth: 50,
+								columns: 4,
+								vertical: true,
+								defaults: {margin: '0 10 0 0', flex: 1},
+								flex: 1,
+								items: [
+									{boxLabel: 'Item 1', name: 'testItem2', inputValue : '1', checked : true},
+									{boxLabel: 'Item 2', name: 'testItem2', inputValue : '2'},
+									{boxLabel: 'Item 3', name: 'testItem2', inputValue : '3'},
+									{boxLabel: 'Item 4', name: 'testItem2', inputValue : '4'},
+									{boxLabel: 'Item 5', name: 'testItem2', inputValue : '5'},
+									{boxLabel: 'Item 6', name: 'testItem2', inputValue : '6'}
+								]
+							},
+							{
+								xtype: 'button',
+								text: '3번 선택',
+								margin: '0 0 0 5',
+								handler: function () {
+									var cmp1 = Ext.ComponentQuery.query('[name=testItem2]');
+									cmp1[2].setValue(true);
+
+									// var cmp2 = Ext.query('[name=testItem2]', false);
+									// cmp2[2].setValue(true); -> error
+								}
+							},
+							{
+								xtype: 'button',
+								text: '아이템 추가',
+								margin: '0 0 0 5',
+								handler: function () {
+									var cmp1 = Ext.ComponentQuery.query('[name=testItem2]');
+									var dom2 = Ext.query('[name=testItem2]');
+									var cmp2 = Ext.query('[name=testItem2]', false);
+									var len = cmp1.length + 1;
+
+									console.log('cmp1', cmp1);
+									console.log('dom2', dom2);
+									console.log('cmp2', cmp2);
+
+									Ext.getCmp('testGroup2').add({
+										boxLabel: 'Item ' + len,
+										name: 'testItem2',
+										inputValue: len
+									});
+								}
+							},
+							{
+								xtype: 'button',
+								text: '값 확인',
+								margin: '0 0 0 5',
+								handler: function () {
+									var testGroup2 = Ext.getCmp('testGroup2');
+									console.log('testGroup2', testGroup2);
+									console.log('testGroup2 value', testGroup2.getValue()); // {testItem2: "5"}
+									console.log('');
+
+									var testItem2 = Ext.ComponentQuery.query('[name=testItem2]'); // Ext.Component[]
+
+									// each(array, fn, [scope], [reverse])
+									var values = [];
+									Ext.each(testItem2, function (item, index, allItems, return2) {
+										if (item.getValue()) {
+											values.push(item.getSubmitValue());
+										}
+									});
+									console.log('values', values);
+									console.log('');
+								}
+							}
+						]
+					},
+					// checkbox
+					{
+						xtype: 'fieldcontainer',
+						layout: 'hbox',
+						items: [
+							{
+								xtype: 'checkboxgroup',
+								id: 'testGroup3',
+								name: 'testGroup3',
+								fieldLabel: 'Test3',
+								labelAlign: 'right',
+								labelWidth: 50,
+								columns: 4,
+								// vertical: true,
+								defaults: {margin: '0 10 0 0', flex: 1},
+								flex: 1,
+								items: [
+									{boxLabel: 'Item 1', name: 'testItem3', inputValue : '1', checked : true},
+									{boxLabel: 'Item 2', name: 'testItem3', inputValue : '2'},
+									{boxLabel: 'Item 3', name: 'testItem3', inputValue : '3'},
+									{boxLabel: 'Item 4', name: 'testItem3', inputValue : '4'},
+									{boxLabel: 'Item 5', name: 'testItem3', inputValue : '5'},
+									{boxLabel: 'Item 6', name: 'testItem3', inputValue : '6'},
+									{boxLabel: 'Item 7', name: 'testItem3', inputValue : '7'}
+								]
+							},
+							{
+								xtype: 'button',
+								text: '3번 선택',
+								margin: '0 0 0 5',
+								handler: function () {
+									var cmp1 = Ext.ComponentQuery.query('[name=testItem3]');
+									cmp1[2].setValue(true);
+
+									// var cmp2 = Ext.query('[name=testItem3]', false);
+									// cmp2[2].setValue(true); -> error
+								}
+							},
+							{
+								xtype: 'button',
+								text: '아이템 추가',
+								margin: '0 0 0 5',
+								handler: function () {
+									var cmp1 = Ext.ComponentQuery.query('[name=testItem3]');
+									var dom2 = Ext.query('[name=testItem3]');
+									var cmp2 = Ext.query('[name=testItem3]', false);
+									var len = cmp1.length + 1;
+
+									console.log('cmp1', cmp1);
+									console.log('dom2', dom2);
+									console.log('cmp2', cmp2);
+
+									Ext.getCmp('testGroup3').add({
+										boxLabel: 'Item ' + len,
+										name: 'testItem3',
+										inputValue: len
+									});
+								}
+							},
+							{
+								xtype: 'button',
+								text: '값 확인',
+								margin: '0 0 0 5',
+								handler: function () {
+									var testGroup3 = Ext.getCmp('testGroup3');
+									console.log('testGroup3', testGroup3);
+									console.log('testGroup3 value', testGroup3.getValue()); // {testItem3: "5"}
+									console.log('');
+
+									var testItem3 = Ext.ComponentQuery.query('[name=testItem3]'); // Ext.Component[]
+
+									// each(array, fn, [scope], [reverse])
+									var values = [];
+									Ext.each(testItem3, function (item, index, allItems, return2) {
+										if (item.getValue()) {
+											values.push(item.getSubmitValue());
+										}
+									});
+									console.log('values', values);
+									console.log('');
+								}
+							}
+						]
+					}
+				]
+			}
+		],
+		buttons: [
+			// reset
+			{
+				text: 'Reset',
+				handler: function () {
+					console.log('Reset Arguments', arguments);
+					this.up('form').getForm().reset();
+				}
+			},
+			// submit 1
+			{
+				text: 'Submit Open Window',
+				formBind: true, //only enabled once the form is valid
+				disabled: true,
+				handler: function () {
+					console.log('Submit Open Window Arguments', arguments);
+
+					// items
+					var wrapper = this.up('form');
+					var form = wrapper.getForm();
+
+					// values
+					console.log('wrapper', wrapper);
+					console.log('form', form);
+					console.log('form values', form.getValues());
+
+					if (!form.isValid()) {
+						Ext.Msg.alert('Invalid', 'Invalid Values');
+						return;
+					}
+
+					// window.open submit
+					var openWindow = window.open('', 'openWindow', 'width=800, height=400');
+					form.submit({
+						url: '/extjs6/page/form.html',
+						method: 'get',
+						standardSubmit: true, // true : 페이지 이동, false : ajax, Defaults to true
+						target: openWindow,
+						params: {
+							addparam1: 'addparam1', // form 데이터 + 추가 파라미터
+							addparam2: 'addparam2'
+						}
+					});
+				}
+			},
+			// submit 2
+			{
+				text: 'Submit Ajax',
+				formBind: true, //only enabled once the form is valid
+				disabled: true,
+				handler: function () {
+					console.log('Submit Ajax Arguments', arguments);
+
+					// items
+					var wrapper = this.up('form');
+					var form = wrapper.getForm();
+
+					// values
+					console.log('wrapper', wrapper);
+					console.log('form', form);
+					console.log('form values', form.getValues());
+
+					if (!form.isValid()) {
+						Ext.Msg.alert('Invalid', 'Invalid Values');
+						return;
+					}
+
+					// ajax
+					// ../data/form.json? [formdata] + &addparam3=addparam3&addparam4=addparam4
+					form.submit({
+						url: '../data/form.json',
+						method: 'get',
+						submitEmptyText : false, // true 이면 blank 일 경우 emptyText가 전송 됨
+						params: {
+							addparam3: 'addparam3', // form 데이터 + 추가 파라미터
+							addparam4: 'addparam4'
+						},
+						success: function (form, action) {
+							console.log(form, action);
+							Ext.Msg.alert('Success', 'Success Msg');
+						},
+						failure: function (form, action) {
+							console.log(form, action);
+							Ext.Msg.alert('Failed', action.response.statusText);
+						}
+					});
+				}
+			},
+			// load
+			{
+				text: 'Load Data',
+				handler: function () {
+					console.log('Load Data Arguments', arguments);
+
+					// items
+					var wrapper = this.up('form');
+					var form = wrapper.getForm();
+
+					// load data
+					// ../data/form.json?seq=1234
+					form.load({
+						url: '../data/form.json',
+						method: 'get',
+						params: {
+							seq: '1234' // 이쪽에 입력되는 파라미터만 요청됨
+						}
+					});
+				}
+			}
+		]
+	};
+
+	Ext.create('Ext.container.Viewport', {
+		layout: 'border',
+		items: [
+			center
+		],
+		listeners: {
+			render: function () {
+				console.log('render');
+
+				// Ext.ComponentQuery
+				var exFormId = Ext.ComponentQuery.query('#exFormId')[0];
+
+				// Ext.mixin.Queryable
+				// query ( [selector] ) : Ext.Component[]
+				var testItem2 = exFormId.query('[name=testItem2]');
+
+				console.log('exFormId  : %o', exFormId);
+				console.log('testItem2 : %o', testItem2);
+
+				for (var i = 0, max = testItem2.length; i < max; i++) {
+					console.log('testItem2[%o] : %o', i, testItem2[i]);
+				}
+				
+			}
+		}
+	});
+
+});
+</script>
+</head>
+<body>
+</body>
+</html>

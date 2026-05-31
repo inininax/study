@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    <persistence-unit name="hello">
+        <!-- 엔티티 매핑 -->
+        <class>study.jpa.domain.embedded.Address</class>
+        <class>study.jpa.domain.embedded.AddressEntity</class>
+        <class>study.jpa.domain.embedded.Member</class>
+        <class>study.jpa.domain.embedded.Period</class>
+
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="1234"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/ex09"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB103Dialect"/>
+
+            <!-- 옵션 -->
+            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="10"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <!--
+                # 개발 초기 (운영 서버에서 사용 절대 금지)
+                create: 기존테이블 삭제 후 다시 생성 (DROP + CREATE)
+                create-drop: create와 같으나 종료시점에 테이블 DROP
+                update: 없을 경우 생성, 변경분만 반영(운영DB에는 사용하면 안됨)
+
+                # 스테이징, 운영 서버
+                validate: 엔티티와 테이블이 정상 매핑되었는지만 확인
+                none: 사용하지 않음
+            -->
+        </properties>
+    </persistence-unit>
+</persistence>

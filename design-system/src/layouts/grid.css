@@ -1,0 +1,164 @@
+/* ============================================================
+   Design System — CSS Grid Layout System
+   12-column grid with responsive variants.
+   All values reference token-based CSS custom properties.
+   ============================================================ */
+
+/* ── Base grid container ─────────────────────────────────── */
+.ds-grid { display: grid; }
+
+/* ── Grid columns (1–12) ─────────────────────────────────── */
+.ds-grid-cols-1  { grid-template-columns: repeat(1,  minmax(0, 1fr)); }
+.ds-grid-cols-2  { grid-template-columns: repeat(2,  minmax(0, 1fr)); }
+.ds-grid-cols-3  { grid-template-columns: repeat(3,  minmax(0, 1fr)); }
+.ds-grid-cols-4  { grid-template-columns: repeat(4,  minmax(0, 1fr)); }
+.ds-grid-cols-5  { grid-template-columns: repeat(5,  minmax(0, 1fr)); }
+.ds-grid-cols-6  { grid-template-columns: repeat(6,  minmax(0, 1fr)); }
+.ds-grid-cols-7  { grid-template-columns: repeat(7,  minmax(0, 1fr)); }
+.ds-grid-cols-8  { grid-template-columns: repeat(8,  minmax(0, 1fr)); }
+.ds-grid-cols-9  { grid-template-columns: repeat(9,  minmax(0, 1fr)); }
+.ds-grid-cols-10 { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+.ds-grid-cols-11 { grid-template-columns: repeat(11, minmax(0, 1fr)); }
+.ds-grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+/* ── Column span (1–12 + full) ───────────────────────────── */
+.ds-col-span-1  { grid-column: span 1 / span 1; }
+.ds-col-span-2  { grid-column: span 2 / span 2; }
+.ds-col-span-3  { grid-column: span 3 / span 3; }
+.ds-col-span-4  { grid-column: span 4 / span 4; }
+.ds-col-span-5  { grid-column: span 5 / span 5; }
+.ds-col-span-6  { grid-column: span 6 / span 6; }
+.ds-col-span-7  { grid-column: span 7 / span 7; }
+.ds-col-span-8  { grid-column: span 8 / span 8; }
+.ds-col-span-9  { grid-column: span 9 / span 9; }
+.ds-col-span-10 { grid-column: span 10 / span 10; }
+.ds-col-span-11 { grid-column: span 11 / span 11; }
+.ds-col-span-12 { grid-column: span 12 / span 12; }
+.ds-col-span-full { grid-column: 1 / -1; }
+
+/* ── sm: breakpoint (≥640px) ─────────────────────────────── */
+@media (min-width: 640px) {
+  .ds-sm\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .ds-sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ds-sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ds-sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ds-sm\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ds-sm\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+  .ds-sm\:col-span-1    { grid-column: span 1 / span 1; }
+  .ds-sm\:col-span-2    { grid-column: span 2 / span 2; }
+  .ds-sm\:col-span-3    { grid-column: span 3 / span 3; }
+  .ds-sm\:col-span-4    { grid-column: span 4 / span 4; }
+  .ds-sm\:col-span-5    { grid-column: span 5 / span 5; }
+  .ds-sm\:col-span-6    { grid-column: span 6 / span 6; }
+  .ds-sm\:col-span-full { grid-column: 1 / -1; }
+
+  .ds-sm\:flex   { display: flex; }
+  .ds-sm\:hidden { display: none; }
+  .ds-sm\:block  { display: block; }
+  .ds-sm\:grid   { display: grid; }
+}
+
+/* ── md: breakpoint (≥768px) ─────────────────────────────── */
+@media (min-width: 768px) {
+  .ds-md\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .ds-md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ds-md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ds-md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ds-md\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ds-md\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+  .ds-md\:col-span-1    { grid-column: span 1 / span 1; }
+  .ds-md\:col-span-2    { grid-column: span 2 / span 2; }
+  .ds-md\:col-span-3    { grid-column: span 3 / span 3; }
+  .ds-md\:col-span-4    { grid-column: span 4 / span 4; }
+  .ds-md\:col-span-5    { grid-column: span 5 / span 5; }
+  .ds-md\:col-span-6    { grid-column: span 6 / span 6; }
+  .ds-md\:col-span-full { grid-column: 1 / -1; }
+
+  .ds-md\:flex   { display: flex; }
+  .ds-md\:hidden { display: none; }
+  .ds-md\:block  { display: block; }
+  .ds-md\:grid   { display: grid; }
+}
+
+/* ── lg: breakpoint (≥1024px) ────────────────────────────── */
+@media (min-width: 1024px) {
+  .ds-lg\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .ds-lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ds-lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ds-lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ds-lg\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ds-lg\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+  .ds-lg\:col-span-1    { grid-column: span 1 / span 1; }
+  .ds-lg\:col-span-2    { grid-column: span 2 / span 2; }
+  .ds-lg\:col-span-3    { grid-column: span 3 / span 3; }
+  .ds-lg\:col-span-4    { grid-column: span 4 / span 4; }
+  .ds-lg\:col-span-5    { grid-column: span 5 / span 5; }
+  .ds-lg\:col-span-6    { grid-column: span 6 / span 6; }
+  .ds-lg\:col-span-full { grid-column: 1 / -1; }
+
+  .ds-lg\:flex   { display: flex; }
+  .ds-lg\:hidden { display: none; }
+  .ds-lg\:block  { display: block; }
+  .ds-lg\:grid   { display: grid; }
+}
+
+/* ── xl: breakpoint (≥1280px) ────────────────────────────── */
+@media (min-width: 1280px) {
+  .ds-xl\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .ds-xl\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ds-xl\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ds-xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ds-xl\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ds-xl\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+  .ds-xl\:col-span-1    { grid-column: span 1 / span 1; }
+  .ds-xl\:col-span-2    { grid-column: span 2 / span 2; }
+  .ds-xl\:col-span-3    { grid-column: span 3 / span 3; }
+  .ds-xl\:col-span-4    { grid-column: span 4 / span 4; }
+  .ds-xl\:col-span-5    { grid-column: span 5 / span 5; }
+  .ds-xl\:col-span-6    { grid-column: span 6 / span 6; }
+  .ds-xl\:col-span-full { grid-column: 1 / -1; }
+
+  .ds-xl\:flex   { display: flex; }
+  .ds-xl\:hidden { display: none; }
+  .ds-xl\:block  { display: block; }
+  .ds-xl\:grid   { display: grid; }
+}
+
+/* ── 2xl: breakpoint (≥1536px) ───────────────────────────── */
+@media (min-width: 1536px) {
+  .ds-2xl\:grid-cols-1  { grid-template-columns: repeat(1,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-2  { grid-template-columns: repeat(2,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-3  { grid-template-columns: repeat(3,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-4  { grid-template-columns: repeat(4,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-5  { grid-template-columns: repeat(5,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-6  { grid-template-columns: repeat(6,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-7  { grid-template-columns: repeat(7,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-8  { grid-template-columns: repeat(8,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-9  { grid-template-columns: repeat(9,  minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-10 { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-11 { grid-template-columns: repeat(11, minmax(0, 1fr)); }
+  .ds-2xl\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+  .ds-2xl\:col-span-1    { grid-column: span 1 / span 1; }
+  .ds-2xl\:col-span-2    { grid-column: span 2 / span 2; }
+  .ds-2xl\:col-span-3    { grid-column: span 3 / span 3; }
+  .ds-2xl\:col-span-4    { grid-column: span 4 / span 4; }
+  .ds-2xl\:col-span-5    { grid-column: span 5 / span 5; }
+  .ds-2xl\:col-span-6    { grid-column: span 6 / span 6; }
+  .ds-2xl\:col-span-7    { grid-column: span 7 / span 7; }
+  .ds-2xl\:col-span-8    { grid-column: span 8 / span 8; }
+  .ds-2xl\:col-span-9    { grid-column: span 9 / span 9; }
+  .ds-2xl\:col-span-10   { grid-column: span 10 / span 10; }
+  .ds-2xl\:col-span-11   { grid-column: span 11 / span 11; }
+  .ds-2xl\:col-span-12   { grid-column: span 12 / span 12; }
+  .ds-2xl\:col-span-full { grid-column: 1 / -1; }
+
+  .ds-2xl\:flex   { display: flex; }
+  .ds-2xl\:hidden { display: none; }
+  .ds-2xl\:block  { display: block; }
+  .ds-2xl\:grid   { display: grid; }
+}

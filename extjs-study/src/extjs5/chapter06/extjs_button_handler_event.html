@@ -1,0 +1,35 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/8
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 6. Understanding the Event Handler 1</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				width: 300,
+				height: 300,
+				frame: true,
+				title: 'Button Handler Test',
+				items: [{
+					xtype: 'button',
+					text: 'Click!',
+					handler: function () {
+						Ext.Msg.alert("Handler", "Click!!");
+					}
+				}],
+				renderTo: Ext.getBody()
+			});
+		})
+	</script>
+</head>
+
+<body></body>
+
+</html>

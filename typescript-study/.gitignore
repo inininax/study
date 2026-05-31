@@ -1,0 +1,12 @@
+node_modules/
+.idea/
+.vscode/
+.DS_Store
+
+bin/
+build/
+dist/
+package-lock.json
+
+handbook/src/**/*.js
+typescript_start/src/**/*.js

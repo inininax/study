@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 13. form field</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				title: 'Default Form Field',
+				items: [{
+						xtype: 'textfield',
+						width: 700,
+						fieldLabel: 'text'
+					}, {
+						xtype: 'textfield',
+						width: 700,
+						fieldLabel: 'password',
+						inputType: 'password'
+					}, {
+						xtype: 'filefield',
+						width: 700,
+						fieldLabel: 'file'
+					}, {
+						xtype: 'filebutton',
+						text: 'upload button'
+					}, {
+						xtype: 'numberfield',
+						width: 700,
+						fieldLabel: 'number'
+					}, {
+						xtype: 'datefield',
+						width: 700,
+						fieldLabel: 'date',
+						maxValue: new Date()
+					}, {
+						xtype: 'timefield',
+						width: 700,
+						fieldLabel: 'time'
+					}, {
+						xtype: 'textarea',
+						width: 700,
+						fieldLabel: 'textarea'
+					}, {
+						xtype: 'checkbox',
+						fieldLabel: 'checkbox',
+						value: 'yes'
+					}, {
+						xtype: 'panel',
+						layout: 'hbox',
+						items: [{
+							xtype: 'radiofield',
+							name: 'radio1',
+							value: 'M',
+							boxLabel: 'Man',
+							fieldLabel: 'Sex'
+						}, {
+							xtype: 'radiofield',
+							name: 'radio1',
+							value: 'W',
+							boxLabel: 'Woman'
+						}]
+					},
+					{
+						xtype: 'panel',
+						layout: 'fit',
+						title: 'editor',
+						items: [{
+							xtype: 'htmleditor'
+						}]
+					},
+					{
+						xtype: 'panel',
+						layout: 'fit',
+						title: 'datepicker',
+						layout: 'hbox',
+						items: [{
+							xtype: 'datepicker'
+						}, {
+							xtype: 'monthpicker'
+						}]
+					}
+				],
+				renderTo: Ext.getBody()
+			})
+		})
+	</script>
+</head>
+
+<body>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kustomize-web
+  labels:
+    app: kustomize-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kustomize-web
+  template:
+    metadata:
+      labels:
+        app: kustomize-web
+    spec:
+      containers:
+        - name: nginx
+          image: nginxinc/nginx-unprivileged:1.27-alpine
+          ports:
+            - containerPort: 8080
+              name: http
+          envFrom:
+            - configMapRef:
+                name: kustomize-web-config
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+

@@ -1,0 +1,132 @@
+/* ============================================================
+   Design System — Animation Keyframes & Utility Classes
+   All durations and easings reference token-based CSS custom
+   properties.
+   ============================================================ */
+
+/* ── Keyframes ───────────────────────────────────────────── */
+@keyframes ds-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ds-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes ds-slide-up {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+@keyframes ds-slide-down {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes ds-slide-left {
+  from { transform: translateX(8px); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+
+@keyframes ds-slide-right {
+  from { transform: translateX(-8px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes ds-scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+@keyframes ds-scale-out {
+  from { transform: scale(1);    opacity: 1; }
+  to   { transform: scale(0.95); opacity: 0; }
+}
+
+@keyframes ds-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes ds-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes ds-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
+
+@keyframes ds-skeleton-wave {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Animation utility classes ───────────────────────────── */
+.ds-animate-fade-in {
+  animation: ds-fade-in var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-fade-out {
+  animation: ds-fade-out var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-slide-up {
+  animation: ds-slide-up var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-slide-down {
+  animation: ds-slide-down var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-slide-left {
+  animation: ds-slide-left var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-slide-right {
+  animation: ds-slide-right var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-scale-in {
+  animation: ds-scale-in var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-scale-out {
+  animation: ds-scale-out var(--duration-normal) var(--easing-out) both;
+}
+
+.ds-animate-spin {
+  animation: ds-spin var(--duration-slower) var(--easing-linear) infinite;
+}
+
+.ds-animate-pulse {
+  animation: ds-pulse var(--duration-slower) var(--easing-default) infinite;
+}
+
+.ds-animate-bounce {
+  animation: ds-bounce var(--duration-slower) var(--easing-in-out) infinite;
+}
+
+/* ── Duration modifiers ──────────────────────────────────── */
+.ds-animate-fast { animation-duration: var(--duration-fast); }
+.ds-animate-slow { animation-duration: var(--duration-slow); }
+
+/* ── Reduced motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ds-animate-fade-in,
+  .ds-animate-fade-out,
+  .ds-animate-slide-up,
+  .ds-animate-slide-down,
+  .ds-animate-slide-left,
+  .ds-animate-slide-right,
+  .ds-animate-scale-in,
+  .ds-animate-scale-out,
+  .ds-animate-spin,
+  .ds-animate-pulse,
+  .ds-animate-bounce {
+    animation: none !important;
+  }
+}

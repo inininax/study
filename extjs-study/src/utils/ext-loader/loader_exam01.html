@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>loader</title>
+
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/classic/theme-triton/resources/theme-triton-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/theme-triton/theme-triton-debug.js"></script>
+
+	<!--[if gt IE 9]><!-->
+	<link href="./loader.css" rel="stylesheet" type="text/css" />
+	<!--<![endif]-->
+	<!--[if lte IE 9]>
+	<link href="./loader_ie.css" rel="stylesheet" type="text/css"/>
+	<![endif]-->
+
+	<script type="text/javascript">
+		function destroyLoader() {
+			if (Ext.supports.Transitions) {
+
+				var top = Ext.get('loadingSplashTop'),
+					wrapper = Ext.fly('loadingSplash');
+
+				top.on('transitionend', wrapper.destroy, wrapper, {
+					single: true
+				});
+
+				wrapper.addCls('app-loaded');
+
+			} else {
+				var circles = Ext.fly('loadingSplashCircles'),
+					bottom = Ext.get('loadingSplashBottom'),
+					top = Ext.get('loadingSplashTop'),
+					wrapper = Ext.fly('loadingSplash');
+
+				circles.destroy();
+
+				Ext.create('Ext.fx.Anim', {
+					target: top,
+					duration: 500,
+					from: {
+						top: 0
+					},
+					to: {
+						top: top.getHeight() * -1
+					}
+				});
+
+				Ext.create('Ext.fx.Anim', {
+					target: bottom,
+					duration: 500,
+					from: {
+						bottom: 0
+					},
+					to: {
+						bottom: bottom.getHeight() * -1
+					},
+					listeners: {
+						single: true,
+						delay: 500, //afteranimate event and callback fn are executing right away
+						scope: wrapper,
+						afteranimate: wrapper.destroy
+					}
+				});
+			}
+		}
+
+		Ext.onReady(function () {
+			setTimeout(function () {
+				destroyLoader();
+			}, 1500);
+		});
+	</script>
+</head>
+
+<body>
+
+	<!-- class : triton, napture, ios -->
+	<div id="loadingSplash" class="triton">
+		<div id="loadingSplashTop"></div>
+		<div id="loadingSplashBottom"></div>
+		<div class="loading-fading-circle" id="loadingSplashCircles">
+			<div class="loading-circle-1 loading-circle"></div>
+			<div class="loading-circle-2 loading-circle"></div>
+			<div class="loading-circle-3 loading-circle"></div>
+			<div class="loading-circle-4 loading-circle"></div>
+			<div class="loading-circle-5 loading-circle"></div>
+			<div class="loading-circle-6 loading-circle"></div>
+			<div class="loading-circle-7 loading-circle"></div>
+			<div class="loading-circle-8 loading-circle"></div>
+			<div class="loading-circle-9 loading-circle"></div>
+			<div class="loading-circle-10 loading-circle"></div>
+			<div class="loading-circle-11 loading-circle"></div>
+			<div class="loading-circle-12 loading-circle"></div>
+		</div>
+	</div>
+
+</body>
+
+</html>

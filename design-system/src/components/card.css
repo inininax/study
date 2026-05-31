@@ -1,0 +1,76 @@
+/* ============================================================
+   Design System — Card Component
+   Surface container with header, body, footer slots.
+   All values reference token-based CSS custom properties.
+   ============================================================ */
+
+/* ── Base card ───────────────────────────────────────────── */
+.ds-card {
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-base);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Card sections ───────────────────────────────────────── */
+.ds-card-header {
+  padding: var(--spacing-4) var(--spacing-6);
+  border-bottom: var(--border-width-thin) solid var(--color-border-subtle);
+}
+
+.ds-card-body {
+  padding: var(--spacing-6);
+  flex: 1 1 auto;
+}
+
+.ds-card-footer {
+  padding: var(--spacing-4) var(--spacing-6);
+  border-top: var(--border-width-thin) solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+/* ── Card typography ─────────────────────────────────────── */
+.ds-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.ds-card-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+  margin-top: var(--spacing-1);
+}
+
+/* ── Card modifiers ──────────────────────────────────────── */
+.ds-card-hoverable {
+  transition: box-shadow var(--duration-normal) var(--easing-default),
+              transform var(--duration-normal) var(--easing-default);
+  cursor: pointer;
+}
+
+.ds-card-hoverable:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.ds-card-hoverable:active {
+  box-shadow: var(--shadow-md);
+  transform: translateY(0);
+}
+
+.ds-card-bordered {
+  border: var(--border-width-thin) solid var(--color-border-default);
+  box-shadow: none;
+}
+
+.ds-card-bordered:hover {
+  border-color: var(--color-border-strong);
+}

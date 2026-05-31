@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>layout</title>
+
+	<!-- reset -->
+	<link href="./css/reset.css" rel="stylesheet" type="text/css" />
+
+	<!-- extjs -->
+	<link rel="stylesheet" href="../libs/ext-6.2.0-gpl/classic/theme-triton/resources/theme-triton-all.css">
+	<script type="text/javascript" src="../libs/ext-6.2.0-gpl/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../libs/ext-6.2.0-gpl/classic/theme-triton/theme-triton-debug.js"></script>
+	<script type="text/javascript" src="../libs/ext-6.2.0-gpl/classic/locale/locale-ko-debug.js"></script>
+
+	<!-- extjs ux -->
+	<link rel="stylesheet" href="../libs/ext-6.2.0-gpl/packages/ux/classic/triton/resources/ux-all.css">
+	<script type="text/javascript" src="../libs/ext-6.2.0-gpl/packages/ux/classic/ux-debug.js"></script>
+
+	<!--[if gt IE 9]><!-->
+	<link href="../utils/ext-loader/loader.css" rel="stylesheet" type="text/css" />
+	<!--<![endif]-->
+	<!--[if lte IE 9]>
+	<link href="../utils/ext-loader/loader_ie.css" rel="stylesheet" type="text/css"/>
+	<![endif]-->
+	<script type="text/javascript" src="../utils/ext-loader/loader.js"></script>
+
+	<style>
+		body {
+			color: #404040;
+			font-size: 13px;
+			line-height: 17px;
+			font-weight: 300;
+			font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+		}
+
+		#header {
+			padding: 12px 16px 12px 16px;
+			border-bottom: 1px solid #0d1218;
+			background-color: #28384a;
+			/* #5fa2dd; */
+			color: #fff;
+			font-size: 16px;
+			font-weight: 400;
+		}
+
+		#home {
+			padding: 10px;
+			color: #000;
+		}
+	</style>
+
+	<script>
+		var layout = {
+			create: function (callback) {
+				this.getMenu(callback);
+			},
+			getMenu: function (callback) {
+				var me = this;
+
+				Ext.Ajax.request({
+					url: 'data/menu.json',
+					success: function (response, opts) {
+						callback(true, me.convertMenu(response));
+					},
+					failure: function (response, opts) {
+						callback(false);
+					}
+				});
+			},
+			convertMenu: function (response) {
+				if (!response || response.status != 200) {
+					console.log('response : %o', response);
+					return null;
+				}
+
+				var datas = null;
+
+				try {
+					datas = Ext.decode(response.responseText).menus; // to json
+				} catch (e) {
+					console.log('error : %o', e);
+					return null;
+				}
+
+				var allmenu = {};
+				var menus = [];
+
+				for (var i in datas) {
+					var menu = datas[i];
+					menu.text = menu.menuName;
+					menu.leaf = true;
+					menu.expanded = false;
+
+					delete menu.menuName;
+
+					allmenu[menu.menuNo] = menu;
+
+					if (menu.level == 1) {
+						menus.push(menu);
+						continue;
+					}
+
+					var upperMenu = allmenu[menu.upperMenuNo];
+
+					if (upperMenu.children == undefined) {
+						upperMenu.leaf = false;
+						upperMenu.expanded = true;
+						upperMenu.children = [];
+					}
+
+					upperMenu.children.push(menu);
+				}
+
+				return menus;
+			}
+		};
+
+		Ext.onReady(function () {
+
+			// loader 생성
+			var loader = new LoadingSplash();
+			loader.create();
+
+			// layout 생성
+			layout.create(function (success, menus) {
+				if (!success) {
+					Ext.Msg.alert('알림', '메뉴 조회 실패');
+					return;
+				}
+
+				if (menus == null) {
+					Ext.Msg.alert('알림', '메뉴 정보가 올바르지 않습니다.');
+					return;
+				}
+
+				for (var i in menus) {
+					var menu = menus[i];
+					var children = menu.children ? menu.children : [menu];
+
+					menus[i] = {
+						xtype: 'treepanel',
+						title: menu.text,
+						rootVisible: false,
+						root: {
+							text: 'root',
+							expanded: true,
+							children: children
+						},
+						listeners: {
+							itemclick: function (_this, record, item, index, e, eOpts) {
+								e.stopEvent();
+
+								var data = record.data;
+								var id = 'tab-' + data.menuNo;
+								var title = data.text;
+								var url = data.url;
+
+								if (url && url != '' && url != '#') {
+									var tabpanel = Ext.getCmp('layout-center');
+									var tab = Ext.getCmp(id);
+
+									if (!tab) {
+										// tab = tabpanel.add({xtype: 'component', id: id, title: title, closable: true, autoEl: {tag: 'iframe', src: url}										});
+										tab = tabpanel.add(Ext.create('Ext.ux.IFrame', {
+											id: id,
+											src: url,
+											title: title,
+											closable: true
+										}));
+									}
+
+									tabpanel.setActiveTab(tab);
+								}
+
+								return false;
+							},
+							itemcontextmenu: function (_this, record, item, index, e, eOpts) {
+								e.stopEvent();
+
+								var data = record.data;
+								var url = data.url;
+
+								if (url && url != '' && url != '#') {
+									var contextmenu = Ext.getCmp('layout-menu-contextmenu');
+									contextmenu._data = data;
+									contextmenu.showAt(e.getXY());
+								}
+
+								return false;
+							}
+						}
+					};
+				}
+
+				var menuContextmenu = Ext.create('Ext.menu.Menu', {
+					_data: null,
+					id: 'layout-menu-contextmenu',
+					items: [{
+						text: '새 창에서 보기',
+						handler: function () {
+							var data = menuContextmenu._data;
+							var url = data.url;
+
+							window.open(url);
+						}
+					}, {
+						text: 'URL 복사하기',
+						handler: function () {
+							var data = menuContextmenu._data;
+							var url = data.url;
+
+							Ext.getBody().createChild({
+								tag: 'input',
+								id: 'tempCopyValue',
+								type: 'text',
+								value: url
+							});
+
+							var tempCopyValue = Ext.get('tempCopyValue');
+							tempCopyValue.dom.select();
+
+							document.execCommand("Copy");
+
+							tempCopyValue.destroy();
+						}
+					}]
+				});
+
+				var border = {
+					north: {
+						region: 'north',
+						contentEl: 'header',
+						margin: '0 0 10 0'
+					},
+					west: {
+						region: 'west',
+						collapsible: true,
+						title: 'menu',
+						width: 280,
+						margin: '0 10 0 0',
+						defaults: {
+							// bodyStyle: 'padding:15px'
+						},
+						layout: {
+							type: 'accordion',
+							titleCollapse: true,
+							animate: true,
+							activeOnTop: false
+						},
+						items: menus
+					},
+					center: {
+						region: 'center',
+						xtype: 'tabpanel',
+						id: 'layout-center',
+						tabPosition: 'bottom',
+						activeTab: 0,
+						items: [{
+							title: 'home',
+							contentEl: 'home' // html: 'home html'
+						}],
+						plugins: [
+							Ext.create('Ext.ux.TabCloseMenu', {
+								closeTabText: '탭 닫기',
+								closeOthersTabsText: '다른 탭 닫기',
+								closeAllTabsText: '모든 탭 닫기'
+							}),
+							Ext.create('Ext.ux.TabReorderer'),
+							Ext.create('Ext.ux.TabScrollerMenu')
+						]
+					}
+				};
+
+				Ext.create('Ext.container.Viewport', {
+					layout: 'border',
+					items: [
+						border.north, border.west, border.center
+					]
+				});
+
+				loader.destroy();
+			});
+		});
+	</script>
+</head>
+
+<body>
+
+	<div style="display:none;">
+		<div id="header">header</div>
+		<div id="home">home</div>
+	</div>
+
+</body>
+
+</html>

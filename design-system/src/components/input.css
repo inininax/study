@@ -1,0 +1,235 @@
+/* ==========================================================================
+   Input Component
+   Usage: .ds-input + size/state modifiers
+   Wrapper: .ds-field > .ds-label + .ds-input-group + .ds-helper-text
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base Input
+   -------------------------------------------------------------------------- */
+
+.ds-input {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3);
+  min-height: 36px;
+  background-color: var(--color-bg-elevated);
+  border: var(--border-width-thin) solid var(--color-border-default);
+  border-radius: var(--radius-base);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  transition:
+    border-color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default),
+    background-color var(--duration-fast) var(--easing-default);
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.ds-input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.ds-input:hover:not(:disabled):not([readonly]) {
+  border-color: var(--color-border-strong);
+}
+
+.ds-input:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+  outline: none;
+}
+
+.ds-input:focus-visible {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+.ds-input:disabled {
+  background-color: var(--color-bg-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-input:disabled::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.ds-input:read-only {
+  background-color: var(--color-bg-subtle);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  cursor: default;
+}
+
+.ds-input:read-only:focus {
+  box-shadow: none;
+  border-color: var(--color-border-subtle);
+}
+
+/* Error state */
+.ds-input-error,
+.ds-input.ds-input-error {
+  border-color: var(--color-status-error);
+}
+
+.ds-input-error:focus,
+.ds-input.ds-input-error:focus {
+  border-color: var(--color-status-error);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-status-error);
+}
+
+/* --------------------------------------------------------------------------
+   Sizes
+   -------------------------------------------------------------------------- */
+
+.ds-input-sm {
+  padding: var(--spacing-1) var(--spacing-2);
+  min-height: 28px;
+  font-size: var(--font-size-xs);
+}
+
+.ds-input-lg {
+  padding: var(--spacing-3) var(--spacing-4);
+  min-height: 44px;
+  font-size: var(--font-size-base);
+}
+
+/* --------------------------------------------------------------------------
+   Input Group (prefix / suffix)
+   -------------------------------------------------------------------------- */
+
+.ds-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ds-input-group .ds-input {
+  flex: 1;
+}
+
+/* Prefix slot */
+.ds-input-group-prefix {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--color-bg-surface);
+  border: var(--border-width-thin) solid var(--color-border-default);
+  border-right: none;
+  border-radius: var(--radius-base) 0 0 var(--radius-base);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ds-input-group .ds-input-group-prefix + .ds-input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Suffix slot */
+.ds-input-group-suffix {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--color-bg-surface);
+  border: var(--border-width-thin) solid var(--color-border-default);
+  border-left: none;
+  border-radius: 0 var(--radius-base) var(--radius-base) 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ds-input-group .ds-input:has(+ .ds-input-group-suffix) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Icon slots inside the input (absolute positioned) */
+.ds-input-group-icon-left,
+.ds-input-group-icon-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ds-input-group-icon-left {
+  left: var(--spacing-3);
+}
+
+.ds-input-group-icon-right {
+  right: var(--spacing-3);
+}
+
+.ds-input-group:has(.ds-input-group-icon-left) .ds-input {
+  padding-left: calc(var(--spacing-3) + 16px + var(--spacing-2));
+}
+
+.ds-input-group:has(.ds-input-group-icon-right) .ds-input {
+  padding-right: calc(var(--spacing-3) + 16px + var(--spacing-2));
+}
+
+/* --------------------------------------------------------------------------
+   Label
+   -------------------------------------------------------------------------- */
+
+.ds-label {
+  display: block;
+  margin-bottom: var(--spacing-1);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+.ds-label[data-required]::after,
+.ds-label.ds-required::after {
+  content: " *";
+  color: var(--color-status-error);
+}
+
+/* --------------------------------------------------------------------------
+   Helper / Error Text
+   -------------------------------------------------------------------------- */
+
+.ds-helper-text {
+  display: block;
+  margin-top: var(--spacing-1);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-secondary);
+}
+
+.ds-helper-text-error,
+.ds-helper-text.ds-helper-text-error {
+  color: var(--color-status-error);
+}
+
+/* --------------------------------------------------------------------------
+   Field Wrapper
+   -------------------------------------------------------------------------- */
+
+.ds-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ds-field + .ds-field {
+  margin-top: var(--spacing-4);
+}

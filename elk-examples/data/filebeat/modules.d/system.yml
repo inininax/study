@@ -1,0 +1,16 @@
+# Module: system
+# Docs: https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-system.html
+
+- module: system
+  syslog:
+    enabled: false
+    var.paths: ["/var/log/syslog*", "/var/log/messages*", "/var/log/auth.log*"]
+  auth:
+    enabled: false
+    var.paths: ["/var/log/auth.log*", "/var/log/secure*"]
+  sudo:
+    enabled: false
+    var.paths: ["/var/log/sudo.log*"]
+  login:
+    enabled: false
+    var.paths: ["/var/log/wtmp*", "/var/log/utmp*", "/var/log/btmp*"]

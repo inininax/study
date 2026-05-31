@@ -1,0 +1,12 @@
+// ============================================================
+// Design System — SCSS Entry Point
+// Import this file to access all tokens and mixins.
+//
+// Usage in consumer projects:
+//   @use '@myorg/design-system/styles' as ds;
+//   or
+//   @use '@myorg/design-system/styles/index' as ds;
+// ============================================================
+
+@forward 'tokens';
+@forward 'mixins';

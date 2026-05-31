@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OMC (oh-my-claudecode) state
+.omc/
+
+# Claude Code local settings
+.claude/
+
+# npm pack output
+*.tgz
+
+# Custom
+.serena/

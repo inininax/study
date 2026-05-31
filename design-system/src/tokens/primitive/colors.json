@@ -1,0 +1,114 @@
+{
+  "color": {
+    "neutral": {
+      "50":  { "value": "#FAFAF7", "description": "Lightest background" },
+      "100": { "value": "#F5F0EB", "description": "Page background (Cloud Dancer influence)" },
+      "200": { "value": "#EFEBE5", "description": "Card / Surface" },
+      "300": { "value": "#E0D9D0", "description": "Subtle border" },
+      "400": { "value": "#CFCABE", "description": "Border" },
+      "500": { "value": "#A4A4A4", "description": "Disabled text" },
+      "600": { "value": "#636363", "description": "Secondary text" },
+      "700": { "value": "#3D3D3D", "description": "Tertiary emphasis" },
+      "800": { "value": "#1A1A1A", "description": "Body text" },
+      "900": { "value": "#111111", "description": "Strongest emphasis text" }
+    },
+    "mocha": {
+      "50":  { "value": "#FBF5F2" },
+      "100": { "value": "#F0E0D8" },
+      "200": { "value": "#D8BEB0" },
+      "300": { "value": "#C49A84", "description": "Dark mode brand accent" },
+      "400": { "value": "#B58B74" },
+      "500": { "value": "#A47864", "description": "Pantone 2025 Mocha Mousse — Primary Brand" },
+      "600": { "value": "#8D6555" },
+      "700": { "value": "#6B4D40" },
+      "800": { "value": "#4A3530" },
+      "900": { "value": "#2E2120" }
+    },
+    "terracotta": {
+      "50":  { "value": "#FFF1EC" },
+      "100": { "value": "#FFD9CC" },
+      "200": { "value": "#FFB199" },
+      "300": { "value": "#FF8A66" },
+      "400": { "value": "#FF7A55" },
+      "500": { "value": "#D8613C", "description": "Primary Accent" },
+      "600": { "value": "#B5492A" },
+      "700": { "value": "#8C371F" },
+      "800": { "value": "#632716" },
+      "900": { "value": "#3D180E" }
+    },
+    "teal": {
+      "50":  { "value": "#E6F7F7" },
+      "100": { "value": "#B3EBEC" },
+      "200": { "value": "#80DEDF" },
+      "300": { "value": "#4DD1D2" },
+      "400": { "value": "#26C4C5" },
+      "500": { "value": "#007B7F", "description": "WGSN 2026 Transformative Teal" },
+      "600": { "value": "#006669" },
+      "700": { "value": "#004E51" },
+      "800": { "value": "#003638" },
+      "900": { "value": "#001F20" }
+    },
+    "sage": {
+      "50":  { "value": "#F4F7F2" },
+      "100": { "value": "#E2EAD9" },
+      "200": { "value": "#CDDCBE" },
+      "300": { "value": "#B1C5A4", "description": "Secondary Accent" },
+      "400": { "value": "#95AD89" },
+      "500": { "value": "#7A946F" },
+      "600": { "value": "#617A56" },
+      "700": { "value": "#4A5F41" },
+      "800": { "value": "#34442E" },
+      "900": { "value": "#1F2A1C" }
+    },
+    "blue": {
+      "50":  { "value": "#EBF3FF" },
+      "100": { "value": "#D7EFFF", "description": "Pinterest 2026 Cool Blue" },
+      "200": { "value": "#A3CDFF" },
+      "300": { "value": "#6FADFF" },
+      "400": { "value": "#3A82FF", "description": "Primary Interactive" },
+      "500": { "value": "#2563EB" },
+      "600": { "value": "#1D4ED8" },
+      "700": { "value": "#1E40AF" },
+      "800": { "value": "#1E3A8A" },
+      "900": { "value": "#172554" }
+    },
+    "red": {
+      "50":  { "value": "#FEF2F2" },
+      "100": { "value": "#FEE2E2" },
+      "200": { "value": "#FECACA" },
+      "300": { "value": "#FCA5A5" },
+      "400": { "value": "#F87171" },
+      "500": { "value": "#EF4444", "description": "Error / Destructive" },
+      "600": { "value": "#DC2626" },
+      "700": { "value": "#B91C1C" },
+      "800": { "value": "#991B1B" },
+      "900": { "value": "#7F1D1D" }
+    },
+    "green": {
+      "50":  { "value": "#F0FDF4" },
+      "100": { "value": "#DCFCE7" },
+      "200": { "value": "#BBF7D0" },
+      "300": { "value": "#86EFAC" },
+      "400": { "value": "#4ADE80" },
+      "500": { "value": "#22C55E", "description": "Success" },
+      "600": { "value": "#16A34A" },
+      "700": { "value": "#15803D" },
+      "800": { "value": "#166534" },
+      "900": { "value": "#14532D" }
+    },
+    "amber": {
+      "50":  { "value": "#FFFBEB" },
+      "100": { "value": "#FEF3C7" },
+      "200": { "value": "#FDE68A" },
+      "300": { "value": "#FCD34D" },
+      "400": { "value": "#FBBF24" },
+      "500": { "value": "#F59E0B", "description": "Warning" },
+      "600": { "value": "#D97706" },
+      "700": { "value": "#B45309" },
+      "800": { "value": "#92400E" },
+      "900": { "value": "#78350F" }
+    },
+    "white":  { "value": "#FFFFFF" },
+    "black":  { "value": "#000000" }
+  }
+}

@@ -1,0 +1,12 @@
+.history/
+.idea/
+.vscode/
+.gradle/
+bin/
+build/
+out/
+*.iml
+*.class
+*.log
+*.tmp
+.DS_Store

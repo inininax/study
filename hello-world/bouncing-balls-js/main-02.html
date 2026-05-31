@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Colorful Bouncing Balls in a Rotating Sphere</title>
+  <!-- Include p5.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
+  <style>
+    /* Remove default margin for a full-screen canvas */
+    body { margin: 0; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <script>
+    // Global configuration
+    const NUM_BALLS = 100;       // Number of balls in the simulation
+    const containerRadius = 300; // Radius of the container sphere
+    const ballRadius = 10;       // Radius of each ball
+
+    // Array to hold our ball objects
+    let balls = [];
+
+    // p5.js setup function: runs once at the start
+    function setup() {
+      createCanvas(windowWidth, windowHeight, WEBGL);
+      
+      // Initialize each ball with a random position inside the container
+      for (let i = 0; i < NUM_BALLS; i++) {
+        balls.push(new Ball());
+      }
+    }
+
+    // p5.js draw function: runs continuously in a loop
+    function draw() {
+      background(0);
+
+      // Apply a slow rotation to the entire scene for a dynamic view.
+      rotateY(frameCount * 0.005);
+      rotateX(frameCount * 0.003);
+
+      // Draw the container sphere as a semi-transparent wireframe with a thinner outline.
+      noFill();
+      stroke(255, 100);
+      strokeWeight(1);  // Thinner outline than before
+      sphere(containerRadius);
+
+      // Update and draw each ball (including its fading trail).
+      noStroke();
+      for (let ball of balls) {
+        ball.update();
+        ball.show();
+      }
+    }
+
+    // Ball class representing each moving ball with a fading trail.
+    class Ball {
+      constructor() {
+        this.radius = ballRadius;
+
+        // Choose a random starting position inside the container sphere.
+        // The do...while loop ensures the ball is fully inside the sphere.
+        do {
+          this.pos = createVector(
+            random(-containerRadius, containerRadius),
+            random(-containerRadius, containerRadius),
+            random(-containerRadius, containerRadius)
+          );
+        } while (this.pos.mag() > containerRadius - this.radius);
+
+        // Generate a random 3D velocity vector and scale its magnitude.
+        this.vel = p5.Vector.random3D();
+        this.vel.mult(random(1, 3));
+
+        // Assign a random bright color to the ball.
+        this.color = color(random(50, 255), random(50, 255), random(50, 255));
+
+        // Array to store the positions for the fading trail effect.
+        this.trail = [];
+        this.trailMaxLength = 30; // Maximum number of points in the trail
+      }
+      
+      // Update the ball's position and handle collision detection.
+      update() {
+        // Move the ball by adding its velocity.
+        this.pos.add(this.vel);
+
+        // Collision detection with the inner surface of the container sphere.
+        if (this.pos.mag() + this.radius > containerRadius) {
+          // Calculate the normal at the collision point.
+          let normal = this.pos.copy().normalize();
+          // Reflect the velocity using the reflection formula:
+          // newVelocity = velocity - 2 * (velocity • normal) * normal
+          let dot = this.vel.dot(normal);
+          this.vel = p5.Vector.sub(this.vel, p5.Vector.mult(normal, 2 * dot));
+          // Adjust position so the ball remains inside the sphere.
+          this.pos = normal.mult(containerRadius - this.radius);
+        }
+        
+        // Record the current position for the trail.
+        this.trail.push(this.pos.copy());
+        if (this.trail.length > this.trailMaxLength) {
+          this.trail.shift();
+        }
+      }
+      
+      // Draw the ball and its fading, size-decreasing trail.
+      show() {
+        // Draw the trail.
+        // We iterate from the oldest position (index 0) to the newest.
+        // The oldest trail spheres will be drawn smaller, and the ones closer
+        // to the ball will have a size equal to the ball's radius.
+        for (let i = 0; i < this.trail.length; i++) {
+          let pos = this.trail[i];
+          // Map index to opacity so that older trail segments are more transparent.
+          let alpha = map(i, 0, this.trail.length - 1, 50, 255);
+          // Map index to size: the oldest is smaller, the most recent equals the ball's size.
+          let s = map(i, 0, this.trail.length - 1, this.radius * 0.3, this.radius);
+          push();
+            translate(pos.x, pos.y, pos.z);
+            fill(red(this.color), green(this.color), blue(this.color), alpha);
+            sphere(s);
+          pop();
+        }
+        
+        // Draw the main ball at its current position.
+        push();
+          translate(this.pos.x, this.pos.y, this.pos.z);
+          fill(this.color);
+          sphere(this.radius);
+        pop();
+      }
+    }
+
+    // Adjust canvas size when the browser window is resized.
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+  </script>
+</body>
+</html>

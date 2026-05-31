@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>grid drag & drop</title>
+
+	<!-- reset -->
+	<link href="../css/reset.css" rel="stylesheet" type="text/css" />
+
+	<!-- extjs -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/classic/theme-triton/resources/theme-triton-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/theme-triton/theme-triton-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/locale/locale-ko-debug.js"></script>
+
+	<!-- extjs ux -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/packages/ux/classic/triton/resources/ux-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/packages/ux/classic/ux-debug.js"></script>
+
+<script>
+Ext.onReady(function () {
+
+	var dragStore = Ext.create('Ext.data.Store', {
+		fields: ['name', 'age', 'phone'],
+		data: [
+			['홍길동1', 21, '010-0001-0001'],
+			['홍길동2', 22, '010-0001-0002'],
+			['홍길동3', 23, '010-0001-0003'],
+			['홍길동4', 24, '010-0001-0004'],
+			['홍길동5', 25, '010-0001-0005']
+		]
+	});
+
+	var dropStore = Ext.create('Ext.data.Store', {
+		fields: ['name', 'age', 'phone'],
+		data: []
+	});
+
+	Ext.create('Ext.container.Viewport', {
+		layout: 'border',
+		items: [
+			{
+				region: 'north',
+				xtype: 'form',
+				// dockedItems: [{
+				// 	xtype: 'toolbar',
+				// 	dock: 'bottom',
+				// 	ui: 'footer',
+				// 	defaults: {
+				// 		minWidth: 200
+				// 	},
+				// 	items: [
+				// 		{ xtype: 'component', flex: 1 },
+				// 		{ xtype: 'button', text: 'Button 1' }
+				// 	]
+				// }],
+				buttons: [
+					{
+						text: '값 확인',
+						handler: function () {
+							console.log('dragStore', dragStore);
+							console.log('dropStore', dropStore);
+						}
+					}
+				]
+			},
+			{
+				region: 'west',
+				xtype: 'grid',
+				title: '원본',
+				store: dragStore,
+				viewConfig: {
+					plugins: [
+						{
+							ptype: 'gridviewdragdrop',
+							ddGroup: 'dragGroup1'
+						}
+					]
+					// ,copy: true // true 일 경우 이동하지 않고 복사
+				},
+				// border: true,
+				width: '50%',
+				margin: '0 5 0 0',
+				columns: [
+					{text: '이름',   dataIndex: 'name',  flex: 1},
+					{text: '나이',   dataIndex: 'age',   flex: 1},
+					{text: '연락처', dataIndex: 'phone', flex: 1}
+				],
+				listeners: {
+					beforedrop: function (node, data, overModel, dropPosition, dropHandlers) {
+						console.log('drag', arguments);
+						console.log('drag data', data);
+						console.log('drag data records', data.records);
+					}
+				}
+			},
+			{
+				region: 'center',
+				xtype: 'grid',
+				title: '이동',
+				store: dropStore,
+				viewConfig: {
+					plugins: [
+						{
+							ptype: 'gridviewdragdrop',
+							ddGroup: 'dragGroup1'
+						}
+					]
+				},
+				// border: true,
+				width: '50%',
+				margin: '0 0 0 5',
+				columns: [
+					{text: '이름', dataIndex: 'name', flex: 1},
+					{text: '나이', dataIndex: 'age', flex: 1},
+					{text: '연락처', dataIndex: 'phone', flex: 1}
+				],
+				listeners: {
+					beforedrop: function (node, data, overModel, dropPosition, dropHandlers) {
+						console.log('drop', arguments);
+						console.log('drop data', data);
+						console.log('drop data records', data.records);
+					}
+				}
+			}
+		],
+		listeners: {
+			afterrender: function (_this, eOpt) {
+				console.log('afterrender', arguments);
+			}
+		}
+	});
+
+});
+</script>
+</head>
+<body>
+</body>
+</html>

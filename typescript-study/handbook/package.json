@@ -1,0 +1,27 @@
+{
+  "name": "study-ts",
+  "version": "1.0.0",
+  "description": "- Compiled language (or transpile) - Static type checker - Superset of javascript",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc --watch",
+    "transpile": "tsc",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barrier-free/study-ts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/barrier-free/study-ts/issues"
+  },
+  "homepage": "https://github.com/barrier-free/study-ts#readme",
+  "devDependencies": {
+    "tslint": "^6.1.3",
+    "typescript": "^4.2.4"
+  }
+}

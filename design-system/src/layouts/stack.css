@@ -1,0 +1,73 @@
+/* ============================================================
+   Design System — Stack & Cluster Layout Utilities
+   Vertical/horizontal stacks and flexible cluster patterns.
+   All values reference token-based CSS custom properties.
+   ============================================================ */
+
+/* ── Vertical stack ──────────────────────────────────────── */
+.ds-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.ds-stack-sm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.ds-stack-md {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.ds-stack-lg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+/* ── Horizontal stack ────────────────────────────────────── */
+.ds-hstack {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.ds-hstack-sm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.ds-hstack-md {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.ds-hstack-lg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-6);
+}
+
+/* ── Center ──────────────────────────────────────────────── */
+.ds-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Cluster (flex-wrap for tag/chip lists) ──────────────── */
+.ds-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}

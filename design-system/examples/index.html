@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System — Example</title>
+
+  <!-- Design System CSS imports (relative paths for local dev) -->
+  <link rel="stylesheet" href="../dist/css/tokens.css">
+  <link rel="stylesheet" href="../dist/css/reset.css">
+  <link rel="stylesheet" href="../dist/css/utilities.css">
+  <link rel="stylesheet" href="../dist/css/animations.css">
+  <link rel="stylesheet" href="../dist/css/layouts.css">
+  <link rel="stylesheet" href="../dist/css/components.css">
+
+  <style>
+    /* Example-specific page layout styles using design system tokens */
+    /* Dark mode: toggle via data-theme="dark" on <html> or prefers-color-scheme */
+    .example-header {
+      background-color: var(--color-bg-inverse);
+      color: var(--color-text-inverse);
+      padding: var(--spacing-4) var(--spacing-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .example-header h1 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .theme-toggle {
+      background-color: var(--color-accent-brand);
+      color: var(--color-text-inverse);
+      padding: var(--spacing-2) var(--spacing-4);
+      border-radius: var(--radius-base);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: opacity var(--duration-normal) var(--easing-default);
+      border: none;
+    }
+
+    .theme-toggle:hover { opacity: 0.85; }
+
+    .example-main {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: var(--spacing-8) var(--spacing-4);
+    }
+
+    .section-title {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-tight);
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-6);
+      padding-bottom: var(--spacing-3);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--spacing-4);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .color-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-base);
+      background-color: var(--color-bg-surface);
+    }
+
+    .color-swatch {
+      height: 80px;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--spacing-2);
+    }
+
+    .color-swatch span {
+      font-size: var(--font-size-xs);
+      font-family: var(--font-family-mono);
+      padding: var(--spacing-0-5) var(--spacing-1);
+      border-radius: var(--radius-sm);
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+    }
+
+    .color-info {
+      padding: var(--spacing-3);
+    }
+
+    .color-info .name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+    }
+
+    .color-info .role {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin-top: var(--spacing-0-5);
+    }
+
+    .typo-demo {
+      margin-bottom: var(--spacing-8);
+    }
+
+    .typo-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--spacing-4);
+      padding: var(--spacing-3) 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .typo-label {
+      width: 100px;
+      flex-shrink: 0;
+      font-size: var(--font-size-xs);
+      font-family: var(--font-family-mono);
+      color: var(--color-text-secondary);
+    }
+
+    .spacing-demo {
+      display: flex;
+      align-items: flex-end;
+      gap: var(--spacing-2);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .spacing-box {
+      background-color: var(--color-accent-teal);
+      border-radius: var(--radius-sm);
+      opacity: 0.7;
+    }
+
+    .spacing-label {
+      font-size: var(--font-size-xs);
+      font-family: var(--font-family-mono);
+      color: var(--color-text-secondary);
+      text-align: center;
+      margin-top: var(--spacing-1);
+    }
+
+    .responsive-info {
+      background-color: var(--color-bg-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-4);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .responsive-info p {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+    }
+
+    .responsive-info .current {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-accent-interactive);
+    }
+
+    .demo-section {
+      margin-bottom: var(--spacing-8);
+    }
+
+    .demo-section h3 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-3);
+      align-items: center;
+      margin-bottom: var(--spacing-4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header with theme toggle -->
+  <header class="example-header">
+    <h1>Design System v3.1</h1>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+  </header>
+
+  <main class="example-main">
+
+    <!-- ── Buttons ─────────────────────────────────────────── -->
+    <h2 class="section-title">Buttons</h2>
+    <div class="demo-section">
+      <h3>Variants</h3>
+      <div class="demo-row">
+        <button class="ds-btn ds-btn-primary">Primary</button>
+        <button class="ds-btn ds-btn-secondary">Secondary</button>
+        <button class="ds-btn ds-btn-outline">Outline</button>
+        <button class="ds-btn ds-btn-ghost">Ghost</button>
+        <button class="ds-btn ds-btn-destructive">Destructive</button>
+        <button class="ds-btn ds-btn-link">Link</button>
+      </div>
+      <h3>Sizes</h3>
+      <div class="demo-row">
+        <button class="ds-btn ds-btn-primary ds-btn-sm">Small</button>
+        <button class="ds-btn ds-btn-primary">Default</button>
+        <button class="ds-btn ds-btn-primary ds-btn-lg">Large</button>
+      </div>
+      <h3>States</h3>
+      <div class="demo-row">
+        <button class="ds-btn ds-btn-primary" disabled>Disabled</button>
+        <button class="ds-btn ds-btn-primary ds-btn-loading">Loading</button>
+      </div>
+    </div>
+
+    <!-- ── Cards ──────────────────────────────────────────── -->
+    <h2 class="section-title">Cards</h2>
+    <div class="demo-section">
+      <div class="ds-grid ds-grid-cols-1 ds-md:grid-cols-2 ds-lg:grid-cols-3" style="gap: var(--spacing-6); margin-bottom: var(--spacing-6);">
+        <div class="ds-card">
+          <div class="ds-card-header">
+            <div class="ds-card-title">Default Card</div>
+            <div class="ds-card-description">Standard card with header, body, and footer.</div>
+          </div>
+          <div class="ds-card-body">
+            <p class="ds-text-sm ds-text-secondary">Card body content goes here. Use semantic tokens for all colors.</p>
+          </div>
+          <div class="ds-card-footer">
+            <button class="ds-btn ds-btn-primary ds-btn-sm">Action</button>
+            <button class="ds-btn ds-btn-ghost ds-btn-sm">Cancel</button>
+          </div>
+        </div>
+        <div class="ds-card ds-card-hoverable">
+          <div class="ds-card-header">
+            <div class="ds-card-title">Hoverable Card</div>
+            <div class="ds-card-description">Hover to see the elevation effect.</div>
+          </div>
+          <div class="ds-card-body">
+            <p class="ds-text-sm ds-text-secondary">This card lifts on hover using the shadow token scale.</p>
+          </div>
+        </div>
+        <div class="ds-card ds-card-bordered">
+          <div class="ds-card-header">
+            <div class="ds-card-title">Bordered Card</div>
+            <div class="ds-card-description">Explicit border variant.</div>
+          </div>
+          <div class="ds-card-body">
+            <p class="ds-text-sm ds-text-secondary">Uses a stronger border color from the token system.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Alerts ─────────────────────────────────────────── -->
+    <h2 class="section-title">Alerts</h2>
+    <div class="demo-section">
+      <div class="ds-stack-md">
+        <div class="ds-alert ds-alert-success">
+          <div class="ds-alert-title">Success</div>
+          <div class="ds-alert-description">Your changes have been saved successfully.</div>
+          <button class="ds-alert-close" aria-label="Dismiss">&#x2715;</button>
+        </div>
+        <div class="ds-alert ds-alert-error">
+          <div class="ds-alert-title">Error</div>
+          <div class="ds-alert-description">Something went wrong. Please try again.</div>
+          <button class="ds-alert-close" aria-label="Dismiss">&#x2715;</button>
+        </div>
+        <div class="ds-alert ds-alert-warning">
+          <div class="ds-alert-title">Warning</div>
+          <div class="ds-alert-description">Your session will expire in 5 minutes.</div>
+          <button class="ds-alert-close" aria-label="Dismiss">&#x2715;</button>
+        </div>
+        <div class="ds-alert ds-alert-info">
+          <div class="ds-alert-title">Info</div>
+          <div class="ds-alert-description">A new version of the design system is available.</div>
+          <button class="ds-alert-close" aria-label="Dismiss">&#x2715;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Badges ─────────────────────────────────────────── -->
+    <h2 class="section-title">Badges</h2>
+    <div class="demo-section">
+      <div class="demo-row">
+        <span class="ds-badge ds-badge-primary">Primary</span>
+        <span class="ds-badge ds-badge-secondary">Secondary</span>
+        <span class="ds-badge ds-badge-success">Success</span>
+        <span class="ds-badge ds-badge-warning">Warning</span>
+        <span class="ds-badge ds-badge-error">Error</span>
+        <span class="ds-badge ds-badge-info">Info</span>
+      </div>
+      <div class="demo-row">
+        <span class="ds-badge ds-badge-primary ds-badge-outline">Outline</span>
+        <span class="ds-badge ds-badge-success ds-badge-outline">Outline</span>
+        <span class="ds-badge ds-badge-error ds-badge-outline">Outline</span>
+        <span class="ds-badge ds-badge-primary ds-badge-sm">Small</span>
+        <span class="ds-badge ds-badge-primary ds-badge-lg">Large</span>
+      </div>
+    </div>
+
+    <!-- ── Inputs ─────────────────────────────────────────── -->
+    <h2 class="section-title">Inputs</h2>
+    <div class="demo-section">
+      <div class="ds-stack-md" style="max-width: 480px;">
+        <input class="ds-input" type="text" placeholder="Default input">
+        <input class="ds-input ds-input-sm" type="text" placeholder="Small input">
+        <input class="ds-input ds-input-lg" type="text" placeholder="Large input">
+        <input class="ds-input ds-input-error" type="text" placeholder="Error state" value="Invalid value">
+        <input class="ds-input" type="text" disabled placeholder="Disabled input">
+      </div>
+    </div>
+
+    <!-- ── Checkbox & Toggle ──────────────────────────────── -->
+    <h2 class="section-title">Checkbox &amp; Toggle</h2>
+    <div class="demo-section">
+      <div class="ds-stack-md">
+        <label class="ds-checkbox-label">
+          <input type="checkbox" class="ds-checkbox" checked>
+          Checked checkbox
+        </label>
+        <label class="ds-checkbox-label">
+          <input type="checkbox" class="ds-checkbox">
+          Unchecked checkbox
+        </label>
+        <label class="ds-checkbox-label">
+          <input type="checkbox" class="ds-checkbox" disabled>
+          Disabled checkbox
+        </label>
+      </div>
+      <div class="ds-stack-md" style="margin-top: var(--spacing-4);">
+        <label class="ds-toggle-label">
+          <input type="checkbox" class="ds-toggle" checked>
+          <span class="ds-toggle-track" role="switch" aria-checked="true">
+            <span class="ds-toggle-thumb"></span>
+          </span>
+          Toggle on
+        </label>
+        <label class="ds-toggle-label">
+          <input type="checkbox" class="ds-toggle">
+          <span class="ds-toggle-track" role="switch" aria-checked="false">
+            <span class="ds-toggle-thumb"></span>
+          </span>
+          Toggle off
+        </label>
+      </div>
+    </div>
+
+    <!-- ── Layout: Grid ───────────────────────────────────── -->
+    <h2 class="section-title">Grid Layout</h2>
+    <div class="demo-section">
+      <p class="ds-text-sm ds-text-secondary ds-mb-4">12-column grid with responsive breakpoints (sm/md/lg/xl/2xl).</p>
+      <div class="ds-grid ds-grid-cols-3" style="gap: var(--spacing-3); margin-bottom: var(--spacing-4);">
+        <div class="ds-card"><div class="ds-card-body">Col 1</div></div>
+        <div class="ds-card"><div class="ds-card-body">Col 2</div></div>
+        <div class="ds-card"><div class="ds-card-body">Col 3</div></div>
+      </div>
+      <div class="ds-grid ds-grid-cols-12" style="gap: var(--spacing-3);">
+        <div class="ds-col-span-8 ds-card"><div class="ds-card-body">span-8</div></div>
+        <div class="ds-col-span-4 ds-card"><div class="ds-card-body">span-4</div></div>
+      </div>
+    </div>
+
+    <!-- ── Layout: Stack ──────────────────────────────────── -->
+    <h2 class="section-title">Stack Layout</h2>
+    <div class="demo-section">
+      <div class="ds-stack-md" style="max-width: 400px;">
+        <div class="ds-card"><div class="ds-card-body">Stack item 1</div></div>
+        <div class="ds-card"><div class="ds-card-body">Stack item 2</div></div>
+        <div class="ds-card"><div class="ds-card-body">Stack item 3</div></div>
+      </div>
+    </div>
+
+    <!-- ── Animations ─────────────────────────────────────── -->
+    <h2 class="section-title">Animations</h2>
+    <div class="demo-section">
+      <div class="ds-animate-fade-in ds-card" style="max-width: 400px;">
+        <div class="ds-card-body">
+          <p class="ds-text-sm">This card fades in using <code>.ds-animate-fade-in</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Color System ───────────────────────────────────── -->
+    <h2 class="section-title">Color System</h2>
+
+    <h3 class="ds-text-lg ds-font-semibold ds-text-primary ds-mb-4">Semantic Colors</h3>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-bg-page)">
+          <span>bg.page</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Page Background</div>
+          <div class="role">Main page background</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-bg-surface)">
+          <span>bg.surface</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Surface</div>
+          <div class="role">Card, panel backgrounds</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-accent-brand)">
+          <span>accent.brand</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Mocha Mousse</div>
+          <div class="role">Primary brand color</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-accent-primary)">
+          <span>accent.primary</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Terracotta</div>
+          <div class="role">Primary accent / CTA</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-accent-secondary)">
+          <span>accent.secondary</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Sage</div>
+          <div class="role">Secondary accent</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-accent-interactive)">
+          <span>accent.interactive</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Blue</div>
+          <div class="role">Links, interactive elements</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-accent-teal)">
+          <span>accent.teal</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Transformative Teal</div>
+          <div class="role">WGSN 2026 accent</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background-color: var(--color-bg-inverse)">
+          <span>bg.inverse</span>
+        </div>
+        <div class="color-info">
+          <div class="name">Inverse Background</div>
+          <div class="role">Headers, dark sections</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Typography ─────────────────────────────────────── -->
+    <h2 class="section-title">Typography</h2>
+    <div class="typo-demo">
+      <div class="typo-row">
+        <span class="typo-label">6xl / 4rem</span>
+        <span class="ds-text-6xl ds-font-bold ds-leading-tight ds-tracking-tight">Display</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">5xl / 3rem</span>
+        <span class="ds-text-5xl ds-font-bold ds-leading-tight ds-tracking-tight">Heading 1</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">4xl / 2.25rem</span>
+        <span class="ds-text-4xl ds-font-bold ds-leading-tight">Heading 2</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">3xl / 1.875rem</span>
+        <span class="ds-text-3xl ds-font-semibold ds-leading-tight">Heading 3</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">2xl / 1.5rem</span>
+        <span class="ds-text-2xl ds-font-semibold">Heading 4</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">xl / 1.25rem</span>
+        <span class="ds-text-xl ds-font-medium">Heading 5</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">base / 1rem</span>
+        <span class="ds-text-base ds-leading-normal">Body text — Pretendard 폰트로 한글과 영문을 자연스럽게 지원합니다.</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">sm / 0.875rem</span>
+        <span class="ds-text-sm ds-text-secondary">Secondary body text for supplementary information.</span>
+      </div>
+      <div class="typo-row">
+        <span class="typo-label">xs / 0.75rem</span>
+        <span class="ds-text-xs ds-text-disabled">Caption text, helper text, and fine print.</span>
+      </div>
+    </div>
+
+    <!-- ── Spacing ────────────────────────────────────────── -->
+    <h2 class="section-title">Spacing Scale</h2>
+    <div class="spacing-demo">
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-1); height: var(--spacing-1);"></div>
+        <div class="spacing-label">4</div>
+      </div>
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-2); height: var(--spacing-2);"></div>
+        <div class="spacing-label">8</div>
+      </div>
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-3); height: var(--spacing-3);"></div>
+        <div class="spacing-label">12</div>
+      </div>
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-4); height: var(--spacing-4);"></div>
+        <div class="spacing-label">16</div>
+      </div>
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-6); height: var(--spacing-6);"></div>
+        <div class="spacing-label">24</div>
+      </div>
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-8); height: var(--spacing-8);"></div>
+        <div class="spacing-label">32</div>
+      </div>
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-12); height: var(--spacing-12);"></div>
+        <div class="spacing-label">48</div>
+      </div>
+      <div>
+        <div class="spacing-box" style="width: var(--spacing-16); height: var(--spacing-16);"></div>
+        <div class="spacing-label">64</div>
+      </div>
+    </div>
+
+    <!-- ── Form Controls ─────────────────────────────────── -->
+    <h2 class="section-title">Form Controls</h2>
+    <div class="demo-section">
+      <div class="ds-stack-md" style="max-width: 480px;">
+        <h3>Select</h3>
+        <select class="ds-select">
+          <option value="">Choose an option</option>
+          <option value="1">Option 1</option>
+          <option value="2">Option 2</option>
+          <option value="3">Option 3</option>
+        </select>
+        <select class="ds-select ds-select-sm">
+          <option>Small select</option>
+        </select>
+        <select class="ds-select" disabled>
+          <option>Disabled select</option>
+        </select>
+
+        <h3>Textarea</h3>
+        <textarea class="ds-textarea" placeholder="Enter your message…" rows="3"></textarea>
+        <textarea class="ds-textarea ds-textarea-sm" placeholder="Small textarea"></textarea>
+        <textarea class="ds-textarea ds-textarea-error" placeholder="Error state">Invalid content</textarea>
+
+        <h3>Radio</h3>
+        <div class="ds-stack-sm">
+          <label class="ds-checkbox-label">
+            <input type="radio" name="radio-demo" class="ds-radio" checked>
+            Option A
+          </label>
+          <label class="ds-checkbox-label">
+            <input type="radio" name="radio-demo" class="ds-radio">
+            Option B
+          </label>
+          <label class="ds-checkbox-label">
+            <input type="radio" name="radio-demo" class="ds-radio" disabled>
+            Disabled
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Navigation ────────────────────────────────────── -->
+    <h2 class="section-title">Navigation</h2>
+    <div class="demo-section">
+      <h3>Navbar</h3>
+      <nav class="ds-navbar" style="margin-bottom: var(--spacing-6);">
+        <a href="#" class="ds-navbar-brand">MyApp</a>
+        <ul class="ds-navbar-nav">
+          <li><a href="#" class="ds-navbar-link ds-navbar-link-active">Home</a></li>
+          <li><a href="#" class="ds-navbar-link">About</a></li>
+          <li><a href="#" class="ds-navbar-link">Contact</a></li>
+        </ul>
+        <div class="ds-navbar-actions">
+          <button class="ds-btn ds-btn-primary ds-btn-sm">Sign In</button>
+        </div>
+      </nav>
+
+      <h3>Tabs</h3>
+      <div style="margin-bottom: var(--spacing-6);">
+        <ul class="ds-tabs" role="tablist">
+          <li><button class="ds-tab ds-tab-active" role="tab" aria-selected="true">Overview</button></li>
+          <li><button class="ds-tab" role="tab" aria-selected="false">Details</button></li>
+          <li><button class="ds-tab" role="tab" aria-selected="false">Reviews</button></li>
+          <li><button class="ds-tab" role="tab" aria-selected="false" disabled>Disabled</button></li>
+        </ul>
+      </div>
+
+      <h3>Dropdown (static open)</h3>
+      <div style="position: relative; height: 180px; margin-bottom: var(--spacing-6);">
+        <div class="ds-dropdown ds-open">
+          <button class="ds-btn ds-btn-secondary ds-dropdown-trigger">
+            Options &#9660;
+          </button>
+          <ul class="ds-dropdown-menu" style="visibility: visible; opacity: 1; transform: none; pointer-events: auto;">
+            <li><a href="#" class="ds-dropdown-item">Edit</a></li>
+            <li><a href="#" class="ds-dropdown-item">Duplicate</a></li>
+            <li class="ds-dropdown-divider"></li>
+            <li><a href="#" class="ds-dropdown-item ds-dropdown-item-danger">Delete</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Accordion</h3>
+      <div class="ds-accordion" style="max-width: 480px;">
+        <div class="ds-accordion-item ds-open">
+          <button class="ds-accordion-trigger">
+            What is this design system?
+          </button>
+          <div class="ds-accordion-content">
+            A token-based, framework-agnostic CSS design system for mobile and web applications.
+          </div>
+        </div>
+        <div class="ds-accordion-item">
+          <button class="ds-accordion-trigger">
+            How do I install it?
+          </button>
+          <div class="ds-accordion-content">
+            Import the all-in-one CSS bundle or use individual component files.
+          </div>
+        </div>
+        <div class="ds-accordion-item">
+          <button class="ds-accordion-trigger">
+            Does it support dark mode?
+          </button>
+          <div class="ds-accordion-content">
+            Yes — both <code>prefers-color-scheme</code> and <code>data-theme="dark"</code> are supported.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Display Components ────────────────────────────── -->
+    <h2 class="section-title">Display Components</h2>
+    <div class="demo-section">
+      <h3>Modal (static preview)</h3>
+      <div style="position: relative; height: 280px; overflow: hidden; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); margin-bottom: var(--spacing-6); background-color: var(--color-bg-overlay);">
+        <div class="ds-modal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 420px; max-height: 240px;">
+          <div class="ds-modal-header">
+            <h2 class="ds-modal-header-title">Confirm Action</h2>
+            <button class="ds-modal-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="ds-modal-body">
+            <p class="ds-text-sm ds-text-secondary">Are you sure you want to proceed? This action cannot be undone.</p>
+          </div>
+          <div class="ds-modal-footer">
+            <button class="ds-btn ds-btn-ghost ds-btn-sm">Cancel</button>
+            <button class="ds-btn ds-btn-destructive ds-btn-sm">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <h3>Avatar</h3>
+      <div class="demo-row" style="margin-bottom: var(--spacing-6);">
+        <div class="ds-avatar ds-avatar-sm">
+          <div class="ds-avatar-fallback">AB</div>
+        </div>
+        <div class="ds-avatar">
+          <div class="ds-avatar-fallback">CD</div>
+        </div>
+        <div class="ds-avatar ds-avatar-lg">
+          <div class="ds-avatar-fallback">EF</div>
+        </div>
+        <div class="ds-avatar ds-avatar-xl">
+          <div class="ds-avatar-fallback">GH</div>
+        </div>
+      </div>
+
+      <h3>Divider</h3>
+      <div style="max-width: 480px; margin-bottom: var(--spacing-6);">
+        <p class="ds-text-sm ds-text-secondary">Content above</p>
+        <div class="ds-divider" style="margin: var(--spacing-3) 0;"></div>
+        <p class="ds-text-sm ds-text-secondary">Content below</p>
+        <div class="ds-divider-text" style="margin: var(--spacing-3) 0;">OR</div>
+        <p class="ds-text-sm ds-text-secondary">Content after labeled divider</p>
+      </div>
+    </div>
+
+    <!-- ── Data & Feedback ───────────────────────────────── -->
+    <h2 class="section-title">Data &amp; Feedback</h2>
+    <div class="demo-section">
+      <h3>Table</h3>
+      <div style="margin-bottom: var(--spacing-6); overflow-x: auto;">
+        <table class="ds-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Alice Kim</td>
+              <td>Designer</td>
+              <td><span class="ds-badge ds-badge-success">Active</span></td>
+            </tr>
+            <tr>
+              <td>Bob Park</td>
+              <td>Engineer</td>
+              <td><span class="ds-badge ds-badge-warning">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Carol Lee</td>
+              <td>Product</td>
+              <td><span class="ds-badge ds-badge-error">Inactive</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Progress</h3>
+      <div class="ds-stack-md" style="max-width: 480px; margin-bottom: var(--spacing-6);">
+        <div>
+          <p class="ds-text-xs ds-text-secondary ds-mb-1">60% complete</p>
+          <div class="ds-progress">
+            <div class="ds-progress-bar" style="width: 60%;"></div>
+          </div>
+        </div>
+        <div>
+          <p class="ds-text-xs ds-text-secondary ds-mb-1">Indeterminate</p>
+          <div class="ds-progress ds-progress-indeterminate">
+            <div class="ds-progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Skeleton</h3>
+      <div class="ds-stack-sm" style="max-width: 360px; margin-bottom: var(--spacing-6);">
+        <div class="ds-skeleton ds-skeleton-text" style="width: 80%;"></div>
+        <div class="ds-skeleton ds-skeleton-text" style="width: 100%;"></div>
+        <div class="ds-skeleton ds-skeleton-text" style="width: 60%;"></div>
+      </div>
+
+      <h3>Tooltip</h3>
+      <div class="demo-row">
+        <span class="ds-tooltip" data-tooltip="This is a helpful tooltip">
+          <button class="ds-btn ds-btn-secondary">Hover for tooltip</button>
+        </span>
+        <span class="ds-tooltip ds-tooltip-bottom" data-tooltip="Tooltip below">
+          <button class="ds-btn ds-btn-outline">Bottom tooltip</button>
+        </span>
+      </div>
+    </div>
+
+    <!-- ── Responsive Breakpoints ─────────────────────────── -->
+    <h2 class="section-title">Responsive Breakpoints</h2>
+    <div class="responsive-info">
+      <p>Resize the browser to see responsive utility classes in action.</p>
+      <p class="ds-mt-2">
+        <span class="ds-mobile-only"><span class="current">Mobile</span> — max-width: 639px</span>
+        <span class="ds-hidden-mobile ds-desktop-only"><span class="current">Tablet</span> — 640px ~ 1023px</span>
+        <span class="ds-hidden-mobile ds-hidden-tablet"><span class="current">Desktop</span> — min-width: 1024px</span>
+      </p>
+    </div>
+
+  </main>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.querySelector('.theme-toggle').textContent =
+        next === 'dark' ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+    }
+  </script>
+
+</body>
+</html>

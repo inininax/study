@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="~{layout/default}">
+<head>
+    <title>Page Title(orderForm)</title>
+</head>
+<body>
+<th:block layout:fragment="pageCss">
+</th:block>
+<th:block layout:fragment="pageJs">
+</th:block>
+<th:block layout:fragment="pageContetns">
+    <form role="form" action="/order" method="post">
+        <div class="form-group">
+            <label for="member">주문회원</label>
+            <select name="memberId" id="member" class="form-control">
+                <option value="">회원선택</option>
+                <option th:each="member : ${members}"
+                        th:value="${member.id}"
+                        th:text="${member.name}">회원명
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="item">상품명</label>
+            <select name="itemId" id="item" class="form-control">
+                <option value="">상품선택</option>
+                <option th:each="item : ${items}"
+                        th:value="${item.id}"
+                        th:text="${item.name}">상품명
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="count">주문수량</label>
+            <input type="number" name="count" class="form-control" id="count" placeholder="주문 수량을 입력하세요"></div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+</th:block>
+</body>
+</html>

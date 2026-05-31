@@ -1,0 +1,139 @@
+/* ==========================================================================
+   Tabs Component
+   Usage: .ds-tabs > .ds-tab* (underline default), .ds-tabs-pills variant
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Tab Container — Underline (default)
+   -------------------------------------------------------------------------- */
+
+.ds-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-0-5);
+  border-bottom: var(--border-width-thin) solid var(--color-border-subtle);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Individual Tab — Underline
+   -------------------------------------------------------------------------- */
+
+.ds-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition:
+    color var(--duration-normal) var(--easing-default),
+    border-color var(--duration-normal) var(--easing-default),
+    background-color var(--duration-normal) var(--easing-default);
+}
+
+.ds-tab:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-subtle);
+}
+
+.ds-tab:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* --------------------------------------------------------------------------
+   Active Tab — Underline
+   -------------------------------------------------------------------------- */
+
+.ds-tab-active,
+.ds-tab[aria-selected="true"] {
+  color: var(--color-interactive-default);
+  border-bottom-color: var(--color-interactive-default);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-tab-active:hover,
+.ds-tab[aria-selected="true"]:hover {
+  color: var(--color-interactive-hover);
+  border-bottom-color: var(--color-interactive-hover);
+  background-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Disabled Tab
+   -------------------------------------------------------------------------- */
+
+.ds-tab:disabled,
+.ds-tab[aria-disabled="true"] {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Tab Panel
+   -------------------------------------------------------------------------- */
+
+.ds-tab-panel {
+  padding-top: var(--spacing-6);
+  color: var(--color-text-primary);
+}
+
+.ds-tab-panel[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Pills Variant
+   -------------------------------------------------------------------------- */
+
+.ds-tabs-pills {
+  border-bottom: none;
+  gap: var(--spacing-2);
+  background-color: var(--color-bg-subtle);
+  padding: var(--spacing-1);
+  border-radius: var(--radius-base);
+  width: fit-content;
+}
+
+.ds-tabs-pills .ds-tab {
+  border-bottom: none;
+  margin-bottom: 0;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-2) var(--spacing-4);
+  color: var(--color-text-secondary);
+}
+
+.ds-tabs-pills .ds-tab:hover {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+}
+
+.ds-tabs-pills .ds-tab-active,
+.ds-tabs-pills .ds-tab[aria-selected="true"] {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+  border-bottom-color: transparent;
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-tabs-pills .ds-tab-active:hover,
+.ds-tabs-pills .ds-tab[aria-selected="true"]:hover {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  border-bottom-color: transparent;
+}

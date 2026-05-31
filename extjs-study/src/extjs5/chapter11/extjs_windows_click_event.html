@@ -1,0 +1,47 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/13
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 11. Window</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			//생성되었지만 화면에는 보이지 않는 윈도우 컴포넌트를 winObject에 담아준다.
+			var winObject = Ext.create('Ext.window.Window', {
+				width: 300,
+				height: 200,
+				autoShow: false, // 자동으로 보여주지 않음
+				maximizable: true, // 최대화
+				modal: true,
+				title: 'Windows Example',
+				html: '<h1>ExtJS WINDOW</h1>'
+			});
+
+			Ext.create('Ext.Panel', {
+				width: 400,
+				height: 400,
+				title: 'Panel',
+				items: [{
+					xtype: 'button',
+					text: 'Click',
+					handler: function () {
+						//클릭이벤트 발생시, winObject에 담긴 윈도우 객체를 보여준다
+						winObject.show();
+					}
+				}],
+				renderTo: Ext.getBody()
+			})
+		})
+	</script>
+</head>
+
+<body>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/6
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 4. VBox Layout</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				width: 500,
+				height: 500,
+				title: "Vertical Layout",
+				layout: 'vbox',
+				items: [
+					 {title: 'First',  width: '100%', flex: 1, html: 'page 1'}
+					,{title: 'Second', width: '50%',  flex: 1, html: 'page 2'}
+					,{title: 'Third',  width: '30%',  flex: 1, html: 'page 3'}
+				],
+				renderTo: Ext.getBody()
+			});
+		})
+	</script>
+</head>
+<body>
+</body>
+</html>

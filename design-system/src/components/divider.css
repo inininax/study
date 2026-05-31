@@ -1,0 +1,48 @@
+/* ============================================================
+   Design System — Divider Component
+   Horizontal and vertical separators with optional label text.
+   All values reference token-based CSS custom properties.
+   ============================================================ */
+
+/* ── Horizontal divider ──────────────────────────────────── */
+.ds-divider {
+  display: block;
+  width: 100%;
+  height: var(--border-width-thin);
+  background-color: var(--color-border-subtle);
+  border: none;
+  flex-shrink: 0;
+}
+
+/* ── Vertical divider ────────────────────────────────────── */
+.ds-divider-vertical {
+  display: inline-block;
+  width: var(--border-width-thin);
+  height: 1em;
+  background-color: var(--color-border-subtle);
+  border: none;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+/* ── Divider with centered text ──────────────────────────── */
+.ds-divider-text {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  width: 100%;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ds-divider-text::before,
+.ds-divider-text::after {
+  content: "";
+  flex: 1 1 0%;
+  height: var(--border-width-thin);
+  background-color: var(--color-border-subtle);
+}

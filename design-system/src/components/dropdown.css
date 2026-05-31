@@ -1,0 +1,172 @@
+/* ==========================================================================
+   Dropdown Component
+   Usage: .ds-dropdown > .ds-dropdown-trigger + .ds-dropdown-menu
+          Add .ds-open to .ds-dropdown to show menu
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Container
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* --------------------------------------------------------------------------
+   Trigger
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-trigger {
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   Menu (hidden by default)
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-menu {
+  position: absolute;
+  top: calc(100% + var(--spacing-1));
+  left: 0;
+  z-index: var(--z-index-dropdown);
+  min-width: 180px;
+  background-color: var(--color-bg-elevated);
+  border: var(--border-width-thin) solid var(--color-border-subtle);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-1) 0;
+  list-style: none;
+  margin: 0;
+
+  /* Hidden state */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition:
+    visibility 0s var(--duration-fast),
+    opacity var(--duration-fast) var(--easing-default),
+    transform var(--duration-fast) var(--easing-default);
+}
+
+/* --------------------------------------------------------------------------
+   Open State — shows the menu
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown.ds-open .ds-dropdown-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition:
+    visibility 0s 0s,
+    opacity var(--duration-fast) var(--easing-default),
+    transform var(--duration-fast) var(--easing-default);
+}
+
+/* --------------------------------------------------------------------------
+   Menu Right-Aligned Variant
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-menu-right {
+  left: auto;
+  right: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Menu Item
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+  transition: background-color var(--duration-fast) var(--easing-default);
+}
+
+.ds-dropdown-item:hover {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+}
+
+.ds-dropdown-item:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(var(--focus-ring-offset) * -1);
+}
+
+/* --------------------------------------------------------------------------
+   Active / Selected Item
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-item-active,
+.ds-dropdown-item[aria-selected="true"] {
+  background-color: var(--color-status-bg-info);
+  color: var(--color-interactive-default);
+  font-weight: var(--font-weight-medium);
+}
+
+.ds-dropdown-item-active:hover,
+.ds-dropdown-item[aria-selected="true"]:hover {
+  background-color: var(--color-status-bg-info);
+}
+
+/* --------------------------------------------------------------------------
+   Destructive Item
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-item-danger {
+  color: var(--color-status-error);
+}
+
+.ds-dropdown-item-danger:hover {
+  background-color: var(--color-status-bg-error);
+  color: var(--color-status-error);
+}
+
+/* --------------------------------------------------------------------------
+   Disabled Item
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-item:disabled,
+.ds-dropdown-item[aria-disabled="true"] {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Divider
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-divider {
+  height: var(--border-width-thin);
+  background-color: var(--color-border-subtle);
+  margin: var(--spacing-1) 0;
+  border: none;
+}
+
+/* --------------------------------------------------------------------------
+   Group Label
+   -------------------------------------------------------------------------- */
+
+.ds-dropdown-label {
+  padding: var(--spacing-2) var(--spacing-4) var(--spacing-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}

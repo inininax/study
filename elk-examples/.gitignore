@@ -1,0 +1,38 @@
+# IDE and Editor files
+.claude/
+.history/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific ignores
+logs/
+backup-*.tar.gz
+
+# Data directories (keep structure but ignore contents)
+data/elasticsearch/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker
+.dockerignore
+
+# Temporary folders
+tmp/
+temp/

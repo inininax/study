@@ -1,0 +1,14 @@
+# LangChain 기본 학습 프로젝트 의존성
+# Python 3.12+ 호환
+
+# 핵심 LangChain 패키지
+langchain-ollama
+langchain-openai
+langchain-core
+
+# 환경 설정
+python-dotenv
+
+# Jupyter 노트북 (주피터 노트북 실행용)
+jupyter
+ipykernel

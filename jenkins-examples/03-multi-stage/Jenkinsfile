@@ -1,0 +1,122 @@
+// ============================================
+// 예제 03: Multi-Stage - 여러 단계 파이프라인
+// ============================================
+// Build -> Test -> Deploy 단계로 구성된
+// 실제 배포 파이프라인 예제입니다.
+// when 구문으로 조건부 실행을 보여줍니다.
+
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = 'my-web-app'
+        VERSION = "${env.BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                echo '=== 환경 준비 ==='
+                sh "mkdir -p output"
+                echo "버전: ${VERSION}"
+                echo "앱 이름: ${APP_NAME}"
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo '=== 애플리케이션 빌드 ==='
+                sh "echo 'Building ${APP_NAME} v${VERSION}' > output/app.jar"
+                sh "echo 'Build complete'"
+            }
+        }
+
+        stage('Unit Test') {
+            steps {
+                echo '=== 단위 테스트 ==='
+                sh 'echo "Running unit tests... All passed!"'
+            }
+        }
+
+        stage('Integration Test') {
+            steps {
+                echo '=== 통합 테스트 ==='
+                sh 'echo "Running integration tests... All passed!"'
+            }
+        }
+
+        // 브랜치에 따라 실행 여부 결정
+        stage('Deploy to Dev') {
+            // main 브랜치에서만 실행
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '=== 개발 환경 배포 ==='
+                echo "${APP_NAME} v${VERSION}을 개발 환경에 배포합니다..."
+                sh 'echo "Deployed to DEV environment"'
+            }
+        }
+
+        stage('Deploy to Staging') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '=== 스테이징 환경 배포 ==='
+                echo "${APP_NAME} v${VERSION}을 스테이징 환경에 배포합니다..."
+                sh 'echo "Deployed to STAGING environment"'
+            }
+        }
+
+        stage('User Acceptance Test') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '=== 사용자 승인 테스트 ==='
+                echo 'UAT 테스트를 실행합니다...'
+                sh 'echo "UAT completed successfully"'
+            }
+        }
+
+        // 수동 승인 단계
+        stage('Approve Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '=== 프로덕션 배포 승인 대기 ==='
+                // 실제 환경에서는 input 단계를 사용합니다
+                // input message: '프로덕션에 배포하시겠습니까?', ok: '배포'
+                echo '(실제 환경에서는 여기서 수동 승인을 기다립니다)'
+                echo '프로덕션 배포가 승인되었습니다.'
+            }
+        }
+
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '=== 프로덕션 배포 ==='
+                echo "${APP_NAME} v${VERSION}을 프로덕션 환경에 배포합니다..."
+                sh 'echo "Deployed to PRODUCTION environment"'
+                sh "echo 'Release v${VERSION} is live!' > output/release.txt"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "배포가 성공적으로 완료되었습니다!"
+            echo "버전: ${VERSION}"
+        }
+        failure {
+            echo "배포가 실패했습니다. 확인 후 재시도하세요."
+        }
+        always {
+            echo '파이프라인이 종료되었습니다.'
+        }
+    }
+}

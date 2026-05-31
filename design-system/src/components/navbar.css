@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Navbar Component
+   Usage: .ds-navbar + optional .ds-navbar-sticky modifier
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base Navbar
+   -------------------------------------------------------------------------- */
+
+.ds-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-6);
+  height: 64px;
+  background-color: var(--color-bg-surface);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Brand / Logo Area
+   -------------------------------------------------------------------------- */
+
+.ds-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  flex-shrink: 0;
+}
+
+.ds-navbar-brand:hover {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation Links Area
+   -------------------------------------------------------------------------- */
+
+.ds-navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Individual Nav Link
+   -------------------------------------------------------------------------- */
+
+.ds-navbar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1-5);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-base);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  transition:
+    color var(--duration-normal) var(--easing-default),
+    background-color var(--duration-normal) var(--easing-default);
+  cursor: pointer;
+}
+
+.ds-navbar-link:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-elevated);
+}
+
+.ds-navbar-link:active {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
+}
+
+.ds-navbar-link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* --------------------------------------------------------------------------
+   Active Link
+   -------------------------------------------------------------------------- */
+
+.ds-navbar-link-active,
+.ds-navbar-link.ds-navbar-link-active {
+  color: var(--color-interactive-default);
+  background-color: var(--color-status-bg-info);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-navbar-link-active:hover,
+.ds-navbar-link.ds-navbar-link-active:hover {
+  color: var(--color-interactive-hover);
+  background-color: var(--color-status-bg-info);
+}
+
+/* --------------------------------------------------------------------------
+   Actions Area (right-side slot for buttons, icons, etc.)
+   -------------------------------------------------------------------------- */
+
+.ds-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Sticky Variant
+   -------------------------------------------------------------------------- */
+
+.ds-navbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-sticky);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: color-mix(in srgb, var(--color-bg-surface) 90%, transparent);
+}
+
+/* Fallback for browsers that do not support color-mix */
+@supports not (background-color: color-mix(in srgb, red 50%, blue)) {
+  .ds-navbar-sticky {
+    background-color: var(--color-bg-surface);
+  }
+}

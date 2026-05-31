@@ -1,0 +1,103 @@
+spring:
+  application:
+    name: springboot-mongodb-reactive-examples
+  
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: reactive_db
+      # uri: mongodb://localhost:27017/reactive_db
+  
+  webflux:
+    base-path: /api
+  
+  jackson:
+    time-zone: UTC
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      adjust-dates-to-context-time-zone: false
+
+logging:
+  level:
+    com.example.reactive: DEBUG
+    org.springframework.data.mongodb: DEBUG
+    reactor.netty: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    mongo:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  info:
+    title: Spring Boot MongoDB Reactive API
+    description: REST API example using Spring Boot, MongoDB Reactive, and Kotlin Coroutines
+    version: 1.0.0
+    contact:
+      name: Development Team
+      email: dev@example.com
+
+server:
+  port: 8080
+  netty:
+    connection-timeout: 2s
+    idle-timeout: 15s
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: reactive_test_db
+
+logging:
+  level:
+    root: WARN
+    com.example.reactive: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/reactive_db}
+
+logging:
+  level:
+    com.example.reactive: INFO
+    root: WARN
+  file:
+    name: logs/application.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
+
+management:
+  endpoint:
+    health:
+      show-details: when-authorized

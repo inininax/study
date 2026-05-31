@@ -1,0 +1,109 @@
+/* ==========================================================================
+   Select Component
+   Usage: .ds-select + size/state modifiers
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base Select
+   -------------------------------------------------------------------------- */
+
+.ds-select {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-8) var(--spacing-2) var(--spacing-3);
+  min-height: 36px;
+  background-color: var(--color-bg-elevated);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23636363' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-3) center;
+  background-size: 16px 16px;
+  border: var(--border-width-thin) solid var(--color-border-default);
+  border-radius: var(--radius-base);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default),
+    background-color var(--duration-fast) var(--easing-default);
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.ds-select:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+}
+
+.ds-select:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+  outline: none;
+}
+
+.ds-select:focus-visible {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+.ds-select:disabled {
+  background-color: var(--color-bg-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  /* Tint the caret icon to match disabled text */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23CFCABE' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Error state */
+.ds-select-error,
+.ds-select.ds-select-error {
+  border-color: var(--color-status-error);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23DC2626' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.ds-select-error:focus,
+.ds-select.ds-select-error:focus {
+  border-color: var(--color-status-error);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-status-error);
+}
+
+/* --------------------------------------------------------------------------
+   Sizes
+   -------------------------------------------------------------------------- */
+
+.ds-select-sm {
+  padding-top: var(--spacing-1);
+  padding-bottom: var(--spacing-1);
+  padding-left: var(--spacing-2);
+  padding-right: var(--spacing-6);
+  min-height: 28px;
+  font-size: var(--font-size-xs);
+  background-position: right var(--spacing-2) center;
+}
+
+.ds-select-lg {
+  padding-top: var(--spacing-3);
+  padding-bottom: var(--spacing-3);
+  padding-left: var(--spacing-4);
+  padding-right: calc(var(--spacing-8) + var(--spacing-2));
+  min-height: 44px;
+  font-size: var(--font-size-base);
+  background-position: right var(--spacing-4) center;
+}
+
+/* --------------------------------------------------------------------------
+   Select option (limited cross-browser styling)
+   -------------------------------------------------------------------------- */
+
+.ds-select option {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-elevated);
+}
+
+.ds-select option:disabled {
+  color: var(--color-text-disabled);
+}

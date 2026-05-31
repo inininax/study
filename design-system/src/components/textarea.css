@@ -1,0 +1,114 @@
+/* ==========================================================================
+   Textarea Component
+   Usage: .ds-textarea + size/state modifiers
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base Textarea
+   -------------------------------------------------------------------------- */
+
+.ds-textarea {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3);
+  min-height: 80px;
+  background-color: var(--color-bg-elevated);
+  border: var(--border-width-thin) solid var(--color-border-default);
+  border-radius: var(--radius-base);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  resize: vertical;
+  transition:
+    border-color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default),
+    background-color var(--duration-fast) var(--easing-default);
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.ds-textarea::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.ds-textarea:hover:not(:disabled):not([readonly]) {
+  border-color: var(--color-border-strong);
+}
+
+.ds-textarea:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+  outline: none;
+}
+
+.ds-textarea:focus-visible {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+.ds-textarea:disabled {
+  background-color: var(--color-bg-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  resize: none;
+}
+
+.ds-textarea:disabled::placeholder {
+  color: var(--color-text-disabled);
+}
+
+.ds-textarea:read-only {
+  background-color: var(--color-bg-subtle);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  cursor: default;
+  resize: none;
+}
+
+.ds-textarea:read-only:focus {
+  box-shadow: none;
+  border-color: var(--color-border-subtle);
+}
+
+/* Error state */
+.ds-textarea-error,
+.ds-textarea.ds-textarea-error {
+  border-color: var(--color-status-error);
+}
+
+.ds-textarea-error:focus,
+.ds-textarea.ds-textarea-error:focus {
+  border-color: var(--color-status-error);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-status-error);
+}
+
+/* --------------------------------------------------------------------------
+   Sizes
+   -------------------------------------------------------------------------- */
+
+.ds-textarea-sm {
+  padding: var(--spacing-1) var(--spacing-2);
+  min-height: 60px;
+  font-size: var(--font-size-xs);
+}
+
+.ds-textarea-lg {
+  padding: var(--spacing-3) var(--spacing-4);
+  min-height: 120px;
+  font-size: var(--font-size-base);
+}
+
+/* No-resize modifier */
+.ds-textarea-no-resize {
+  resize: none;
+}
+
+/* Auto-resize hint (JS-driven, prevents manual drag handle) */
+.ds-textarea-auto-resize {
+  resize: none;
+  overflow: hidden;
+}

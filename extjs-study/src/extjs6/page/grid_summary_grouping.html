@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>grid summary & grouping</title>
+
+	<!-- reset -->
+	<link href="../css/reset.css" rel="stylesheet" type="text/css" />
+
+	<!-- extjs -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/classic/theme-triton/resources/theme-triton-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/ext-all-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/theme-triton/theme-triton-debug.js"></script>
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/classic/locale/locale-ko-debug.js"></script>
+
+	<!-- extjs ux -->
+	<link rel="stylesheet" href="../../libs/ext-6.2.0-gpl/packages/ux/classic/triton/resources/ux-all.css">
+	<script type="text/javascript" src="../../libs/ext-6.2.0-gpl/packages/ux/classic/ux-debug.js"></script>
+
+<style>
+.my-body-class {background-color:#f9f9f9;}
+</style>
+
+<script>
+Ext.create('Ext.data.Store', {
+	storeId: 'examStore',
+	fields: ['nation', 'area', 'name', 'email', 'phone', 'age'],
+	groupField: 'nation', // {ftype: 'groupingsummary'}
+	data: [
+		['헬조선', '서울', 'a01', 'a02@test.com', '010-0001-0002', 33],
+		['헬조선', '포천', 'a02', 'a03@test.com', '010-0001-0003', 12],
+		['헬조선', '경기', 'a03', 'a04@test.com', '010-0001-0004', 42],
+		['헬조선', '경기', 'a04', 'a01@test.com', '010-0001-0001', 22],
+		['한국인', '서울', 'a05', 'a05@test.com', '010-0001-0005', 32],
+		['한국인', '서울', 'a06', 'a06@test.com', '010-0001-0006', 56],
+		['한국인', '경기', 'a07', 'a07@test.com', '010-0001-0007', 37],
+		['한국인', '경기', 'a08', 'a08@test.com', '010-0001-0008', 15],
+		['한국인', '서울', 'a09', 'a09@test.com', '010-0001-0009', 19],
+		['한국인', '포천', 'a10', 'a10@test.com', '010-0001-0010', 75],
+		['헬조선', '포천', 'a11', 'a11@test.com', '010-0001-0011', 87],
+		['헬조선', '서울', 'a12', 'a12@test.com', '010-0001-0012', 45],
+		['헬조선', '포천', 'a13', 'a13@test.com', '010-0001-0013', 57]
+	]
+});
+
+Ext.onReady(function () {
+
+	Ext.create('Ext.container.Viewport', {
+		layout: 'border',
+		items: [{
+			region: 'center',
+			xtype: 'grid',
+
+			title: 'exam grid',
+			store: Ext.data.StoreManager.lookup('examStore'),
+
+			features: [
+				// 그룹핑 1
+				// {ftype: 'grouping'},
+
+				// 그룹핑 2 : 그룹핑 + 그룹별 count, sum, min, max, average, store의 groupField 필수
+				{
+					ftype: 'groupingsummary',
+					groupHeaderTpl: '{columnName}: {name}'
+				},
+
+				// 전체 count, sum, min, max, average
+				{ftype: 'summary'}
+
+				// 로우 body
+				// {
+				// 	ftype: 'rowbody',
+				// 	getAdditionalData: function (data, idx, record, orig) {
+				// 		console.log('Nation Arguments', arguments);
+				// 		return {
+				// 			rowBody: '<div style="padding:5px">'
+				// 				+ record.get("name") + '<br>'
+				// 				+ record.get("email") + '<br>'
+				// 				+ record.get("phone")
+				// 				+ '</div>',
+                // 			rowBodyCls: 'my-body-class'
+				// 		};
+				// 	}
+				// }
+			],
+
+			columns: [
+				{
+					text: 'Nation',
+					dataIndex: 'nation',
+					width: 200,
+
+					summaryType: 'count', // count, sum, min, max, average
+					summaryRenderer: function (value, summaryData, dataIndex) {
+						console.log('Nation Count SummaryRenderer', arguments);
+						return Ext.String.format('총 {0}명', value);
+					}
+				},
+				{
+					text: 'Area',
+					dataIndex: 'area'
+				},
+				{
+					text: 'Name',
+					dataIndex: 'name'
+				},
+				{
+					text: 'Email',
+					width: 200,
+					dataIndex: 'email'
+				},
+				{
+					text: 'Phone',
+					width: 200,
+					dataIndex: 'phone'
+				},
+				{
+					text: 'Age',
+					dataIndex: 'age',
+					width: 200,
+
+					summaryType: 'average',
+					summaryRenderer: function (value, summaryData, dataIndex) {
+						console.log('Age Average SummaryRenderer', arguments);
+						return Ext.String.format('평균 {0}', parseInt(value));
+					}
+				}
+			]
+		}],
+		listeners: {
+			afterrender: function (_this, eOpt) {
+				console.log('afterrender', arguments);
+			}
+		}
+	});
+
+});
+</script>
+</head>
+<body>
+</body>
+</html>

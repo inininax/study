@@ -1,0 +1,43 @@
+{
+  "font": {
+    "family": {
+      "sans": {
+        "value": "'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "description": "Primary font family — Korean/English support"
+      },
+      "mono": {
+        "value": "'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace",
+        "description": "Monospace font family"
+      }
+    },
+    "size": {
+      "xs":   { "value": "0.75rem",  "px": 12,  "description": "Caption, Helper text" },
+      "sm":   { "value": "0.875rem", "px": 14,  "description": "Body small, Labels" },
+      "base": { "value": "1rem",     "px": 16,  "description": "Body default" },
+      "lg":   { "value": "1.125rem", "px": 18,  "description": "Body large" },
+      "xl":   { "value": "1.25rem",  "px": 20,  "description": "H5" },
+      "2xl":  { "value": "1.5rem",   "px": 24,  "description": "H4" },
+      "3xl":  { "value": "1.875rem", "px": 30,  "description": "H3" },
+      "4xl":  { "value": "2.25rem",  "px": 36,  "description": "H2" },
+      "5xl":  { "value": "3rem",     "px": 48,  "description": "H1" },
+      "6xl":  { "value": "4rem",     "px": 64,  "description": "Display" }
+    },
+    "weight": {
+      "regular":  { "value": 400 },
+      "medium":   { "value": 500 },
+      "semibold": { "value": 600 },
+      "bold":     { "value": 700 }
+    }
+  },
+  "line-height": {
+    "tight":   { "value": 1.25, "description": "Headings" },
+    "normal":  { "value": 1.5,  "description": "Body text" },
+    "relaxed": { "value": 1.75, "description": "Long-form reading" }
+  },
+  "letter-spacing": {
+    "tight":  { "value": "-0.02em", "description": "Display, H1" },
+    "normal": { "value": "0em",     "description": "Body" },
+    "wide":   { "value": "0.02em",  "description": "Labels, Buttons" },
+    "wider":  { "value": "0.05em",  "description": "Caption uppercase" }
+  }
+}

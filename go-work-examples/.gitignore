@@ -1,0 +1,7 @@
+.history/
+.idea/
+.vscode/
+.claude/
+.cursor/
+.DS_Store
+.env

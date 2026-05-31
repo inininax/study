@@ -1,0 +1,11 @@
+.serena/
+.DS_Store
+
+# Local artifacts created when running the examples in a checkout.
+build/
+build-info.txt
+build-reports/
+option-reports/
+output/
+reports/
+src/

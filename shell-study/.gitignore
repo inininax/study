@@ -1,0 +1,11 @@
+.idea/
+.idea_modules/
+.gradle/
+.vscode/
+.vs/
+
+bin/
+build/
+gen/
+out/
+node_modules/

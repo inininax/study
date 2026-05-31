@@ -1,0 +1,72 @@
+{
+  "color": {
+    "bg": {
+      "page":      { "value": "{color.neutral.100}", "description": "Main page background" },
+      "surface":   { "value": "{color.neutral.200}", "description": "Card / panel background" },
+      "subtle":    { "value": "{color.neutral.50}", "description": "Subtle distinction from page" },
+      "elevated":  { "value": "{color.white}", "description": "Elevated surface (modals, popovers)" },
+      "overlay":   { "value": "rgba(0, 0, 0, 0.4)", "description": "Scrim / backdrop overlay" },
+      "inverse":   { "value": "{color.neutral.800}", "description": "Inverse background (tooltips)" },
+      "brand":     { "value": "{color.mocha.50}", "description": "Brand-tinted background" },
+      "disabled":  { "value": "{color.neutral.200}", "description": "Disabled element background" }
+    },
+    "text": {
+      "primary":   { "value": "{color.neutral.900}", "description": "Strongest text" },
+      "secondary": { "value": "{color.neutral.600}", "description": "Supporting text" },
+      "tertiary":  { "value": "{color.neutral.500}", "description": "Placeholder / hint text" },
+      "disabled":  { "value": "{color.neutral.400}", "description": "Disabled text" },
+      "inverse":   { "value": "{color.neutral.50}", "description": "Text on inverse/dark backgrounds" },
+      "brand":     { "value": "{color.mocha.500}", "description": "Brand-colored text" },
+      "link":      { "value": "{color.blue.500}", "description": "Link text" },
+      "on-brand":  { "value": "{color.white}", "description": "Text on brand background" }
+    },
+    "border": {
+      "subtle":    { "value": "{color.neutral.300}", "description": "Subtle dividers" },
+      "default":   { "value": "{color.neutral.400}", "description": "Standard borders" },
+      "strong":    { "value": "{color.neutral.600}", "description": "Emphasis borders" },
+      "focus":     { "value": "{color.blue.500}", "description": "Focus ring color" },
+      "brand":     { "value": "{color.mocha.500}", "description": "Brand-colored border" },
+      "disabled":  { "value": "{color.neutral.300}", "description": "Disabled border" }
+    },
+    "accent": {
+      "brand":       { "value": "{color.mocha.500}", "description": "Primary brand color" },
+      "primary":     { "value": "{color.terracotta.500}", "description": "Primary accent" },
+      "secondary":   { "value": "{color.sage.300}", "description": "Secondary accent" },
+      "interactive": { "value": "{color.blue.500}", "description": "Interactive elements" },
+      "teal":        { "value": "{color.teal.500}", "description": "Teal accent" }
+    },
+    "interactive": {
+      "default":  { "value": "{color.blue.500}", "description": "Default interactive color" },
+      "hover":    { "value": "{color.blue.600}", "description": "Hover state" },
+      "pressed":  { "value": "{color.blue.700}", "description": "Pressed / active state" },
+      "disabled": { "value": "{color.neutral.400}", "description": "Disabled interactive" },
+      "focus":    { "value": "{color.blue.500}", "description": "Focus state" }
+    },
+    "status": {
+      "success":   { "value": "{color.green.600}", "description": "Success foreground" },
+      "error":     { "value": "{color.red.600}", "description": "Error foreground" },
+      "warning":   { "value": "{color.amber.600}", "description": "Warning foreground" },
+      "info":      { "value": "{color.blue.500}", "description": "Info foreground" }
+    },
+    "status-bg": {
+      "success":          { "value": "{color.green.50}", "description": "Success background" },
+      "error":            { "value": "{color.red.50}", "description": "Error background" },
+      "warning":          { "value": "{color.amber.50}", "description": "Warning background" },
+      "info":             { "value": "{color.blue.50}", "description": "Info background" },
+      "destructive-hover":    { "value": "{color.red.700}", "description": "Destructive button hover background" },
+      "destructive-pressed":  { "value": "{color.red.800}", "description": "Destructive button pressed background" }
+    }
+  },
+  "focus": {
+    "ring-color":  { "value": "{color.blue.500}", "description": "Focus ring color" },
+    "ring-width":  { "value": "2px", "description": "Focus ring thickness (WCAG 2.2)" },
+    "ring-offset": { "value": "2px", "description": "Focus ring offset from element" }
+  },
+  "shadow": {
+    "sm":   { "value": "{shadow.light.sm}" },
+    "base": { "value": "{shadow.light.base}" },
+    "md":   { "value": "{shadow.light.md}" },
+    "lg":   { "value": "{shadow.light.lg}" },
+    "xl":   { "value": "{shadow.light.xl}" }
+  }
+}

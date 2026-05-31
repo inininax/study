@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kustomize-web
+  labels:
+    app: kustomize-web
+spec:
+  selector:
+    app: kustomize-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+

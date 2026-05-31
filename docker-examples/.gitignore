@@ -1,0 +1,25 @@
+.gradle/
+.settings/
+.venv
+build/
+gradle/
+node_modules/
+out/
+
+.idea
+.vscode
+.DS_Store
+gradlew
+gradlew.bat
+
+# Local tool metadata
+.serena/
+
+# Docker Compose runtime state and secrets
+**/.env
+**/data/
+**/backup/*.gz
+**/backup/*.sql.gz
+**/backup/*.rdb
+**/backup/*.aof
+**/keyfile/mongo-keyfile

@@ -1,0 +1,13 @@
+{
+  "z-index": {
+    "hide":     { "value": -1, "description": "Hidden below base layer" },
+    "base":     { "value": 0, "description": "Default stacking context" },
+    "dropdown": { "value": 1000, "description": "Dropdown menus" },
+    "sticky":   { "value": 1100, "description": "Sticky headers / nav" },
+    "overlay":  { "value": 1200, "description": "Background overlays" },
+    "modal":    { "value": 1300, "description": "Modal dialogs" },
+    "popover":  { "value": 1400, "description": "Popovers / Floating UI" },
+    "toast":    { "value": 1500, "description": "Toast notifications" },
+    "tooltip":  { "value": 1600, "description": "Tooltips (topmost)" }
+  }
+}

@@ -1,0 +1,165 @@
+# =========================
+# Airflow 런타임
+# =========================
+# 실행 로그 (개인정보 / 사내 호스트명 노출 가능)
+logs/*
+!logs/.gitkeep
+
+# SQLite 메타DB (사용 안 하지만 혹시 모를 때)
+airflow.db
+airflow.db-journal
+airflow-webserver.pid
+unittests.cfg
+
+# 사용자가 로컬에서 편집할 수 있는 설정 (비밀 포함 가능)
+airflow.cfg
+webserver_config.py
+config/airflow.cfg
+config/webserver_config.py
+
+# =========================
+# 비밀 / 환경변수 (★ 보안)
+# =========================
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# 인증서 / 키
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+
+# 클라우드 자격증명
+.aws/
+gcp-credentials*.json
+service-account*.json
+credentials.json
+secrets/
+secret_*.yaml
+secret_*.yml
+
+# Airflow Connection / Variable 덤프
+connections.json
+variables.json
+connections.yaml
+variables.yaml
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 패키징
+build/
+dist/
+*.egg-info/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 가상환경
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# 테스트 / 커버리지
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# 타입체커
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# =========================
+# Docker
+# =========================
+# Compose가 만드는 named volume 데이터는 호스트에 안 떨어지지만
+# 일부 환경에서 bind mount되면 무시
+postgres-db-volume/
+postgres-data/
+docker-compose.override.yml
+docker-compose.override.yaml
+
+# =========================
+# IDE / 에디터
+# =========================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# =========================
+# OS
+# =========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# =========================
+# Claude Code / OMC 도구 상태
+# =========================
+.claude/
+.omc/
+.serena/
+.cursor/
+CLAUDE.local.md
+
+# =========================
+# 임시 / 백업
+# =========================
+*.log
+*.bak
+*.tmp
+*.temp
+*.orig
+.cache/
+tmp/
+temp/
+
+# =========================
+# 학습 중 생성될 수 있는 산출물
+# =========================
+# 학습자가 직접 만든 노트 (선택적)
+notes/
+scratch/
+
+# 캡처한 스크린샷 중 개인정보가 있을 수 있는 것
+docs/images/*.png
+docs/images/*.jpg
+docs/images/*.jpeg
+docs/images/*.gif
+!docs/images/README.md

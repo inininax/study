@@ -1,0 +1,59 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/5
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 3. Column Layout</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				title: 'Column',
+				width: 500,
+				height: 500,
+				layout: 'column',
+				items: [
+					{
+						title: 'Column 1',
+						columnWidth: 0.33,
+						height: 200, // 높이를 안 주면 제대로 안 나옴
+						items: [
+							 {xtype: 'button', text: 'button1'}
+							,{xtype: 'button', text: 'button2'}
+							,{xtype: 'button', text: 'button3'}
+							,{xtype: 'button', text: 'button4'}
+							,{xtype: 'button', text: 'button5'}
+							,{xtype: 'button', text: 'button6'}
+							,{xtype: 'button', text: 'button7'}
+							,{xtype: 'button', text: 'button8'}
+							,{xtype: 'button', text: 'button9'}
+							,{xtype: 'button', text: 'button0'}
+						]
+					}
+					,{
+						title: 'Column 2',
+						columnWidth: 0.33,
+						items: [
+							{xtype: 'button', text: 'button2'}
+						]
+					}
+					,{
+						title: 'Column 3',
+						columnWidth: 0.34,
+						html: 'contents'
+					}
+				],
+				renderTo: Ext.getBody()
+			});
+		})
+	</script>
+</head>
+
+<body></body>
+
+</html>

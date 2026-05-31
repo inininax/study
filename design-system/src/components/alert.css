@@ -1,0 +1,126 @@
+/* ============================================================
+   Design System — Alert Component
+   Block-level notification banners with icon and dismiss slots.
+   All values reference token-based CSS custom properties.
+   ============================================================ */
+
+/* ── Base alert ──────────────────────────────────────────── */
+.ds-alert {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "icon content close";
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-base);
+  border: var(--border-width-thin) solid transparent;
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+}
+
+/* ── Status variants ─────────────────────────────────────── */
+.ds-alert-info {
+  background-color: var(--color-status-bg-info);
+  border-color: var(--color-status-info);
+  color: var(--color-text-primary);
+}
+
+.ds-alert-success {
+  background-color: var(--color-status-bg-success);
+  border-color: var(--color-status-success);
+  color: var(--color-text-primary);
+}
+
+.ds-alert-warning {
+  background-color: var(--color-status-bg-warning);
+  border-color: var(--color-status-warning);
+  color: var(--color-text-primary);
+}
+
+.ds-alert-error {
+  background-color: var(--color-status-bg-error);
+  border-color: var(--color-status-error);
+  color: var(--color-text-primary);
+}
+
+/* ── Alert icon ──────────────────────────────────────────── */
+.ds-alert-icon {
+  grid-area: icon;
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+  padding-top: var(--spacing-0-5);
+  color: var(--color-text-secondary);
+}
+
+.ds-alert-info    .ds-alert-icon { color: var(--color-status-info); }
+.ds-alert-success .ds-alert-icon { color: var(--color-status-success); }
+.ds-alert-warning .ds-alert-icon { color: var(--color-status-warning); }
+.ds-alert-error   .ds-alert-icon { color: var(--color-status-error); }
+
+/* ── Alert content area ──────────────────────────────────── */
+.ds-alert-title {
+  grid-area: content;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+.ds-alert-description {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-1);
+}
+
+.ds-alert-info    .ds-alert-description,
+.ds-alert-success .ds-alert-description,
+.ds-alert-warning .ds-alert-description,
+.ds-alert-error   .ds-alert-description {
+  color: var(--color-text-secondary);
+}
+
+/* ── Alert close button ──────────────────────────────────── */
+.ds-alert-close {
+  grid-area: close;
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+  padding: var(--spacing-0-5);
+  margin: calc(var(--spacing-0-5) * -1);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-tertiary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color var(--duration-normal) var(--easing-default),
+              background-color var(--duration-normal) var(--easing-default);
+}
+
+.ds-alert-close:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-surface);
+}
+
+.ds-alert-close:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* When no icon is present, collapse the icon column */
+.ds-alert:not(:has(.ds-alert-icon)) {
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "content close";
+}
+
+/* When no close button is present, collapse the close column */
+.ds-alert:not(:has(.ds-alert-close)) {
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "icon content";
+}
+
+.ds-alert:not(:has(.ds-alert-icon)):not(:has(.ds-alert-close)) {
+  grid-template-columns: 1fr;
+  grid-template-areas: "content";
+}

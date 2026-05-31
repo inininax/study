@@ -1,0 +1,116 @@
+/* ============================================================
+   Design System — Modal Component
+   Fullscreen overlay dialog with header, body, footer slots.
+   All values reference token-based CSS custom properties.
+   ============================================================ */
+
+/* ── Body scroll lock ────────────────────────────────────── */
+body.ds-modal-open {
+  overflow: hidden;
+}
+
+/* ── Overlay backdrop ────────────────────────────────────── */
+.ds-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-bg-overlay);
+  z-index: var(--z-index-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4);
+  overflow-y: auto;
+}
+
+/* ── Modal dialog ────────────────────────────────────────── */
+.ds-modal {
+  position: relative;
+  z-index: var(--z-index-modal);
+  background-color: var(--color-bg-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100vh - var(--spacing-8));
+  max-height: calc(100dvh - var(--spacing-8));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Modal size variants ─────────────────────────────────── */
+.ds-modal-sm {
+  max-width: 400px;
+}
+
+.ds-modal-lg {
+  max-width: 768px;
+}
+
+/* ── Modal header ────────────────────────────────────────── */
+.ds-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5) var(--spacing-6);
+  border-bottom: var(--border-width-thin) solid var(--color-border-subtle);
+  flex-shrink: 0;
+}
+
+.ds-modal-header-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.ds-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  margin: calc(var(--spacing-1) * -1);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-tertiary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color var(--duration-normal) var(--easing-default),
+              background-color var(--duration-normal) var(--easing-default);
+}
+
+.ds-modal-close:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-surface);
+}
+
+.ds-modal-close:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ── Modal body ──────────────────────────────────────────── */
+.ds-modal-body {
+  padding: var(--spacing-6);
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+/* ── Modal footer ────────────────────────────────────────── */
+.ds-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-6);
+  border-top: var(--border-width-thin) solid var(--color-border-subtle);
+  flex-shrink: 0;
+}

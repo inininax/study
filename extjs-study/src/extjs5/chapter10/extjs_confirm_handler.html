@@ -1,0 +1,34 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/12
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 10. MessageBox</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.Msg.confirm(
+				//TITLE
+				"자바스크립트 알림",
+				//BODY
+				"이것이 CONFIRM창입니다.",
+				function (button) {
+					if (button == "yes") {
+						alert("yes");
+					} else {
+						alert("no");
+					}
+				});
+		})
+	</script>
+</head>
+
+<body>
+</body>
+
+</html>

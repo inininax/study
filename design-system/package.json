@@ -1,0 +1,91 @@
+{
+  "name": "@myorg/design-system",
+  "version": "3.2.0",
+  "description": "Cross-platform design system with tokens, components, layouts, and animations — for Mobile App, Mobile Web, and PC Web",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/js/tokens.cjs",
+  "module": "dist/js/tokens.js",
+  "types": "dist/js/tokens.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist/",
+    "src/tokens/",
+    "src/scss/",
+    "src/css/",
+    "src/components/",
+    "src/layouts/"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/js/tokens.d.ts",
+        "default": "./dist/js/tokens.js"
+      },
+      "require": {
+        "types": "./dist/js/tokens.d.ts",
+        "default": "./dist/js/tokens.cjs"
+      }
+    },
+    "./css/all.css": "./dist/css/all.css",
+    "./css/tokens.css": "./dist/css/tokens.css",
+    "./css/tokens-light.css": "./dist/css/tokens-light.css",
+    "./css/tokens-dark.css": "./dist/css/tokens-dark.css",
+    "./css/reset.css": "./dist/css/reset.css",
+    "./css/utilities.css": "./dist/css/utilities.css",
+    "./css/animations.css": "./dist/css/animations.css",
+    "./css/components.css": "./dist/css/components.css",
+    "./css/components/*": "./dist/css/components/*",
+    "./css/layouts.css": "./dist/css/layouts.css",
+    "./css/*": "./dist/css/*",
+    "./styles": "./dist/scss/index.scss",
+    "./styles/*": "./dist/scss/*",
+    "./tokens": {
+      "import": "./dist/js/tokens.js",
+      "require": "./dist/js/tokens.cjs"
+    },
+    "./tokens/json/*": "./dist/json/*",
+    "./tokens/primitives": "./dist/json/flat-primitives.json",
+    "./tokens/semantic/light": "./dist/json/flat-light.json",
+    "./tokens/semantic/dark": "./dist/json/flat-dark.json",
+    "./tokens/dtcg": "./dist/json/tokens.tokens.json"
+  },
+  "scripts": {
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "node scripts/build-tokens.cjs",
+    "prebuild": "npm run clean",
+    "prepublishOnly": "npm run build",
+    "test": "node scripts/test.cjs"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "css-variables",
+    "css-components",
+    "scss",
+    "dtcg",
+    "w3c",
+    "cross-platform",
+    "mobile",
+    "web",
+    "react-native",
+    "theming",
+    "dark-mode",
+    "accessibility",
+    "grid",
+    "animations"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kyungseok-lee/design-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kyungseok-lee/design-system/issues"
+  },
+  "homepage": "https://github.com/kyungseok-lee/design-system#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

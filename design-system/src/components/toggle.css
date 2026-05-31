@@ -1,0 +1,226 @@
+/* ==========================================================================
+   Toggle / Switch Component
+   Pattern A (input): <label class="ds-toggle-label">
+                        <input type="checkbox" class="ds-toggle">
+                        <span class="ds-toggle-track"><span class="ds-toggle-thumb"></span></span>
+                        <span>Label text</span>
+                      </label>
+
+   Pattern B (aria): <button role="switch" class="ds-toggle-track" aria-checked="false">
+                       <span class="ds-toggle-thumb"></span>
+                     </button>
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Hidden native checkbox (Pattern A)
+   -------------------------------------------------------------------------- */
+
+.ds-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Wrapper label
+   -------------------------------------------------------------------------- */
+
+.ds-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   Track (the pill-shaped background)
+   -------------------------------------------------------------------------- */
+
+.ds-toggle-track {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 22px;
+  padding: 2px;
+  background-color: var(--color-border-default);
+  border: var(--border-width-thin) solid transparent;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-normal) var(--easing-default),
+    border-color var(--duration-normal) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default);
+  position: relative;
+}
+
+/* Track as standalone button (Pattern B) */
+.ds-toggle-track[role="switch"] {
+  outline: none;
+}
+
+.ds-toggle-track[role="switch"]:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* --------------------------------------------------------------------------
+   Thumb (the sliding circle)
+   -------------------------------------------------------------------------- */
+
+.ds-toggle-thumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--color-bg-elevated);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--easing-default);
+  transform: translateX(0);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Checked / On state — Pattern A (input sibling)
+   -------------------------------------------------------------------------- */
+
+.ds-toggle:checked + .ds-toggle-track,
+.ds-toggle:checked ~ .ds-toggle-track {
+  background-color: var(--color-interactive-default);
+}
+
+.ds-toggle:checked + .ds-toggle-track .ds-toggle-thumb,
+.ds-toggle:checked ~ .ds-toggle-track .ds-toggle-thumb {
+  transform: translateX(18px);
+}
+
+/* Checked — Pattern B (aria-checked on the track itself) */
+.ds-toggle-track[aria-checked="true"] {
+  background-color: var(--color-interactive-default);
+}
+
+.ds-toggle-track[aria-checked="true"] .ds-toggle-thumb {
+  transform: translateX(18px);
+}
+
+/* --------------------------------------------------------------------------
+   Hover
+   -------------------------------------------------------------------------- */
+
+.ds-toggle-label:hover .ds-toggle-track:not(.ds-toggle-track[disabled]),
+.ds-toggle:not(:disabled) + .ds-toggle-track:hover,
+.ds-toggle:not(:disabled) ~ .ds-toggle-track:hover {
+  background-color: var(--color-border-strong);
+}
+
+.ds-toggle:checked + .ds-toggle-track:hover,
+.ds-toggle:checked ~ .ds-toggle-track:hover {
+  background-color: var(--color-interactive-hover);
+}
+
+.ds-toggle-track[aria-checked="true"]:hover:not([aria-disabled="true"]) {
+  background-color: var(--color-interactive-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Focus — Pattern A
+   -------------------------------------------------------------------------- */
+
+.ds-toggle:focus-visible + .ds-toggle-track,
+.ds-toggle:focus-visible ~ .ds-toggle-track {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* --------------------------------------------------------------------------
+   Disabled — Pattern A
+   -------------------------------------------------------------------------- */
+
+.ds-toggle:disabled + .ds-toggle-label,
+.ds-toggle:disabled ~ .ds-toggle-label {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ds-toggle:disabled + .ds-toggle-track,
+.ds-toggle:disabled ~ .ds-toggle-track {
+  background-color: var(--color-bg-disabled);
+  cursor: not-allowed;
+}
+
+.ds-toggle:disabled:checked + .ds-toggle-track,
+.ds-toggle:disabled:checked ~ .ds-toggle-track {
+  background-color: var(--color-interactive-disabled);
+}
+
+.ds-toggle-label:has(.ds-toggle:disabled) {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+
+/* Disabled — Pattern B */
+.ds-toggle-track[aria-disabled="true"] {
+  background-color: var(--color-bg-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ds-toggle-track[aria-disabled="true"][aria-checked="true"] {
+  background-color: var(--color-interactive-disabled);
+}
+
+/* --------------------------------------------------------------------------
+   Sizes — Small
+   -------------------------------------------------------------------------- */
+
+.ds-toggle-sm .ds-toggle-track,
+.ds-toggle-track.ds-toggle-sm {
+  width: 32px;
+  height: 18px;
+}
+
+.ds-toggle-sm .ds-toggle-thumb,
+.ds-toggle-track.ds-toggle-sm .ds-toggle-thumb {
+  width: 12px;
+  height: 12px;
+}
+
+.ds-toggle-sm .ds-toggle:checked + .ds-toggle-track .ds-toggle-thumb,
+.ds-toggle-sm .ds-toggle:checked ~ .ds-toggle-track .ds-toggle-thumb,
+.ds-toggle-track.ds-toggle-sm[aria-checked="true"] .ds-toggle-thumb {
+  transform: translateX(14px);
+}
+
+/* --------------------------------------------------------------------------
+   Sizes — Large
+   -------------------------------------------------------------------------- */
+
+.ds-toggle-lg .ds-toggle-track,
+.ds-toggle-track.ds-toggle-lg {
+  width: 52px;
+  height: 28px;
+}
+
+.ds-toggle-lg .ds-toggle-thumb,
+.ds-toggle-track.ds-toggle-lg .ds-toggle-thumb {
+  width: 22px;
+  height: 22px;
+}
+
+.ds-toggle-lg .ds-toggle:checked + .ds-toggle-track .ds-toggle-thumb,
+.ds-toggle-lg .ds-toggle:checked ~ .ds-toggle-track .ds-toggle-thumb,
+.ds-toggle-track.ds-toggle-lg[aria-checked="true"] .ds-toggle-thumb {
+  transform: translateX(24px);
+}

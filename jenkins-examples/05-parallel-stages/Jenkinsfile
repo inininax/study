@@ -1,0 +1,140 @@
+// ============================================
+// 예제 05: Parallel Stages - 병렬 실행 파이프라인
+// ============================================
+// 독립적인 작업들을 동시에 실행하여
+// 빌드 시간을 단축하는 예제입니다.
+
+pipeline {
+    agent any
+
+    environment {
+        REPORT_DIR = 'reports'
+    }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                echo '=== 준비 작업 ==='
+                sh "mkdir -p ${REPORT_DIR}"
+                echo '프로젝트 준비 완료'
+            }
+        }
+
+        // 병렬로 실행되는 단계들
+        stage('Parallel Tests') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        echo '=== 단위 테스트 (병렬) ==='
+                        sh '''
+                            echo "Unit Test Suite 시작..."
+                            echo "Test case 1: PASSED"
+                            echo "Test case 2: PASSED"
+                            echo "Test case 3: PASSED"
+                            echo "Unit Tests 완료!"
+                        '''
+                    }
+                }
+
+                stage('Integration Tests') {
+                    steps {
+                        echo '=== 통합 테스트 (병렬) ==='
+                        sh '''
+                            echo "Integration Test Suite 시작..."
+                            echo "API Test: PASSED"
+                            echo "DB Test: PASSED"
+                            echo "Integration Tests 완료!"
+                        '''
+                    }
+                }
+
+                stage('Code Analysis') {
+                    steps {
+                        echo '=== 코드 분석 (병렬) ==='
+                        sh '''
+                            echo "코드 품질 분석 시작..."
+                            echo "검사 항목 1: OK"
+                            echo "검사 항목 2: OK"
+                            echo "검사 항목 3: OK"
+                            echo "코드 분석 완료!"
+                        '''
+                    }
+                }
+
+                stage('Security Scan') {
+                    steps {
+                        echo '=== 보안 검사 (병렬) ==='
+                        sh '''
+                            echo "보안 취약점 검사 시작..."
+                            echo "취약점 1: 없음"
+                            echo "취약점 2: 없음"
+                            echo "보안 검사 완료!"
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Generate Reports') {
+            steps {
+                echo '=== 보고서 생성 ==='
+                sh '''
+                    echo "모든 테스트가 완료되었습니다."
+                    echo "보고서를 생성합니다..."
+                '''
+                sh "echo 'Test Report' > ${REPORT_DIR}/test-report.txt"
+                sh "echo 'Quality Report' > ${REPORT_DIR}/quality-report.txt"
+                sh "echo 'Security Report' > ${REPORT_DIR}/security-report.txt"
+                echo '보고서 생성 완료'
+            }
+        }
+
+        // 또 다른 병렬 실행 예제
+        stage('Build for Multiple Platforms') {
+            parallel {
+                stage('Linux Build') {
+                    steps {
+                        echo '=== Linux용 빌드 ==='
+                        sh 'echo "Building for Linux..."'
+                        sh 'echo "Linux build artifact created"'
+                    }
+                }
+
+                stage('Windows Build') {
+                    steps {
+                        echo '=== Windows용 빌드 ==='
+                        sh 'echo "Building for Windows..."'
+                        sh 'echo "Windows build artifact created"'
+                    }
+                }
+
+                stage('MacOS Build') {
+                    steps {
+                        echo '=== MacOS용 빌드 ==='
+                        sh 'echo "Building for MacOS..."'
+                        sh 'echo "MacOS build artifact created"'
+                    }
+                }
+            }
+        }
+
+        stage('Final Summary') {
+            steps {
+                echo '=== 최종 요약 ==='
+                echo '모든 플랫폼 빌드 완료'
+                echo '모든 테스트 통과'
+                echo '파이프라인 성공!'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '병렬 파이프라인이 성공적으로 완료되었습니다!'
+            archiveArtifacts artifacts: "${REPORT_DIR}/**", fingerprint: true
+        }
+        failure {
+            echo '병렬 파이프라인이 실패했습니다.'
+        }
+    }
+}

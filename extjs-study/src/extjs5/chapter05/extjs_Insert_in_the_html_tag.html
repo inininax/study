@@ -1,0 +1,33 @@
+﻿<!--  
+	Author : Mongo
+	Related Contents URL : http://mongodev.tistory.com/7
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ExtJS Chapter 5. Insert in the html tag</title>
+	<link href="../../libs/ext-5.1.4/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css" rel="stylesheet">
+	<script type="text/javascript" src="../../libs/ext-5.1.4/ext-all-debug.js"></script>
+	<script type="text/javascript">
+		Ext.onReady(function () {
+			Ext.create('Ext.Panel', {
+				width: 500,
+				height: 500,
+				frame: true,
+				title: 'ExtJS Panel',
+				html: '<h1>This Second DIV TAG TITLE</h1>',
+				renderTo: document.getElementById("extjspage")
+			});
+		})
+	</script>
+</head>
+
+<body>
+	<div style="background-color: red;color: white;">This First DIV TAG</div>
+	<div id="extjspage" style="background-color: yellow"></div>
+	<div style="background-color: blue;color: white;">This Third DIV TAG</div>
+</body>
+
+</html>

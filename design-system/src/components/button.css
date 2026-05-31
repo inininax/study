@@ -1,0 +1,281 @@
+/* ==========================================================================
+   Button Component
+   Usage: .ds-btn + variant + size modifier
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base Button
+   -------------------------------------------------------------------------- */
+
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  min-height: 36px;
+  border: var(--border-width-thin) solid transparent;
+  border-radius: var(--radius-base);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default),
+    opacity var(--duration-fast) var(--easing-default);
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.ds-btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.ds-btn:disabled,
+.ds-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   Variants
+   -------------------------------------------------------------------------- */
+
+/* Primary */
+.ds-btn-primary {
+  background-color: var(--color-interactive-default);
+  border-color: var(--color-interactive-default);
+  color: var(--color-text-on-brand);
+}
+
+.ds-btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-interactive-hover);
+  border-color: var(--color-interactive-hover);
+}
+
+.ds-btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-interactive-pressed);
+  border-color: var(--color-interactive-pressed);
+}
+
+/* Secondary */
+.ds-btn-secondary {
+  background-color: var(--color-bg-surface);
+  border-color: var(--color-border-default);
+  color: var(--color-text-primary);
+}
+
+.ds-btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-bg-elevated);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+.ds-btn-secondary:active:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-bg-page);
+  border-color: var(--color-border-strong);
+}
+
+/* Outline */
+.ds-btn-outline {
+  background-color: transparent;
+  border-color: var(--color-interactive-default);
+  color: var(--color-interactive-default);
+}
+
+.ds-btn-outline:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-status-bg-info);
+  border-color: var(--color-interactive-hover);
+  color: var(--color-interactive-hover);
+}
+
+.ds-btn-outline:active:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-status-bg-info);
+  border-color: var(--color-interactive-pressed);
+  color: var(--color-interactive-pressed);
+}
+
+/* Ghost */
+.ds-btn-ghost {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-text-primary);
+}
+
+.ds-btn-ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+}
+
+.ds-btn-ghost:active:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-bg-page);
+}
+
+/* Destructive */
+.ds-btn-destructive {
+  background-color: var(--color-status-error);
+  border-color: var(--color-status-error);
+  color: var(--color-text-on-brand);
+}
+
+.ds-btn-destructive:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-status-bg-destructive-hover);
+  border-color: var(--color-status-bg-destructive-hover);
+}
+
+.ds-btn-destructive:active:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-status-bg-destructive-pressed);
+  border-color: var(--color-status-bg-destructive-pressed);
+}
+
+/* Link */
+.ds-btn-link {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-text-link);
+  padding-left: 0;
+  padding-right: 0;
+  min-height: auto;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ds-btn-link:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--color-interactive-hover);
+  text-decoration-thickness: 2px;
+}
+
+.ds-btn-link:active:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--color-interactive-pressed);
+}
+
+/* --------------------------------------------------------------------------
+   Sizes
+   -------------------------------------------------------------------------- */
+
+.ds-btn-sm {
+  padding: var(--spacing-1) var(--spacing-3);
+  min-height: 28px;
+  font-size: var(--font-size-xs);
+  gap: var(--spacing-1);
+}
+
+.ds-btn-lg {
+  padding: var(--spacing-3) var(--spacing-6);
+  min-height: 44px;
+  font-size: var(--font-size-base);
+  gap: var(--spacing-2);
+}
+
+/* --------------------------------------------------------------------------
+   Loading State
+   -------------------------------------------------------------------------- */
+
+.ds-btn-loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.ds-btn-loading::after {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-full);
+  animation: ds-spin var(--duration-slower) var(--easing-linear) infinite;
+  flex-shrink: 0;
+}
+
+.ds-btn-sm.ds-btn-loading::after {
+  width: 12px;
+  height: 12px;
+}
+
+.ds-btn-lg.ds-btn-loading::after {
+  width: 16px;
+  height: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Icon Button (square)
+   -------------------------------------------------------------------------- */
+
+.ds-btn-icon {
+  padding: var(--spacing-2);
+  min-width: 36px;
+  min-height: 36px;
+  width: 36px;
+  height: 36px;
+  gap: 0;
+}
+
+.ds-btn-sm.ds-btn-icon {
+  padding: var(--spacing-1);
+  min-width: 28px;
+  min-height: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.ds-btn-lg.ds-btn-icon {
+  padding: var(--spacing-3);
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+}
+
+/* --------------------------------------------------------------------------
+   Full Width
+   -------------------------------------------------------------------------- */
+
+.ds-btn-block {
+  display: flex;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Button Group
+   -------------------------------------------------------------------------- */
+
+.ds-btn-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ds-btn-group .ds-btn {
+  border-radius: 0;
+}
+
+.ds-btn-group .ds-btn:first-child {
+  border-radius: var(--radius-base) 0 0 var(--radius-base);
+}
+
+.ds-btn-group .ds-btn:last-child {
+  border-radius: 0 var(--radius-base) var(--radius-base) 0;
+}
+
+.ds-btn-group .ds-btn:not(:first-child) {
+  margin-left: calc(var(--border-width-thin) * -1);
+}
+
+.ds-btn-group .ds-btn:focus-visible {
+  z-index: 1;
+  position: relative;
+}

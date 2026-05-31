@@ -1,0 +1,134 @@
+/* ============================================================
+   Design System — Badge Component
+   Inline pill label for status, category, and count display.
+   All values reference token-based CSS custom properties.
+   ============================================================ */
+
+/* ── Base badge ──────────────────────────────────────────── */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-0-5) var(--spacing-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-wide);
+  white-space: nowrap;
+  border-radius: var(--radius-full);
+  border: var(--border-width-thin) solid transparent;
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+}
+
+/* ── Color variants ──────────────────────────────────────── */
+.ds-badge-primary {
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-on-brand);
+  border-color: var(--color-accent-primary);
+}
+
+.ds-badge-secondary {
+  background-color: var(--color-accent-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent-secondary);
+}
+
+.ds-badge-success {
+  background-color: var(--color-status-bg-success);
+  color: var(--color-status-success);
+  border-color: var(--color-status-bg-success);
+}
+
+.ds-badge-warning {
+  background-color: var(--color-status-bg-warning);
+  color: var(--color-status-warning);
+  border-color: var(--color-status-bg-warning);
+}
+
+.ds-badge-error {
+  background-color: var(--color-status-bg-error);
+  color: var(--color-status-error);
+  border-color: var(--color-status-bg-error);
+}
+
+.ds-badge-info {
+  background-color: var(--color-status-bg-info);
+  color: var(--color-status-info);
+  border-color: var(--color-status-bg-info);
+}
+
+/* ── Outline variant ─────────────────────────────────────── */
+.ds-badge-outline {
+  background-color: transparent;
+  border-color: var(--color-border-default);
+  color: var(--color-text-secondary);
+}
+
+.ds-badge-primary.ds-badge-outline {
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+  background-color: transparent;
+}
+
+.ds-badge-secondary.ds-badge-outline {
+  border-color: var(--color-accent-secondary);
+  color: var(--color-text-primary);
+  background-color: transparent;
+}
+
+.ds-badge-success.ds-badge-outline {
+  border-color: var(--color-status-success);
+  color: var(--color-status-success);
+  background-color: transparent;
+}
+
+.ds-badge-warning.ds-badge-outline {
+  border-color: var(--color-status-warning);
+  color: var(--color-status-warning);
+  background-color: transparent;
+}
+
+.ds-badge-error.ds-badge-outline {
+  border-color: var(--color-status-error);
+  color: var(--color-status-error);
+  background-color: transparent;
+}
+
+.ds-badge-info.ds-badge-outline {
+  border-color: var(--color-status-info);
+  color: var(--color-status-info);
+  background-color: transparent;
+}
+
+/* ── Size variants ───────────────────────────────────────── */
+.ds-badge-sm {
+  padding: var(--spacing-0-5) var(--spacing-1-5);
+  font-size: 0.625rem; /* 10px — below xs for compact fit */
+  gap: var(--spacing-0-5);
+}
+
+.ds-badge-lg {
+  padding: var(--spacing-1) var(--spacing-3);
+  font-size: var(--font-size-sm);
+  gap: var(--spacing-1-5);
+}
+
+/* ── Dot indicator ───────────────────────────────────────── */
+.ds-badge-dot {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-text-tertiary);
+  border: none;
+}
+
+.ds-badge-primary.ds-badge-dot    { background-color: var(--color-accent-primary); }
+.ds-badge-secondary.ds-badge-dot  { background-color: var(--color-accent-secondary); }
+.ds-badge-success.ds-badge-dot    { background-color: var(--color-status-success); }
+.ds-badge-warning.ds-badge-dot    { background-color: var(--color-status-warning); }
+.ds-badge-error.ds-badge-dot      { background-color: var(--color-status-error); }
+.ds-badge-info.ds-badge-dot       { background-color: var(--color-status-info); }

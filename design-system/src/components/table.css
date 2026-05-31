@@ -1,0 +1,106 @@
+/* ==========================================================================
+   Table Component
+   Usage: .ds-table + optional modifier classes
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base Table
+   -------------------------------------------------------------------------- */
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+
+.ds-table thead {
+  background-color: var(--color-bg-subtle);
+  border-bottom: var(--border-width-medium) solid var(--color-border-subtle);
+}
+
+.ds-table th {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  letter-spacing: var(--letter-spacing-wide);
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Cells
+   -------------------------------------------------------------------------- */
+
+.ds-table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: var(--border-width-thin) solid var(--color-border-subtle);
+  vertical-align: middle;
+}
+
+.ds-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --------------------------------------------------------------------------
+   Striped Modifier
+   -------------------------------------------------------------------------- */
+
+.ds-table-striped tbody tr:nth-child(even) {
+  background-color: var(--color-bg-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Hoverable Modifier
+   -------------------------------------------------------------------------- */
+
+.ds-table-hoverable tbody tr {
+  transition: background-color var(--duration-fast) var(--easing-default);
+}
+
+.ds-table-hoverable tbody tr:hover {
+  background-color: var(--color-bg-surface);
+}
+
+/* --------------------------------------------------------------------------
+   Compact Modifier
+   -------------------------------------------------------------------------- */
+
+.ds-table-compact th,
+.ds-table-compact td {
+  padding: var(--spacing-2) var(--spacing-3);
+}
+
+/* --------------------------------------------------------------------------
+   Bordered Modifier
+   -------------------------------------------------------------------------- */
+
+.ds-table-bordered,
+.ds-table-bordered th,
+.ds-table-bordered td {
+  border: var(--border-width-thin) solid var(--color-border-subtle);
+}
+
+.ds-table-bordered thead {
+  border-bottom-width: var(--border-width-medium);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Wrapper
+   -------------------------------------------------------------------------- */
+
+.ds-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ds-table-responsive .ds-table {
+  min-width: 600px;
+}

@@ -1,0 +1,8 @@
+{
+  "border-width": {
+    "none":   { "value": "0px", "description": "No border" },
+    "thin":   { "value": "1px", "description": "Default border" },
+    "medium": { "value": "2px", "description": "Emphasis border / Focus ring" },
+    "thick":  { "value": "4px", "description": "Strong emphasis" }
+  }
+}
