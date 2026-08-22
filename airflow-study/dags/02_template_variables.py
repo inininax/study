@@ -10,7 +10,7 @@ Airflow의 Jinja Template 예약어를 한 번에 모두 출력해보는 DAG.
 """
 from __future__ import annotations
 
-from datetime import datetime
+import pendulum
 
 from airflow import DAG
 from airflow.operators.bash import BashOperator
@@ -39,7 +39,7 @@ def print_all_context(**context):
 with DAG(
     dag_id="02_template_variables",
     description="Jinja 예약어 전체를 한 번에 보기",
-    start_date=datetime(2026, 1, 1),
+    start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
     schedule="@daily",
     catchup=False,
     tags=["learning", "templates"],

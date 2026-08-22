@@ -10,7 +10,7 @@ BranchPythonOperator로 조건 분기 시연.
 """
 from __future__ import annotations
 
-from datetime import datetime
+import pendulum
 
 from airflow import DAG
 from airflow.operators.bash import BashOperator
@@ -31,7 +31,7 @@ def choose_branch(**context):
 with DAG(
     dag_id="03_branching_example",
     description="conf로 분기하는 DAG",
-    start_date=datetime(2026, 1, 1),
+    start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
     schedule=None,   # 수동 트리거 전용
     catchup=False,
     tags=["learning", "branching"],

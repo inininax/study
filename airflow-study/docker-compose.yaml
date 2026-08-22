@@ -90,6 +90,7 @@ services:
     command:
       - -c
       - |
+        set -e
         airflow db migrate
         airflow users create \
           --username "${_AIRFLOW_WWW_USER_USERNAME:-airflow}" \
@@ -97,7 +98,7 @@ services:
           --firstname Air \
           --lastname Flow \
           --role Admin \
-          --email airflow@example.com || true
+          --email airflow@example.com
     environment:
       <<: *airflow-common-env
       _AIRFLOW_DB_MIGRATE: 'true'

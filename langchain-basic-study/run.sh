@@ -12,12 +12,19 @@ else
     exit 1
 fi
 
-# 의존성 확인
+# 의존성 확인 (모듈별 임포트 체크)
 echo "📚 의존성 확인 중..."
-uv pip list | grep -E "(langchain|jupyter|ipykernel)" || {
+missing=()
+for module in langchain_core langchain_ollama langchain_openai IPython ipykernel dotenv; do
+    if ! python -c "import ${module}" >/dev/null 2>&1; then
+        missing+=("${module}")
+    fi
+done
+if [ "${#missing[@]}" -gt 0 ]; then
+    echo "📦 누락된 모듈: ${missing[*]}"
     echo "📦 의존성을 설치합니다..."
     uv pip install -r requirements.txt
-}
+fi
 
 # 주피터 노트북 실행
 echo "📓 주피터 노트북을 실행합니다..."

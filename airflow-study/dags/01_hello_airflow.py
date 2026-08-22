@@ -10,7 +10,7 @@
 """
 from __future__ import annotations
 
-from datetime import datetime
+import pendulum
 
 from airflow import DAG
 from airflow.operators.bash import BashOperator
@@ -27,7 +27,7 @@ def say_hello(**context):
 with DAG(
     dag_id="01_hello_airflow",
     description="가장 단순한 학습용 DAG",
-    start_date=datetime(2026, 1, 1),
+    start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
     schedule="@daily",
     catchup=False,
     tags=["learning", "intro"],

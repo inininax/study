@@ -28,7 +28,7 @@ async def fetch_data(name: str, delay: float) -> str:
     return f"{name} 데이터"
 
 
-async def basic_async_demo() -> None:
+async def basic_async_demo() -> float:
     """기본 async/await 사용법."""
     print("\n📌 기본 async/await")
     print("-" * 50)
@@ -41,9 +41,11 @@ async def basic_async_demo() -> None:
     
     elapsed = time.perf_counter() - start
     print(f"\n  순차 실행 소요 시간: {elapsed:.2f}초")
+    print(f"  결과: {result1}, {result2}")
+    return elapsed
 
 
-async def concurrent_async_demo() -> None:
+async def concurrent_async_demo() -> float:
     """동시 실행 (asyncio.gather)."""
     print("\n📌 동시 실행 (asyncio.gather)")
     print("-" * 50)
@@ -60,6 +62,7 @@ async def concurrent_async_demo() -> None:
     elapsed = time.perf_counter() - start
     print(f"\n  동시 실행 소요 시간: {elapsed:.2f}초")
     print(f"  결과: {results}")
+    return elapsed
 
 
 async def task_demo() -> None:
@@ -135,11 +138,16 @@ def main() -> None:
     print("=" * 60)
     
     # 이벤트 루프 실행
-    asyncio.run(basic_async_demo())
-    asyncio.run(concurrent_async_demo())
+    sequential_elapsed = asyncio.run(basic_async_demo())
+    concurrent_elapsed = asyncio.run(concurrent_async_demo())
     asyncio.run(task_demo())
     asyncio.run(timeout_demo())
     asyncio.run(exception_handling_demo())
+    
+    print(f"""
+    📊 순차 실행: {sequential_elapsed:.2f}초 vs 동시 실행: {concurrent_elapsed:.2f}초
+       → 약 {sequential_elapsed / concurrent_elapsed:.1f}배 빠름!
+""")
     
     print("""
     ╔═══════════════════════════════════════════════════════════════╗
