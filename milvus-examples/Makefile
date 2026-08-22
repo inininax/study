@@ -33,19 +33,19 @@ setup: install
 	mkdir -p logs
 
 start:
-	docker-compose up -d
+	docker compose up -d
 	@echo "Waiting for Milvus to be ready..."
 	@sleep 5
-	docker-compose ps
+	docker compose ps
 
 stop:
-	docker-compose down
+	docker compose down
 
 restart:
-	docker-compose restart
+	docker compose restart
 
 logs:
-	docker-compose logs -f milvus
+	docker compose logs -f milvus
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true

@@ -1,4 +1,4 @@
-package com.example.study.ex03
+package com.example.study.ex04
 
 import com.example.study.ex04.JavaMoney
 

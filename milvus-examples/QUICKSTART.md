@@ -24,13 +24,13 @@ mkdir -p logs
 
 ```bash
 # Docker Compose로 Milvus 시작
-docker-compose up -d
+docker compose up -d
 
 # 상태 확인
-docker-compose ps
+docker compose ps
 
 # 로그 확인 (optional)
-docker-compose logs -f milvus
+docker compose logs -f milvus
 ```
 
 **예상 출력**:
@@ -104,14 +104,14 @@ python 04_basic_search.py --topk 10
 
 ```bash
 # Milvus 상태 확인
-docker-compose ps
+docker compose ps
 
 # Milvus 재시작
-docker-compose restart milvus
+docker compose restart milvus
 
 # 전체 재시작
-docker-compose down
-docker-compose up -d
+docker compose down
+docker compose up -d
 ```
 
 ### 포트 충돌
@@ -132,7 +132,7 @@ netstat -an | grep 9000   # MinIO
 docker system prune -a
 
 # Milvus 볼륨 정리
-docker-compose down -v
+docker compose down -v
 ```
 
 ---
@@ -180,7 +180,7 @@ python -c "from config.settings import settings; print(settings)"
 
 문제가 발생하면:
 1. [문제 해결 가이드](./README.md#문제-해결) 확인
-2. Milvus 로그 확인: `docker-compose logs milvus`
+2. Milvus 로그 확인: `docker compose logs milvus`
 3. 이슈 등록: GitHub Issues
 
 **Happy Learning! 🎉**

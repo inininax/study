@@ -1,4 +1,4 @@
-package com.example.study
+package com.example.study.ex02
 
 fun main(args: Array<String>) {
     println("hello kotlin")

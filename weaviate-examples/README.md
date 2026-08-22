@@ -28,7 +28,7 @@ weaviate-examples/
 ├── lessons/                     # 단계별 학습 모듈
 │   ├── 01-basics/              # 초급: 기본 개념과 CRUD
 │   ├── 02-intermediate/        # 중급: 벡터 검색과 필터링
-│   └── 03-advanced/            # 고급: RAG, 멀티테넌시, 최적화
+│   └── 03-advanced/            # 고급: RAG, 멀티테넌시, 최적화 (작성 예정)
 ├── project/                     # 실전 프로젝트
 │   ├── app/                    # FastAPI 백엔드 애플리케이션
 │   ├── tests/                  # 테스트 코드
@@ -162,22 +162,22 @@ python 01_connection.py
 
 ### 🔴 고급 (Advanced) - 3-4주
 
-1. **RAG 구현** (`lessons/03-advanced/01_rag_implementation.py`)
+1. **RAG 구현** (lessons/03-advanced/01_rag_implementation.py, 작성 예정)
    - LLM과 벡터 DB 통합
    - 컨텍스트 기반 응답 생성
    - 프롬프트 엔지니어링
 
-2. **멀티테넌시** (`lessons/03-advanced/02_multi_tenancy.py`)
+2. **멀티테넌시** (lessons/03-advanced/02_multi_tenancy.py, 작성 예정)
    - 테넌트 관리
    - 데이터 격리
    - 확장성 패턴
 
-3. **성능 최적화** (`lessons/03-advanced/03_performance_optimization.py`)
+3. **성능 최적화** (lessons/03-advanced/03_performance_optimization.py, 작성 예정)
    - 인덱싱 전략
    - 쿼리 최적화
    - 캐싱 전략
 
-4. **모니터링** (`lessons/03-advanced/04_monitoring.py`)
+4. **모니터링** (lessons/03-advanced/04_monitoring.py, 작성 예정)
    - 메트릭 수집
    - 로깅 전략
    - 에러 핸들링

@@ -120,11 +120,3 @@ services:
 networks:
   milvus:
     driver: bridge
-
-volumes:
-  etcd:
-  minio:
-  milvus:
-  redis:
-  prometheus:
-  grafana:

@@ -85,4 +85,4 @@ python 04_aggregations.py
 
 ## 다음 단계
 
-👉 [고급 학습: RAG와 프로덕션 패턴](../03-advanced/README.md)
+👉 [고급 학습: RAG와 프로덕션 패턴](../03-advanced/README.md (작성 예정 — 아직 없음))
