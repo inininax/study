@@ -1,19 +1,65 @@
-.gradle/
-.idea/
-.settings/
-.vscode/
-
-build/
-gradle/
-node_modules/
-out/
-
+# ===== OS =====
 .DS_Store
-gradlew
-gradlew.bat
+Thumbs.db
 
-# AI agent directories
+# ===== IDE =====
+.idea/
+.vscode/
+.settings/
+.history/
+
+# ===== AI agent directories =====
 .serena/
 .omc/
-# bind-mount debris
+
+# ===== JVM / Gradle =====
+.gradle/
+build/
+out/
+# 래퍼 미커밋 정책: 로컬에 설치된 gradle 사용 (AGENTS.md 참고)
+gradle/
+gradlew
+gradlew.bat
+.kotlin/
+
+# ===== Node.js =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# ⚠️ dist/는 전역 무시하지 않는다: webpack-example/, webpack-study/의 dist/는 의도적으로 커밋됨
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# 환경변수 파일 (커밋된 템플릿 .env.example은 예외)
+.env
+.env.local
+!.env.example
+
+# ===== Go =====
+# 모듈 루트에서 go build 시 생성되는 바이너리 (모듈명과 동일한 이름)
+/go-work-examples/examples/workspace-demo/workspace-demo
+/go-work-examples/examples/library-consumer/library-consumer
+/go-work-examples/services/user-service/user-service
+/go-work-examples/services/order-service/order-service
+/go-work-examples/services/notification-service/notification-service
+/go-work-examples/tools/cli/cli
+/go-work-examples/tools/migration/migration
+
+# ===== Dart / Flutter =====
+.dart_tool/
+
+# ===== 기타 임시 파일 =====
+*.tmp
+
+# ===== Docker bind-mount 산출물 =====
 docker-study/hellophp/mysql/data/
