@@ -1,0 +1,6 @@
+---
+description: Repository-wide guidelines for this polyglot study monorepo
+alwaysApply: true
+---
+
+Follow **[AGENTS.md](../AGENTS.md)** at the repository root — it is the single source of truth (project structure, build commands, architecture notes, and gotchas). Key rule: each top-level directory is a self-contained project with its own toolchain; there is no shared root build system.
