@@ -1,5 +1,5 @@
 FROM node:18-alpine AS deps
-RUN apk add --no-cache libc6-compat curl
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
@@ -19,6 +19,8 @@ ENV NODE_ENV production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+# healthcheck(docker-compose)가 runner 스테이지에서 curl을 사용함
+RUN apk add --no-cache curl
 
 COPY --from=builder /app/public ./public
 

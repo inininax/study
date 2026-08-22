@@ -58,6 +58,8 @@
 | `docker-study/`, `docker-examples/` | Docker 기초 및 응용 |
 | `jenkins-examples/` | Jenkins Pipeline 예제 8종 (`scripts/validate-jenkinsfiles.sh` 검증 스크립트) |
 | `git-examples/`, `shell-study/` | Git / 셸 스크립트 연습 |
+| `hello-world/` | JS/Go/Py 미니 데모 모음 (fibonacci, bouncing balls 등) |
+| `prompt-engineering-study/` | 프롬프트 엔지니어링 학습 |
 
 ## 시작하기
 

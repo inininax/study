@@ -24,6 +24,8 @@ Polyglot study/examples mono-repo. Each top-level directory is a self-contained 
 | `milvus-examples/`, `qdrant-examples/`, `weaviate-examples/` | — | vector databases (Docker Compose) |
 | `k8s-study/`, `k8s-lecture-starter/` | — | Kubernetes manifests, lecture notes |
 | `docker-study/`, `docker-examples/`, `jenkins-examples/`, `git-examples/`, `shell-study/` | — | DevOps/scripting studies |
+| `hello-world/` | JS/Go/Py | 미니 데모 모음 (fibonacci, bouncing balls 등) |
+| `prompt-engineering-study/` | Python | 프롬프트 엔지니어링 학습 |
 
 ## Build & Run Commands
 
