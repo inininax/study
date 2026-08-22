@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"time"

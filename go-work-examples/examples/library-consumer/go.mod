@@ -6,3 +6,5 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/kyungseok-lee/go-work-examples/shared v0.0.0-20250908215140-e8331dc2750b
 )
+
+replace github.com/kyungseok-lee/go-work-examples/shared => ../../shared

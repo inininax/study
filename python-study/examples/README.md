@@ -23,7 +23,7 @@ source venv/bin/activate   # macOS/Linux
 ### 2. 예제 실행
 ```bash
 # 단일 파일
-python3 01-beginner/hello.py
+python3 01-beginner/01_hello_world.py
 
 # 모든 예제 (Bash)
 for f in 01-beginner/*.py; do

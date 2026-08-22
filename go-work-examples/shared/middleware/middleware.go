@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"crypto/rand"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -87,8 +88,12 @@ func generateRequestID() string {
 func randomString(length int) string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	b := make([]byte, length)
+	if _, err := rand.Read(b); err != nil {
+		// crypto/rand failure is unexpected; fall back to a timestamp-based ID
+		return time.Now().Format("20060102150405.000000000")
+	}
 	for i := range b {
-		b[i] = charset[time.Now().UnixNano()%int64(len(charset))]
+		b[i] = charset[b[i]%byte(len(charset))]
 	}
 	return string(b)
 }

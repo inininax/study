@@ -92,7 +92,7 @@ services:
       - "8080:8080"
     environment:
       - LOGSTASH_HOST=logstash
-      - LOGSTASH_PORT=5044
+      - LOGSTASH_PORT=5000
     depends_on:
       logstash:
         condition: service_healthy

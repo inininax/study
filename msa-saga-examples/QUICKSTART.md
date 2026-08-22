@@ -12,7 +12,7 @@
 ```bash
 # 프로젝트 클론
 git clone <repository-url>
-cd msa-saga-go-examples
+cd msa-saga-examples
 
 # 모든 서비스 시작
 docker compose up -d

@@ -13,12 +13,7 @@ services:
       - QDRANT__SERVICE__HTTP_PORT=6333
       - QDRANT__SERVICE__GRPC_PORT=6334
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6333/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    # qdrant 공식 이미지에는 curl/wget이 없어 healthcheck를 둘 수 없음 (제거함)
 
   redis:
     image: redis:7-alpine

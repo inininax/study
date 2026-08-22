@@ -22,4 +22,4 @@ echo $YN
 if [ "${YN:0:1}" != "y" ]; then
 	echo "Build Image Stopped"
 	exit
-if
+fi

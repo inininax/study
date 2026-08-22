@@ -4,7 +4,7 @@
     "es6": true,
     "node": true
   },
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
@@ -24,6 +24,7 @@
     "sourceType": "module"
   },
   "plugins": [
+    "@typescript-eslint",
     "react",
     "react-hooks",
     "prettier"

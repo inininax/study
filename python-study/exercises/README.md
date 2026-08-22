@@ -27,11 +27,11 @@ vim my_solution.py
 ```
 
 ### 3. 정답과 비교
-각 문제마다 `solution_*.py` 정답 파일이 제공됩니다. **먼저 스스로 풀어본 후** 비교하세요.
+정답은 `01-beginner/solutions.py`에 모아 제공됩니다. **먼저 스스로 풀어본 후** 비교하세요.
 
 ### 4. 테스트 실행
 ```bash
-python3 -m pytest test_solutions.py
+python3 01-beginner/solutions.py   # assert 기반 자가 점검 (외부 의존성 없음)
 ```
 
 ## 문제 풀이 팁

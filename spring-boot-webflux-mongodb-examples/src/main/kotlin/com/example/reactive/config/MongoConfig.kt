@@ -1,5 +1,6 @@
 package com.example.reactive.config
 
+import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration
@@ -15,9 +16,12 @@ import java.time.ZonedDateTime
 @Configuration
 @EnableReactiveMongoRepositories(basePackages = ["com.example.reactive.repository"])
 @EnableReactiveMongoAuditing
-class MongoConfig : AbstractReactiveMongoConfiguration() {
+class MongoConfig(
+    private val mongoProperties: MongoProperties,
+) : AbstractReactiveMongoConfiguration() {
 
-    override fun getDatabaseName(): String = "reactive_db"
+    // spring.data.mongodb.database (또는 uri) 설정을 따르도록 함 — 기본값 reactive_db
+    override fun getDatabaseName(): String = mongoProperties.mongoClientDatabase
 
     @Bean
     override fun customConversions(): MongoCustomConversions {

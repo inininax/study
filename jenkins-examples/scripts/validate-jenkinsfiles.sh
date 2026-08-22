@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo_root="$(git rev-parse --show-toplevel)"
+# jenkins-examples는 상위 study 모노레포의 하위 디렉터리이므로 git toplevel이 아니라
+# 스크립트 기준 위치를 저장소 루트로 사용한다.
+repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo_root"
 
 docs_paths="AGENTS.md GUIDE.md README.md scripts/validate-jenkinsfiles.sh"

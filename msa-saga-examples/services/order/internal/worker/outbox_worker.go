@@ -3,6 +3,7 @@ package worker
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 	"time"
 
 	"github.com/kyungseok/msa-saga-go-examples/common/messaging"
@@ -97,7 +98,7 @@ func (w *OutboxWorker) publishEvent(ctx context.Context, event *repository.Outbo
 	key := ""
 	if orderID, ok := payload["orderId"]; ok {
 		if oid, ok := orderID.(float64); ok {
-			key = string(rune(int64(oid)))
+			key = strconv.FormatInt(int64(oid), 10)
 		}
 	}
 

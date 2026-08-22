@@ -1,7 +1,6 @@
 # MSA 분산 트랜잭션 & SAGA (Golang Practical Guide)
 
 [![Go Version](https://img.shields.io/badge/Go-1.23-blue.svg)](https://golang.org)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 실무에서 즉시 사용 가능한 Go 기반 MSA 분산 트랜잭션 & SAGA 패턴 구현 예제입니다.
 
@@ -69,7 +68,7 @@
 ## 📂 프로젝트 구조
 
 ```
-msa-saga-go-examples/
+msa-saga-examples/
 ├── common/                      # 공통 라이브러리
 │   ├── events/                  # 이벤트 정의
 │   ├── errors/                  # 에러 코드 및 처리
@@ -116,7 +115,7 @@ msa-saga-go-examples/
 
 ```bash
 git clone <repository-url>
-cd msa-saga-go-examples
+cd msa-saga-examples
 ```
 
 ### 2. 인프라 시작
@@ -449,7 +448,9 @@ make check-redis
 
 ## 🧪 테스트
 
-### 단위 테스트
+> ⚠️ 아직 자동화된 테스트 코드(`*_test.go`)는 없습니다. 아래 명령은 테스트 추가 시 사용 가능한 형태이며, 현재는 `go build ./...`로 전체 컴파일을 검증할 수 있습니다.
+
+### 단위 테스트 (작성 예정)
 
 ```bash
 # 전체 테스트 실행
@@ -462,7 +463,7 @@ go test ./services/order/internal/service/...
 go test -cover ./...
 ```
 
-### 통합 테스트
+### 통합 테스트 (작성 예정)
 
 ```bash
 # 환경 시작

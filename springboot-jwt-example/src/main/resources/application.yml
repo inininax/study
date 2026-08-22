@@ -54,7 +54,8 @@ spring:
       on-profile: localjwt
 jwt:
   header: Authorization
-  secret: ${JWT_SECRET:change-me-to-a-secure-base64-secret-at-least-64-bytes-long} # set via JWT_SECRET env var
+  # fallback은 유효한 Base64(디코딩 69바이트)이며 로컬 개발 전용 — 실제 사용 시 JWT_SECRET 환경변수로 교체
+  secret: ${JWT_SECRET:ZGV2LW9ubHktand0LWhtYWMtc2VjcmV0LWZvci1zdHVkeS1yZXBsYWNlLXdpdGgteW91ci1vd24tNjRieXRlLWtleSEh}
   token-validity-in-seconds: 86400000 # 86400000 = 1000*60*60*24 = one day
 ---
 spring:

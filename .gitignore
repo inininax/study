@@ -15,3 +15,5 @@ gradlew.bat
 # AI agent directories
 .serena/
 .omc/
+# bind-mount debris
+docker-study/hellophp/mysql/data/

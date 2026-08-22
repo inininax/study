@@ -68,8 +68,7 @@ spring:
       on-profile: test
   data:
     mongodb:
-      host: localhost
-      port: 27017
+      # host/port를 지정하지 않으면 flapdoodle embedded mongodb가 자동 기동됨 (별도 로컬 Mongo 불필요)
       database: reactive_test_db
 
 logging:

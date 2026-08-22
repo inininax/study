@@ -48,7 +48,7 @@ gulp.task('clean', () => {
 
 // gulp webpack
 gulp.task('webpack', () => {
-	return gulp.src('src/js/main.js')
+	return gulp.src('src/js/index.js')
 		.pipe(webpack(webpackConfig))
 		.pipe(gulp.dest('dist/js'));
 });

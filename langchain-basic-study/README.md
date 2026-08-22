@@ -51,7 +51,7 @@ ollama serve
 **학습 포인트**:
 - **Ollama (로컬)**: `ChatOllama`를 사용한 로컬 모델 호출
 - **OpenAI (클라우드)**: `ChatOpenAI`를 사용한 클라우드 모델 호출
-- **Azure OpenAI**: `AzureOpenAI`를 사용한 엔터프라이즈 모델 호출
+- **Azure OpenAI**: `AzureChatOpenAI`를 사용한 엔터프라이즈 모델 호출 (`.env`에 `AZURE_OPENAI_*` 변수 필요, `.env.example` 참고)
 
 **주요 코드**:
 ```python

@@ -151,9 +151,6 @@ suspend fun createUser(@RequestBody request: CreateUserRequest): UserResponse {
 ```bash
 # 단위 테스트 실행
 ./gradlew test
-
-# 통합 테스트 실행
-./gradlew integrationTest
 ```
 
 ## 📋 TODO

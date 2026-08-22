@@ -18,7 +18,7 @@ echo "3️⃣ 각 볼륨 상세 정보:"
 for volume in order-db-data payment-db-data inventory-db-data delivery-db-data temporal-db-data redis-data kafka-data zookeeper-data; do
     echo ""
     echo "📦 ${volume}:"
-    docker volume inspect "msa-saga-go-examples_${volume}" 2>/dev/null | grep -E '"Mountpoint"|"CreatedAt"|"Driver"' || echo "   볼륨이 존재하지 않습니다."
+    docker volume inspect "msa-saga-examples_${volume}" 2>/dev/null | grep -E '"Mountpoint"|"CreatedAt"|"Driver"' || echo "   볼륨이 존재하지 않습니다."
 done
 
 echo ""
