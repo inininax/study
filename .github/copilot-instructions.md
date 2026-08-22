@@ -6,3 +6,4 @@ Key rules:
 - Each top-level directory is a self-contained project with its own toolchain; there is no shared root build system — work inside the relevant sub-project directory.
 - Do not "fix" intentionally broken teaching fixtures (e.g. `k8s-study/examples/09-troubleshooting/*`).
 - Era-pinned legacy toolchains (`webpack-gulp-study/`, `webpack-study/`) are historical snapshots — do not modernize unless asked.
+- When working inside a sub-project, also follow its own `AGENTS.md` if present (e.g. `design-system/AGENTS.md`).

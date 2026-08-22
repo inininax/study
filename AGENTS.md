@@ -127,10 +127,16 @@ Full details in `design-system/AGENTS.md`.
 `AGENTS.md`(이 파일)가 단일 진실 공급원이다. 다른 도구용 파일들은 이 파일을 가리키는 얇은 포인터이며 내용을 복제하지 않는다 — 새 지침은 여기에만 추가한다:
 
 - `CLAUDE.md` — Claude Code → AGENTS.md
+- `opencode.json` — OpenCode (`instructions`: `*/AGENTS.md` 글롭으로 하위 프로젝트 규칙 자동 로드)
 - `.github/copilot-instructions.md` — GitHub Copilot → AGENTS.md
 - `.cursor/rules/project.mdc` — Cursor (alwaysApply) → AGENTS.md
 - `.gemini/settings.json` — Gemini CLI (`contextFileName: AGENTS.md`)
 - Codex·OpenCode·Jules 등은 루트 `AGENTS.md`를 네이티브로 읽는다
+
+**규칙 추가 절차 (향후 확장 시)**:
+1. 저장소 전역 규칙 → 루트 `AGENTS.md`에만 추가한다. 포인터 파일들은 수정 불필요.
+2. 특정 하위 프로젝트 전용 규칙 → `<프로젝트>/AGENTS.md`를 만든다. OpenCode는 `*/AGENTS.md` 글롭으로, Codex/Cursor/Jules는 작업 디렉터리 기준으로 자동 발견한다. Claude Code는 루트 `CLAUDE.md`의 행 지침에 따라 읽는다.
+3. 새로운 AI 도구를 추가할 때만 그 도구의 진입 파일에서 이 파일을 가리키는 얇은 포인터를 만들고 위 목록에 한 줄 추가한다.
 
 ## Nested Instruction Files
 
