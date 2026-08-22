@@ -126,19 +126,19 @@ Full details in `design-system/AGENTS.md`.
 
 ## Agent Instruction Files
 
-`AGENTS.md`(이 파일)가 단일 진실 공급원이다. 다른 도구용 파일들은 이 파일을 가리키는 얇은 포인터이며 내용을 복제하지 않는다 — 새 지침은 여기에만 추가한다:
+`AGENTS.md`(이 파일)가 단일 진실 공급원이다. 다른 도구용 진입 파일은 모두 이 파일의 **심링크**다 — 심링크를 통해 편집하지 말고 항상 원본(`AGENTS.md`)을 편집한다:
 
-- `CLAUDE.md` — Claude Code → AGENTS.md
-- `opencode.json` — OpenCode (`instructions`: `*/AGENTS.md` 글롭으로 하위 프로젝트 규칙 자동 로드)
-- `.github/copilot-instructions.md` — GitHub Copilot → AGENTS.md
-- `.cursor/rules/project.mdc` — Cursor (alwaysApply) → AGENTS.md
-- `.gemini/settings.json` — Gemini CLI (`contextFileName: AGENTS.md`)
+- `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md` → `AGENTS.md` 심링크
+- `.cursor/rules/project.mdc` — Cursor용 축약 사본(mdc frontmatter 필요, 심링크 불가). AGENTS.md 변경 시 일관성 유지할 것
+- `opencode.json` — OpenCode가 `.agents/rules/**/*.md` 글롭과 하위 프로젝트 규칙(`*/AGENTS.md`, `python-study/CLAUDE.md`)을 자동 로드
 - Codex·OpenCode·Jules 등은 루트 `AGENTS.md`를 네이티브로 읽는다
 
 **규칙 추가 절차 (향후 확장 시)**:
-1. 저장소 전역 규칙 → 루트 `AGENTS.md`에만 추가한다. 포인터 파일들은 수정 불필요.
-2. 특정 하위 프로젝트 전용 규칙 → `<프로젝트>/AGENTS.md`를 만든다. OpenCode는 `*/AGENTS.md` 글롭으로, Codex/Cursor/Jules는 작업 디렉터리 기준으로 자동 발견한다. Claude Code는 루트 `CLAUDE.md`의 행 지침에 따라 읽는다.
-3. 새로운 AI 도구를 추가할 때만 그 도구의 진입 파일에서 이 파일을 가리키는 얇은 포인터를 만들고 위 목록에 한 줄 추가한다.
+1. 저장소 전역 규칙 → 루트 `AGENTS.md`에만 추가한다. 심링크/사본 파일들은 수정 불필요.
+2. 주제별 규칙 → `.agents/rules/<topic>.md` 생성 후 AGENTS.md 하단 규칙 목록에 `@.agents/rules/<topic>.md` 한 줄 추가(Claude Code가 import함). 자세한 절차는 `.agents/rules/README.md` 참고.
+3. 특정 하위 프로젝트 전용 규칙 → `<프로젝트>/AGENTS.md`를 만든다. OpenCode는 `*/AGENTS.md` 글롭으로, Codex/Cursor/Jules는 작업 디렉터리 기준으로 자동 발견한다. Claude Code는 아래 행 지침에 따라 읽는다.
+
+**행 지침**: 하위 프로젝트 디렉터리에서 작업할 때는 그 안에 `AGENTS.md`(또는 규칙 문서)가 있는지 확인하고 함께 따른다.
 
 ## Nested Instruction Files
 

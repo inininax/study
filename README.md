@@ -2,7 +2,7 @@
 
 다양한 기술 스택을 학습하기 위한 폴리글랏 스터디 모노레포입니다. 각 최상위 디렉터리는 독립적인 프로젝트로, 자체 툴체인과 실행 방법을 가집니다. 루트에는 공통 빌드 시스템이 없으므로 반드시 해당 하위 프로젝트 디렉터리 안에서 작업하세요.
 
-> 🤖 **AI 에이전트 협업 가이드**: [AGENTS.md](./AGENTS.md)가 단일 진실 공급원(single source of truth)입니다. Codex·OpenCode·Cursor는 이 파일을 자동으로 읽고, Claude Code는 [CLAUDE.md](./CLAUDE.md) → AGENTS.md, GitHub Copilot은 [.github/copilot-instructions.md](./.github/copilot-instructions.md), Gemini CLI는 [.gemini/settings.json](./.gemini/settings.json), OpenCode는 [opencode.json](./opencode.json)으로 하위 프로젝트 규칙까지 자동 로드합니다. 규칙 추가 절차는 AGENTS.md의 "Agent Instruction Files" 섹션을 참고하세요.
+> 🤖 **AI 에이전트 협업 가이드**: [AGENTS.md](./AGENTS.md)가 단일 진실 공급원입니다. Codex·OpenCode·Cursor는 이 파일을 자동으로 읽고, `CLAUDE.md`·`GEMINI.md`·`.github/copilot-instructions.md`는 AGENTS.md의 심링크입니다. Cursor용 축약 사본은 [.cursor/rules/project.mdc](./.cursor/rules/project.mdc), 주제별 확장 규칙은 `.agents/rules/`(절차는 [.agents/rules/README.md](./.agents/rules/README.md)), OpenCode 로딩 설정은 [opencode.json](./opencode.json)을 참고하세요.
 
 ## 저장소 지도
 

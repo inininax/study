@@ -3,4 +3,13 @@ description: Repository-wide guidelines for this polyglot study monorepo
 alwaysApply: true
 ---
 
-Follow **[AGENTS.md](../AGENTS.md)** at the repository root — it is the single source of truth (project structure, build commands, architecture notes, and gotchas). Key rule: each top-level directory is a self-contained project with its own toolchain; there is no shared root build system.
+Follow **[AGENTS.md](../AGENTS.md)** at the repository root — it is the single source of truth. This file is a condensed copy for Cursor; edit AGENTS.md, not this file.
+
+Key rules:
+- Each top-level directory is a self-contained project with its own toolchain; there is no shared root build system — work inside the relevant sub-project directory.
+- Do not "fix" intentionally broken teaching fixtures (e.g. `k8s-study/examples/09-troubleshooting/*`).
+- Era-pinned legacy toolchains (`webpack-gulp-study/`, `webpack-study/`) are historical snapshots — do not modernize unless asked.
+- JVM projects have no committed Gradle wrapper (`.gitignore` policy) — use a locally installed `gradle`.
+- Hardcoded local credentials in study configs are intentional; do not refactor them into env vars unprompted.
+- `go-work-examples`: build per-module (`cd <module> && go build ./...`); workspace-root `./...` fails on Go 1.24.
+- When working inside a sub-project, also follow its own `AGENTS.md` if present.
