@@ -64,11 +64,12 @@
 각 프로젝트의 자세한 실행 명령은 [AGENTS.md](./AGENTS.md)의 "Build & Run Commands" 섹션 또는 각 디렉터리의 README를 참고하세요. 요약:
 
 ```bash
-# Go 워크스페이스 전체 빌드
-cd go-work-examples && go work sync && go build ./...
+# Go 워크스페이스 전체 빌드 (모듈 디렉터리 안에서 실행)
+cd go-work-examples && go work sync
+for d in shared examples/* services/* tools/*; do (cd "$d" && go build ./...) || echo "FAIL: $d"; done
 
-# MSA SAGA 유닛 테스트 (인프라 불필요)
-cd msa-saga-examples && go test ./...
+# MSA SAGA 컴파일 검증 (아직 자동화 테스트 없음)
+cd msa-saga-examples && go build ./...
 
 # Python 예제 전체 검증
 cd python-examples && python tools/validate_examples.py

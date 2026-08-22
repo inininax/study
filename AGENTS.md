@@ -32,7 +32,11 @@ Polyglot study/examples mono-repo. Each top-level directory is a self-contained 
 ```bash
 go work sync                          # sync workspace
 ./scripts/sync-all.sh                 # tidy all modules
-go build ./...                        # verify all modules compile
+
+# ⚠️ go build ./... 을 워크스페이스 루트에서 실행하면
+#    "directory prefix . does not contain modules listed in go.work" 오류가 난다 (Go 1.24).
+#    빌드/검증은 반드시 모듈 디렉터리 안에서 실행할 것:
+for d in shared examples/* services/* tools/*; do (cd "$d" && go build ./...) || echo "FAIL: $d"; done
 
 cd examples/workspace-demo && go run main.go   # demo
 cd services/user-service && go run main.go     # port 8080
@@ -117,6 +121,16 @@ Full details in `design-system/AGENTS.md`.
 - **`go-tuckersGo-goWeb/`**: all 3 modules declare the same module path (`github.com/kyungseok-lee/learn-go-web`). Keep them independent; never combine under one `go.work`.
 - Python: activate the project's `venv` before running scripts or installing packages. `langchain-basic-study/` additionally needs a `.env` (see its README).
 - Infrastructure-dependent projects (`msa-saga-examples`, `airflow-study`, ELK/vector-db examples, `springboot-rest-api` for runtime) require Docker Compose to be up first.
+
+## Agent Instruction Files
+
+`AGENTS.md`(이 파일)가 단일 진실 공급원이다. 다른 도구용 파일들은 이 파일을 가리키는 얇은 포인터이며 내용을 복제하지 않는다 — 새 지침은 여기에만 추가한다:
+
+- `CLAUDE.md` — Claude Code → AGENTS.md
+- `.github/copilot-instructions.md` — GitHub Copilot → AGENTS.md
+- `.cursor/rules/project.mdc` — Cursor (alwaysApply) → AGENTS.md
+- `.gemini/settings.json` — Gemini CLI (`contextFileName: AGENTS.md`)
+- Codex·OpenCode·Jules 등은 루트 `AGENTS.md`를 네이티브로 읽는다
 
 ## Nested Instruction Files
 
