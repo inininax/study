@@ -11,10 +11,9 @@ import (
 
 // OrderRepository 주문 레포지토리 인터페이스
 type OrderRepository interface {
-	Create(ctx context.Context, order *domain.Order) error
+	CreateTx(ctx context.Context, tx *sql.Tx, order *domain.Order) error
 	FindByID(ctx context.Context, id int64) (*domain.Order, error)
 	FindByIdempotencyKey(ctx context.Context, key string) (*domain.Order, error)
-	UpdateStatus(ctx context.Context, id int64, status domain.OrderStatus, version int64) error
 	UpdateStatusWithVersion(ctx context.Context, id int64, status domain.OrderStatus, currentVersion int64) (bool, error)
 }
 
@@ -27,17 +26,25 @@ func NewOrderRepository(db *sql.DB) OrderRepository {
 	return &orderRepository{db: db}
 }
 
-// Create 주문 생성
-func (r *orderRepository) Create(ctx context.Context, order *domain.Order) error {
-	query := `
-		INSERT INTO orders (user_id, amount, quantity, status, idempotency_key, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id, version
-	`
+const createOrderQuery = `
+	INSERT INTO orders (user_id, amount, quantity, status, idempotency_key, created_at, updated_at)
+	VALUES ($1, $2, $3, $4, $5, $6, $7)
+	RETURNING id, version
+`
 
-	err := r.db.QueryRowContext(
+func scanCreateOrderErr(err error) error {
+	if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+		// Unique constraint violation
+		return fmt.Errorf("duplicate idempotency key: %w", err)
+	}
+	return fmt.Errorf("failed to create order: %w", err)
+}
+
+// CreateTx 트랜잭션 내에서 주문 생성
+func (r *orderRepository) CreateTx(ctx context.Context, tx *sql.Tx, order *domain.Order) error {
+	err := tx.QueryRowContext(
 		ctx,
-		query,
+		createOrderQuery,
 		order.UserID,
 		order.Amount,
 		order.Quantity,
@@ -48,11 +55,7 @@ func (r *orderRepository) Create(ctx context.Context, order *domain.Order) error
 	).Scan(&order.ID, &order.Version)
 
 	if err != nil {
-		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
-			// Unique constraint violation
-			return fmt.Errorf("duplicate idempotency key: %w", err)
-		}
-		return fmt.Errorf("failed to create order: %w", err)
+		return scanCreateOrderErr(err)
 	}
 
 	return nil
@@ -80,7 +83,7 @@ func (r *orderRepository) FindByID(ctx context.Context, id int64) (*domain.Order
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("order not found: %d", id)
+		return nil, fmt.Errorf("order not found: %d: %w", id, sql.ErrNoRows)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to find order: %w", err)
@@ -89,7 +92,7 @@ func (r *orderRepository) FindByID(ctx context.Context, id int64) (*domain.Order
 	return order, nil
 }
 
-// FindByIdempotencyKey 멱등성 키로 주문 조회
+// FindByIdempotencyKey 멱등성 키로 주문 조회 (미존재 시 sql.ErrNoRows 래핑)
 func (r *orderRepository) FindByIdempotencyKey(ctx context.Context, key string) (*domain.Order, error) {
 	query := `
 		SELECT id, user_id, amount, quantity, status, version, idempotency_key, created_at, updated_at
@@ -111,29 +114,13 @@ func (r *orderRepository) FindByIdempotencyKey(ctx context.Context, key string) 
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("order not found with idempotency key: %s", key)
+		return nil, fmt.Errorf("order not found with idempotency key: %s: %w", key, sql.ErrNoRows)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to find order: %w", err)
 	}
 
 	return order, nil
-}
-
-// UpdateStatus 주문 상태 업데이트
-func (r *orderRepository) UpdateStatus(ctx context.Context, id int64, status domain.OrderStatus, version int64) error {
-	query := `
-		UPDATE orders
-		SET status = $1, version = $2, updated_at = NOW()
-		WHERE id = $3
-	`
-
-	_, err := r.db.ExecContext(ctx, query, status, version+1, id)
-	if err != nil {
-		return fmt.Errorf("failed to update order status: %w", err)
-	}
-
-	return nil
 }
 
 // UpdateStatusWithVersion Optimistic Lock을 사용한 상태 업데이트

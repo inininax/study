@@ -3,14 +3,21 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
+	commonerrors "github.com/kyungseok/msa-saga-go-examples/common/errors"
 	"github.com/kyungseok/msa-saga-go-examples/common/events"
 	"github.com/kyungseok/msa-saga-go-examples/common/idempotency"
 	"github.com/kyungseok/msa-saga-go-examples/common/messaging"
 	"github.com/kyungseok/msa-saga-go-examples/services/payment/internal/service"
 	"go.uber.org/zap"
 )
+
+// idempotentEvent EventID를 가진 이벤트 공통 제약
+type idempotentEvent interface {
+	GetEventID() string
+}
 
 // EventHandler 이벤트 핸들러
 type EventHandler struct {
@@ -50,44 +57,61 @@ func (h *EventHandler) HandleMessage(ctx context.Context, msg *messaging.Message
 	}
 }
 
-func (h *EventHandler) handleOrderCreated(ctx context.Context, msg *messaging.Message) error {
-	var evt events.OrderCreatedEvent
+// process 모든 핸들러가 공유하는 처리 파이프라인 (fail-closed 멱등성).
+//   - JSON 파싱 실패 → MalformedMessage 비즈니스 에러 (컨슈머가 마킹 후 건너뜀)
+//   - IsProcessed 조회 실패 → 에러 반환 (마킹하지 않아 재전달로 정합성 확보)
+//   - 이미 처리됨 → nil
+//   - 처리 실패 → 에러 반환 (재전달)
+//   - Reserve(처리 완료 표시) 실패 → 에러 반환 (재전달되어도 핸들러는 멱등하므로 안전)
+func process[T idempotentEvent](
+	ctx context.Context,
+	logger *zap.Logger,
+	idemStore idempotency.Store,
+	msg *messaging.Message,
+	handle func(context.Context, T) error,
+) error {
+	var evt T
 	if err := json.Unmarshal(msg.Value, &evt); err != nil {
-		return err
+		logger.Error("malformed message payload",
+			zap.String("topic", msg.Topic),
+			zap.Int64("offset", msg.Offset),
+			zap.Error(err))
+		return commonerrors.Wrap(commonerrors.ErrCodeMalformedMessage, "failed to unmarshal event payload", err)
 	}
 
-	// 멱등성 체크
-	if processed, _ := h.idemStore.IsProcessed(ctx, evt.EventID); processed {
-		h.logger.Info("event already processed", zap.String("eventId", evt.EventID))
+	processed, err := idemStore.IsProcessed(ctx, evt.GetEventID())
+	if err != nil {
+		logger.Error("idempotency check failed",
+			zap.String("eventId", evt.GetEventID()),
+			zap.Error(err))
+		return fmt.Errorf("idempotency check failed for event %s: %w", evt.GetEventID(), err)
+	}
+	if processed {
+		logger.Info("event already processed", zap.String("eventId", evt.GetEventID()))
 		return nil
 	}
 
-	if err := h.paymentService.HandleOrderCreated(ctx, evt); err != nil {
+	if err := handle(ctx, evt); err != nil {
 		return err
 	}
 
-	// 처리 완료 표시
-	_, _ = h.idemStore.Reserve(ctx, evt.EventID, 24*time.Hour)
+	if _, err := idemStore.Reserve(ctx, evt.GetEventID(), 24*time.Hour); err != nil {
+		logger.Error("failed to mark event processed",
+			zap.String("eventId", evt.GetEventID()),
+			zap.Error(err))
+		return fmt.Errorf("failed to mark event %s processed: %w", evt.GetEventID(), err)
+	}
 	return nil
 }
 
+func (h *EventHandler) handleOrderCreated(ctx context.Context, msg *messaging.Message) error {
+	return process(ctx, h.logger, h.idemStore, msg, func(ctx context.Context, evt events.OrderCreatedEvent) error {
+		return h.paymentService.HandleOrderCreated(ctx, evt)
+	})
+}
+
 func (h *EventHandler) handleStockReservationFailed(ctx context.Context, msg *messaging.Message) error {
-	var evt events.StockReservationFailedEvent
-	if err := json.Unmarshal(msg.Value, &evt); err != nil {
-		return err
-	}
-
-	// 멱등성 체크
-	if processed, _ := h.idemStore.IsProcessed(ctx, evt.EventID); processed {
-		h.logger.Info("event already processed", zap.String("eventId", evt.EventID))
-		return nil
-	}
-
-	if err := h.paymentService.HandleStockReservationFailed(ctx, evt); err != nil {
-		return err
-	}
-
-	// 처리 완료 표시
-	_, _ = h.idemStore.Reserve(ctx, evt.EventID, 24*time.Hour)
-	return nil
+	return process(ctx, h.logger, h.idemStore, msg, func(ctx context.Context, evt events.StockReservationFailedEvent) error {
+		return h.paymentService.HandleStockReservationFailed(ctx, evt)
+	})
 }

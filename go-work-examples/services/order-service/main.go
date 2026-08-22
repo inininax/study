@@ -6,17 +6,20 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/kyungseok-lee/go-work-examples/shared/errors"
+	"github.com/kyungseok-lee/go-work-examples/shared/config"
+	sharederrors "github.com/kyungseok-lee/go-work-examples/shared/errors"
 	"github.com/kyungseok-lee/go-work-examples/shared/events"
 	"github.com/kyungseok-lee/go-work-examples/shared/types"
 )
 
 type OrderService struct {
+	mu     sync.RWMutex
 	orders map[uuid.UUID]types.Order
 }
 
@@ -51,7 +54,9 @@ func (s *OrderService) CreateOrder(req types.OrderCreateRequest) (*types.Order, 
 		UpdatedAt:  time.Now(),
 	}
 
+	s.mu.Lock()
 	s.orders[order.ID] = order
+	s.mu.Unlock()
 
 	// Publish event
 	event := events.NewEvent(events.OrderCreatedEvent, events.OrderCreatedEventData{
@@ -63,17 +68,22 @@ func (s *OrderService) CreateOrder(req types.OrderCreateRequest) (*types.Order, 
 }
 
 func (s *OrderService) GetOrder(id uuid.UUID) (*types.Order, error) {
+	s.mu.RLock()
 	order, exists := s.orders[id]
+	s.mu.RUnlock()
 	if !exists {
-		return nil, errors.NewNotFoundErrorWithID(id.String(), "Order not found")
+		return nil, sharederrors.NewNotFoundErrorWithID(id.String(), "Order not found")
 	}
 	return &order, nil
 }
 
 func (s *OrderService) UpdateOrderStatus(id uuid.UUID, status types.OrderStatus) (*types.Order, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	order, exists := s.orders[id]
 	if !exists {
-		return nil, errors.NewNotFoundErrorWithID(id.String(), "Order not found")
+		return nil, sharederrors.NewNotFoundErrorWithID(id.String(), "Order not found")
 	}
 
 	oldStatus := order.Status
@@ -93,6 +103,9 @@ func (s *OrderService) UpdateOrderStatus(id uuid.UUID, status types.OrderStatus)
 }
 
 func (s *OrderService) GetOrdersByUser(userID uuid.UUID) []types.Order {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
 	var userOrders []types.Order
 	for _, order := range s.orders {
 		if order.UserID == userID {
@@ -133,7 +146,7 @@ func main() {
 
 		order, err := orderService.GetOrder(id)
 		if err != nil {
-			if httpErr, ok := err.(errors.HTTPError); ok {
+			if httpErr, ok := err.(sharederrors.HTTPError); ok {
 				c.JSON(httpErr.HTTPStatus(), gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
@@ -162,7 +175,7 @@ func main() {
 
 		order, err := orderService.UpdateOrderStatus(id, req.Status)
 		if err != nil {
-			if httpErr, ok := err.(errors.HTTPError); ok {
+			if httpErr, ok := err.(sharederrors.HTTPError); ok {
 				c.JSON(httpErr.HTTPStatus(), gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
@@ -194,15 +207,25 @@ func main() {
 		})
 	})
 
+	// Load configuration from environment
+	cfg := config.LoadFromEnv()
+	if os.Getenv("SERVER_PORT") == "" {
+		cfg.Server.Port = "8081"
+	}
+
 	// Create HTTP server
 	srv := &http.Server{
-		Addr:    ":8081",
-		Handler: r,
+		Addr:              cfg.GetServerAddress(),
+		Handler:           r,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       time.Duration(cfg.Server.ReadTimeout) * time.Second,
+		WriteTimeout:      time.Duration(cfg.Server.WriteTimeout) * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
 
 	// Start server in a goroutine
 	go func() {
-		log.Println("Order service starting on :8081")
+		log.Printf("Order service starting on %s", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)
 		}

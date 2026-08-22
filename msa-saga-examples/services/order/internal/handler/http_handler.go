@@ -2,10 +2,12 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/google/uuid"
+	commonerrors "github.com/kyungseok/msa-saga-go-examples/common/errors"
 	"github.com/kyungseok/msa-saga-go-examples/services/order/internal/service"
 	"go.uber.org/zap"
 )
@@ -44,6 +46,31 @@ type ErrorResponse struct {
 	Code  string `json:"code,omitempty"`
 }
 
+// respondDomainError DomainError 코드를 기준으로 HTTP 상태를 매핑해 응답한다.
+// 전체 에러는 서버 로그에만 남기고, 5xx 본문에는 원시 에러 문자열을 노출하지 않는다.
+func (h *HTTPHandler) respondDomainError(w http.ResponseWriter, err error) {
+	var domainErr *commonerrors.DomainError
+	if errors.As(err, &domainErr) {
+		switch domainErr.Code {
+		case commonerrors.ErrCodeInvalidOrder:
+			h.logger.Error("request failed", zap.Error(err))
+			h.respondError(w, http.StatusBadRequest, domainErr.Message, string(domainErr.Code))
+			return
+		case commonerrors.ErrCodeOrderNotFound, commonerrors.ErrCodeNotFound:
+			h.logger.Error("request failed", zap.Error(err))
+			h.respondError(w, http.StatusNotFound, domainErr.Message, string(domainErr.Code))
+			return
+		case commonerrors.ErrCodeDuplicateRequest, commonerrors.ErrCodeConflict:
+			h.logger.Error("request failed", zap.Error(err))
+			h.respondError(w, http.StatusConflict, domainErr.Message, string(domainErr.Code))
+			return
+		}
+	}
+
+	h.logger.Error("request failed with internal error", zap.Error(err))
+	h.respondError(w, http.StatusInternalServerError, "internal server error", "")
+}
+
 // CreateOrder 주문 생성 API
 func (h *HTTPHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -71,8 +98,7 @@ func (h *HTTPHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 
 	result, err := h.orderService.CreateOrder(r.Context(), cmd)
 	if err != nil {
-		h.logger.Error("failed to create order", zap.Error(err))
-		h.respondError(w, http.StatusInternalServerError, err.Error(), "")
+		h.respondDomainError(w, err)
 		return
 	}
 
@@ -99,8 +125,7 @@ func (h *HTTPHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 
 	order, err := h.orderService.GetOrder(r.Context(), orderID)
 	if err != nil {
-		h.logger.Error("failed to get order", zap.Error(err))
-		h.respondError(w, http.StatusNotFound, "order not found", "")
+		h.respondDomainError(w, err)
 		return
 	}
 

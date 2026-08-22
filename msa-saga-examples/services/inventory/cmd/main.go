@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,6 +16,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 
+	commonerrors "github.com/kyungseok/msa-saga-go-examples/common/errors"
 	"github.com/kyungseok/msa-saga-go-examples/common/events"
 	"github.com/kyungseok/msa-saga-go-examples/common/idempotency"
 	"github.com/kyungseok/msa-saga-go-examples/common/logger"
@@ -25,6 +27,10 @@ import (
 )
 
 func main() {
+	// 전체 라이프사이클 컨텍스트 (컨슈머/워커 종료 신호로 사용)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	log, _ := logger.NewLogger("inventory-service", true)
 	defer log.Sync()
 
@@ -71,7 +77,7 @@ func main() {
 
 	topics := []string{"payment.completed.v1", "payment.refunded.v1"}
 
-	// Event Handler
+	// Event Handler (fail-closed 멱등성: 조회/예약 실패 시 에러 반환 → 재전달)
 	eventHandler := func(ctx context.Context, msg *messaging.Message) error {
 		log.Info("received message", zap.String("topic", msg.Topic))
 
@@ -79,40 +85,57 @@ func main() {
 		case events.EventPaymentCompleted:
 			var evt events.PaymentCompletedEvent
 			if err := json.Unmarshal(msg.Value, &evt); err != nil {
-				return err
+				log.Error("malformed message payload", zap.String("topic", msg.Topic), zap.Error(err))
+				return commonerrors.Wrap(commonerrors.ErrCodeMalformedMessage, "failed to unmarshal event payload", err)
 			}
-			if processed, _ := idemStore.IsProcessed(ctx, evt.EventID); processed {
+			processed, err := idemStore.IsProcessed(ctx, evt.EventID)
+			if err != nil {
+				log.Error("idempotency check failed", zap.String("eventId", evt.EventID), zap.Error(err))
+				return fmt.Errorf("idempotency check failed for event %s: %w", evt.EventID, err)
+			}
+			if processed {
 				return nil
 			}
 			if err := inventoryService.HandlePaymentCompleted(ctx, evt); err != nil {
 				return err
 			}
-			_, _ = idemStore.Reserve(ctx, evt.EventID, 24*time.Hour)
+			if _, err := idemStore.Reserve(ctx, evt.EventID, 24*time.Hour); err != nil {
+				log.Error("failed to mark event processed", zap.String("eventId", evt.EventID), zap.Error(err))
+				return fmt.Errorf("failed to mark event %s processed: %w", evt.EventID, err)
+			}
 
 		case events.EventPaymentRefunded:
 			var evt events.PaymentRefundedEvent
 			if err := json.Unmarshal(msg.Value, &evt); err != nil {
-				return err
+				log.Error("malformed message payload", zap.String("topic", msg.Topic), zap.Error(err))
+				return commonerrors.Wrap(commonerrors.ErrCodeMalformedMessage, "failed to unmarshal event payload", err)
 			}
-			if processed, _ := idemStore.IsProcessed(ctx, evt.EventID); processed {
+			processed, err := idemStore.IsProcessed(ctx, evt.EventID)
+			if err != nil {
+				log.Error("idempotency check failed", zap.String("eventId", evt.EventID), zap.Error(err))
+				return fmt.Errorf("idempotency check failed for event %s: %w", evt.EventID, err)
+			}
+			if processed {
 				return nil
 			}
 			if err := inventoryService.HandlePaymentRefunded(ctx, evt); err != nil {
 				return err
 			}
-			_, _ = idemStore.Reserve(ctx, evt.EventID, 24*time.Hour)
+			if _, err := idemStore.Reserve(ctx, evt.EventID, 24*time.Hour); err != nil {
+				log.Error("failed to mark event processed", zap.String("eventId", evt.EventID), zap.Error(err))
+				return fmt.Errorf("failed to mark event %s processed: %w", evt.EventID, err)
+			}
+
+		default:
+			log.Warn("unknown event type", zap.String("topic", msg.Topic))
 		}
 		return nil
 	}
 
-	if err := consumer.Subscribe(topics, eventHandler); err != nil {
+	if err := consumer.Subscribe(ctx, topics, eventHandler); err != nil {
 		log.Fatal("failed to subscribe", zap.Error(err))
 	}
 	log.Info("subscribed to kafka topics", zap.Strings("topics", topics))
-
-	// Outbox Worker
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 
 	outboxWorker := worker.NewOutboxWorker(outboxRepo, publisher, log, 1*time.Second)
 	go outboxWorker.Start(ctx)
@@ -145,7 +168,7 @@ func main() {
 		log.Error("server forced to shutdown", zap.Error(err))
 	}
 
-	cancel()
+	cancel() // 컨슈머 루프와 outbox worker 종료
 	log.Info("server stopped")
 }
 

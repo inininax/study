@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -25,6 +26,10 @@ import (
 )
 
 func main() {
+	// 전체 라이프사이클 컨텍스트 (컨슈머/워커 종료 신호로 사용)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	// Logger 초기화
 	log, err := logger.NewLogger("payment-service", true)
 	if err != nil {
@@ -57,7 +62,7 @@ func main() {
 	})
 	defer redisClient.Close()
 
-	if err := redisClient.Ping(context.Background()).Err(); err != nil {
+	if err := redisClient.Ping(ctx).Err(); err != nil {
 		log.Fatal("failed to connect to redis", zap.Error(err))
 	}
 	log.Info("connected to redis")
@@ -96,14 +101,10 @@ func main() {
 		"stock.reservation_failed.v1",
 	}
 
-	if err := consumer.Subscribe(topics, eventHandler.HandleMessage); err != nil {
+	if err := consumer.Subscribe(ctx, topics, eventHandler.HandleMessage); err != nil {
 		log.Fatal("failed to subscribe to topics", zap.Error(err))
 	}
 	log.Info("subscribed to kafka topics", zap.Strings("topics", topics))
-
-	// Outbox Worker 시작
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 
 	go startOutboxWorker(ctx, db, publisher, log)
 	log.Info("outbox worker started")
@@ -141,8 +142,28 @@ func main() {
 		log.Error("server forced to shutdown", zap.Error(err))
 	}
 
-	cancel() // outbox worker 종료
+	cancel() // 컨슈머 루프와 outbox worker 종료
 	log.Info("server stopped")
+}
+
+// outboxPartitionKey payload JSON에서 orderId를 추출해 파티션 키로 사용한다.
+// 추출 실패 시 빈 키로 폴백하고 경고 로그를 남긴다 (순서 보장은 포기, 발행은 계속).
+func outboxPartitionKey(payload []byte, outboxID int64, logger *zap.Logger) string {
+	var meta struct {
+		OrderID int64 `json:"orderId"`
+	}
+	if err := json.Unmarshal(payload, &meta); err != nil {
+		logger.Warn("failed to extract orderId from outbox payload, using empty partition key",
+			zap.Int64("outboxId", outboxID),
+			zap.Error(err))
+		return ""
+	}
+	if meta.OrderID <= 0 {
+		logger.Warn("orderId missing in outbox payload, using empty partition key",
+			zap.Int64("outboxId", outboxID))
+		return ""
+	}
+	return strconv.FormatInt(meta.OrderID, 10)
 }
 
 func startOutboxWorker(ctx context.Context, db *sql.DB, publisher messaging.Publisher, logger *zap.Logger) {
@@ -159,6 +180,7 @@ func startOutboxWorker(ctx context.Context, db *sql.DB, publisher messaging.Publ
 				WHERE status = 'PENDING' ORDER BY created_at LIMIT 100
 			`)
 			if err != nil {
+				logger.Error("failed to query pending outbox events", zap.Error(err))
 				continue
 			}
 
@@ -167,15 +189,29 @@ func startOutboxWorker(ctx context.Context, db *sql.DB, publisher messaging.Publ
 				var eventType string
 				var payload []byte
 				if err := rows.Scan(&id, &eventType, &payload); err != nil {
+					logger.Error("failed to scan outbox event row", zap.Error(err))
 					continue
 				}
 
-				if err := publisher.Publish(ctx, eventType, "", json.RawMessage(payload)); err != nil {
-					logger.Error("failed to publish", zap.Error(err))
+				key := outboxPartitionKey(payload, id, logger)
+
+				if err := publisher.Publish(ctx, eventType, key, json.RawMessage(payload)); err != nil {
+					logger.Error("failed to publish",
+						zap.Int64("outboxId", id),
+						zap.String("eventType", eventType),
+						zap.Error(err))
 					continue
 				}
 
-				db.ExecContext(ctx, `UPDATE outbox_events SET status = 'SENT', sent_at = NOW() WHERE id = $1`, id)
+				if _, err := db.ExecContext(ctx, `UPDATE outbox_events SET status = 'SENT', sent_at = NOW() WHERE id = $1`, id); err != nil {
+					logger.Error("failed to mark outbox event as sent",
+						zap.Int64("outboxId", id),
+						zap.Error(err))
+					continue
+				}
+			}
+			if err := rows.Err(); err != nil {
+				logger.Error("outbox rows iteration error", zap.Error(err))
 			}
 			rows.Close()
 		}

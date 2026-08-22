@@ -1,6 +1,9 @@
 package errors
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // ErrorCode 에러 코드 정의
 type ErrorCode string
@@ -15,6 +18,7 @@ const (
 	ErrCodeDuplicateRequest    ErrorCode = "DUPLICATE_REQUEST"
 	ErrCodeNotFound            ErrorCode = "NOT_FOUND"
 	ErrCodeConflict            ErrorCode = "CONFLICT"
+	ErrCodeMalformedMessage    ErrorCode = "MALFORMED_MESSAGE"
 
 	// Technical Errors
 	ErrCodeDatabaseError      ErrorCode = "DATABASE_ERROR"
@@ -60,34 +64,48 @@ func Wrap(code ErrorCode, message string, cause error) *DomainError {
 	}
 }
 
-// IsRetryable 재시도 가능한 에러인지 판단
+// AsDomainError 래핑 체인을 따라가며 DomainError를 추출
+func AsDomainError(err error) (*DomainError, bool) {
+	var domainErr *DomainError
+	if errors.As(err, &domainErr) {
+		return domainErr, true
+	}
+	return nil, false
+}
+
+// IsRetryable 재시도 가능한 에러인지 판단 (래핑 체인 포함)
 func IsRetryable(err error) bool {
-	if domainErr, ok := err.(*DomainError); ok {
-		switch domainErr.Code {
-		case ErrCodeDatabaseError, ErrCodeNetworkError, ErrCodeTimeoutError:
-			return true
-		}
+	domainErr, ok := AsDomainError(err)
+	if !ok {
+		return false
+	}
+	switch domainErr.Code {
+	case ErrCodeDatabaseError, ErrCodeNetworkError, ErrCodeTimeoutError:
+		return true
 	}
 	return false
 }
 
-// IsBusinessError 비즈니스 에러인지 판단 (재시도 불필요)
+// IsBusinessError 비즈니스 에러인지 판단 (재시도 불필요, 래핑 체인 포함)
 func IsBusinessError(err error) bool {
-	if domainErr, ok := err.(*DomainError); ok {
-		switch domainErr.Code {
-		case ErrCodePaymentDeclined, ErrCodeOutOfStock, ErrCodeInsufficientBalance,
-			ErrCodeInvalidOrder, ErrCodeOrderNotFound, ErrCodeDuplicateRequest,
-			ErrCodeNotFound, ErrCodeConflict:
-			return true
-		}
+	domainErr, ok := AsDomainError(err)
+	if !ok {
+		return false
+	}
+	switch domainErr.Code {
+	case ErrCodePaymentDeclined, ErrCodeOutOfStock, ErrCodeInsufficientBalance,
+		ErrCodeInvalidOrder, ErrCodeOrderNotFound, ErrCodeDuplicateRequest,
+		ErrCodeNotFound, ErrCodeConflict, ErrCodeMalformedMessage:
+		return true
 	}
 	return false
 }
 
-// IsCode 특정 에러 코드인지 확인
+// IsCode 특정 에러 코드인지 확인 (래핑 체인 포함)
 func IsCode(err error, code ErrorCode) bool {
-	if domainErr, ok := err.(*DomainError); ok {
-		return domainErr.Code == code
+	domainErr, ok := AsDomainError(err)
+	if !ok {
+		return false
 	}
-	return false
+	return domainErr.Code == code
 }

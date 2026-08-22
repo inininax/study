@@ -25,6 +25,10 @@ import (
 )
 
 func main() {
+	// 전체 라이프사이클 컨텍스트 (컨슈머/워커 종료 신호로 사용)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	// Logger 초기화
 	log, err := logger.NewLogger("order-service", true)
 	if err != nil {
@@ -57,7 +61,7 @@ func main() {
 	})
 	defer redisClient.Close()
 
-	if err := redisClient.Ping(context.Background()).Err(); err != nil {
+	if err := redisClient.Ping(ctx).Err(); err != nil {
 		log.Fatal("failed to connect to redis", zap.Error(err))
 	}
 	log.Info("connected to redis")
@@ -100,15 +104,12 @@ func main() {
 		"delivery.failed.v1",
 	}
 
-	if err := consumer.Subscribe(topics, eventHandler.HandleMessage); err != nil {
+	if err := consumer.Subscribe(ctx, topics, eventHandler.HandleMessage); err != nil {
 		log.Fatal("failed to subscribe to topics", zap.Error(err))
 	}
 	log.Info("subscribed to kafka topics", zap.Strings("topics", topics))
 
 	// Outbox Worker 시작
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
 	outboxWorker := worker.NewOutboxWorker(outboxRepo, publisher, log, 1*time.Second)
 	go outboxWorker.Start(ctx)
 	log.Info("outbox worker started")
@@ -146,7 +147,7 @@ func main() {
 		log.Error("server forced to shutdown", zap.Error(err))
 	}
 
-	cancel() // outbox worker 종료
+	cancel() // 컨슈머 루프와 outbox worker 종료
 	log.Info("server stopped")
 }
 

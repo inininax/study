@@ -8,11 +8,13 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/kyungseok-lee/go-work-examples/shared/config"
 	"github.com/kyungseok-lee/go-work-examples/shared/events"
 	"github.com/kyungseok-lee/go-work-examples/shared/types"
 )
@@ -37,6 +39,7 @@ type Notification struct {
 }
 
 type NotificationService struct {
+	mu            sync.RWMutex
 	notifications map[uuid.UUID]Notification
 }
 
@@ -61,7 +64,10 @@ func (s *NotificationService) ProcessEvent(event events.Event) error {
 }
 
 func (s *NotificationService) handleUserCreated(event events.Event) error {
-	dataBytes, _ := json.Marshal(event.Data)
+	dataBytes, err := json.Marshal(event.Data)
+	if err != nil {
+		return fmt.Errorf("failed to marshal event data: %w", err)
+	}
 	var eventData events.UserCreatedEventData
 	if err := json.Unmarshal(dataBytes, &eventData); err != nil {
 		return err
@@ -77,7 +83,9 @@ func (s *NotificationService) handleUserCreated(event events.Event) error {
 		CreatedAt: time.Now(),
 	}
 
+	s.mu.Lock()
 	s.notifications[notification.ID] = notification
+	s.mu.Unlock()
 	log.Printf("Created welcome notification for user: %s", eventData.User.Name)
 
 	// Simulate sending notification
@@ -87,7 +95,10 @@ func (s *NotificationService) handleUserCreated(event events.Event) error {
 }
 
 func (s *NotificationService) handleOrderCreated(event events.Event) error {
-	dataBytes, _ := json.Marshal(event.Data)
+	dataBytes, err := json.Marshal(event.Data)
+	if err != nil {
+		return fmt.Errorf("failed to marshal event data: %w", err)
+	}
 	var eventData events.OrderCreatedEventData
 	if err := json.Unmarshal(dataBytes, &eventData); err != nil {
 		return err
@@ -104,7 +115,9 @@ func (s *NotificationService) handleOrderCreated(event events.Event) error {
 		CreatedAt: time.Now(),
 	}
 
+	s.mu.Lock()
 	s.notifications[notification.ID] = notification
+	s.mu.Unlock()
 	log.Printf("Created order confirmation notification for order: %s", eventData.Order.ID)
 
 	// Simulate sending notification
@@ -114,7 +127,10 @@ func (s *NotificationService) handleOrderCreated(event events.Event) error {
 }
 
 func (s *NotificationService) handleOrderUpdated(event events.Event) error {
-	dataBytes, _ := json.Marshal(event.Data)
+	dataBytes, err := json.Marshal(event.Data)
+	if err != nil {
+		return fmt.Errorf("failed to marshal event data: %w", err)
+	}
 	var eventData events.OrderStatusUpdatedEventData
 	if err := json.Unmarshal(dataBytes, &eventData); err != nil {
 		return err
@@ -145,7 +161,9 @@ func (s *NotificationService) handleOrderUpdated(event events.Event) error {
 		CreatedAt: time.Now(),
 	}
 
+	s.mu.Lock()
 	s.notifications[notification.ID] = notification
+	s.mu.Unlock()
 	log.Printf("Created order status notification for order: %s", eventData.Order.ID)
 
 	// Simulate sending notification
@@ -157,6 +175,9 @@ func (s *NotificationService) handleOrderUpdated(event events.Event) error {
 func (s *NotificationService) sendNotification(notificationID uuid.UUID) {
 	// Simulate processing time
 	time.Sleep(2 * time.Second)
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	notification, exists := s.notifications[notificationID]
 	if !exists {
@@ -176,6 +197,9 @@ func (s *NotificationService) sendNotification(notificationID uuid.UUID) {
 }
 
 func (s *NotificationService) GetNotificationsByUser(userID uuid.UUID) []Notification {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
 	var userNotifications []Notification
 	for _, notification := range s.notifications {
 		if notification.UserID == userID {
@@ -224,15 +248,25 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"status": "healthy"})
 	})
 
+	// Load configuration from environment
+	cfg := config.LoadFromEnv()
+	if os.Getenv("SERVER_PORT") == "" {
+		cfg.Server.Port = "8082"
+	}
+
 	// Create HTTP server
 	srv := &http.Server{
-		Addr:    ":8082",
-		Handler: r,
+		Addr:              cfg.GetServerAddress(),
+		Handler:           r,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       time.Duration(cfg.Server.ReadTimeout) * time.Second,
+		WriteTimeout:      time.Duration(cfg.Server.WriteTimeout) * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
 
 	// Start server in a goroutine
 	go func() {
-		log.Println("Notification service starting on :8082")
+		log.Printf("Notification service starting on %s", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)
 		}

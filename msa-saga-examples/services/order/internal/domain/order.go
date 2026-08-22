@@ -33,6 +33,7 @@ func (o *Order) CanTransitionTo(newStatus OrderStatus) bool {
 	transitions := map[OrderStatus][]OrderStatus{
 		OrderStatusPending: {
 			OrderStatusPaymentProcessing,
+			OrderStatusStockReserving, // 결제 완료 이벤트 수신 시 PAYMENT_PROCESSING을 거치지 않고 바로 예약 단계로 진행
 			OrderStatusCanceled,
 			OrderStatusFailed,
 		},

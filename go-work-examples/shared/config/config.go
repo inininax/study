@@ -42,7 +42,7 @@ func DefaultConfig() *Config {
 	return &Config{
 		Server: ServerConfig{
 			Port:         "8080",
-			Host:         "localhost",
+			Host:         "",
 			ReadTimeout:  30,
 			WriteTimeout: 30,
 		},
@@ -112,8 +112,12 @@ func LoadFromEnv() *Config {
 	return config
 }
 
-// GetServerAddress returns the full server address
+// GetServerAddress returns the full server address.
+// Host가 비어 있으면 ":<port>" 형태로 모든 인터페이스에 바인딩한다.
 func (c *Config) GetServerAddress() string {
+	if c.Server.Host == "" {
+		return fmt.Sprintf(":%s", c.Server.Port)
+	}
 	return fmt.Sprintf("%s:%s", c.Server.Host, c.Server.Port)
 }
 

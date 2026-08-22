@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/IBM/sarama"
+	commonerrors "github.com/kyungseok/msa-saga-go-examples/common/errors"
 	"go.uber.org/zap"
 )
 
@@ -18,7 +19,7 @@ type Publisher interface {
 
 // Consumer 이벤트 구독 인터페이스
 type Consumer interface {
-	Subscribe(topics []string, handler MessageHandler) error
+	Subscribe(ctx context.Context, topics []string, handler MessageHandler) error
 	Close() error
 }
 
@@ -120,11 +121,10 @@ func NewKafkaConsumer(brokers []string, groupID string, logger *zap.Logger) (*Ka
 	}, nil
 }
 
-// Subscribe 토픽 구독
-func (c *KafkaConsumer) Subscribe(topics []string, handler MessageHandler) error {
+// Subscribe 토픽 구독 (ctx가 취소되면 컨슘 루프도 종료된다)
+func (c *KafkaConsumer) Subscribe(ctx context.Context, topics []string, handler MessageHandler) error {
 	c.handler = handler
 
-	ctx := context.Background()
 	consumerHandler := &consumerGroupHandler{
 		consumer: c,
 	}
@@ -136,6 +136,7 @@ func (c *KafkaConsumer) Subscribe(topics []string, handler MessageHandler) error
 			}
 
 			if ctx.Err() != nil {
+				c.logger.Info("consumer loop stopped", zap.String("topics", fmt.Sprint(topics)))
 				return
 			}
 		}
@@ -174,11 +175,23 @@ func (h *consumerGroupHandler) ConsumeClaim(session sarama.ConsumerGroupSession,
 			zap.String("key", string(message.Key)))
 
 		if err := h.consumer.handler(session.Context(), msg); err != nil {
-			h.consumer.logger.Error("failed to handle message",
+			if commonerrors.IsBusinessError(err) {
+				// 비즈니스 에러(독약 메시지, 도메인 거절 등)는 재시도해도 같은 결과 → 마킹 후 건너뛴다
+				h.consumer.logger.Warn("business error handling message, skipping",
+					zap.Error(err),
+					zap.String("topic", message.Topic),
+					zap.Int64("offset", message.Offset))
+				session.MarkMessage(message, "")
+				continue
+			}
+			// 기술 에러는 마킹 없이 세션을 종료한다. 리밸런스 후 마지막 커밋 오프셋부터 재소비된다.
+			// (마킹 없이 continue만 하면 이후 파티션의 MarkMessage가 실패한 오프셋까지 함께 커밋해 유실됨)
+			h.consumer.logger.Error("technical error handling message, ending session for redelivery",
 				zap.Error(err),
 				zap.String("topic", message.Topic),
+				zap.Int32("partition", message.Partition),
 				zap.Int64("offset", message.Offset))
-			// 에러가 발생해도 메시지를 마킹하여 재처리 방지 (멱등성 보장 필요)
+			return err
 		}
 
 		session.MarkMessage(message, "")

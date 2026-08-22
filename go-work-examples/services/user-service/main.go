@@ -6,18 +6,21 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/kyungseok-lee/go-work-examples/shared/errors"
+	"github.com/kyungseok-lee/go-work-examples/shared/config"
+	sharederrors "github.com/kyungseok-lee/go-work-examples/shared/errors"
 	"github.com/kyungseok-lee/go-work-examples/shared/events"
 	"github.com/kyungseok-lee/go-work-examples/shared/types"
 	"github.com/kyungseok-lee/go-work-examples/shared/utils"
 )
 
 type UserService struct {
+	mu    sync.RWMutex
 	users map[uuid.UUID]types.User
 }
 
@@ -29,11 +32,11 @@ func NewUserService() *UserService {
 
 func (s *UserService) CreateUser(req types.UserCreateRequest) (*types.User, error) {
 	if !utils.IsValidEmail(req.Email) {
-		return nil, errors.NewValidationErrorWithField("email", "Invalid email format")
+		return nil, sharederrors.NewValidationErrorWithField("email", "Invalid email format")
 	}
 
 	if !utils.IsValidName(req.Name) {
-		return nil, errors.NewValidationErrorWithField("name", "Name must be at least 2 characters")
+		return nil, sharederrors.NewValidationErrorWithField("name", "Name must be at least 2 characters")
 	}
 
 	user := types.User{
@@ -44,7 +47,9 @@ func (s *UserService) CreateUser(req types.UserCreateRequest) (*types.User, erro
 		UpdatedAt: time.Now(),
 	}
 
+	s.mu.Lock()
 	s.users[user.ID] = user
+	s.mu.Unlock()
 
 	// Publish event
 	event := events.NewEvent(events.UserCreatedEvent, events.UserCreatedEventData{
@@ -56,22 +61,27 @@ func (s *UserService) CreateUser(req types.UserCreateRequest) (*types.User, erro
 }
 
 func (s *UserService) GetUser(id uuid.UUID) (*types.User, error) {
+	s.mu.RLock()
 	user, exists := s.users[id]
+	s.mu.RUnlock()
 	if !exists {
-		return nil, errors.NewNotFoundErrorWithID(id.String(), "User not found")
+		return nil, sharederrors.NewNotFoundErrorWithID(id.String(), "User not found")
 	}
 	return &user, nil
 }
 
 func (s *UserService) UpdateUser(id uuid.UUID, req types.UserUpdateRequest) (*types.User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	user, exists := s.users[id]
 	if !exists {
-		return nil, errors.NewNotFoundErrorWithID(id.String(), "User not found")
+		return nil, sharederrors.NewNotFoundErrorWithID(id.String(), "User not found")
 	}
 
 	if req.Name != "" {
 		if !utils.IsValidName(req.Name) {
-			return nil, errors.NewValidationErrorWithField("name", "Name must be at least 2 characters")
+			return nil, sharederrors.NewValidationErrorWithField("name", "Name must be at least 2 characters")
 		}
 		user.Name = req.Name
 	}
@@ -96,7 +106,7 @@ func main() {
 
 		user, err := userService.CreateUser(req)
 		if err != nil {
-			if httpErr, ok := err.(errors.HTTPError); ok {
+			if httpErr, ok := err.(sharederrors.HTTPError); ok {
 				c.JSON(httpErr.HTTPStatus(), gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
@@ -117,7 +127,7 @@ func main() {
 
 		user, err := userService.GetUser(id)
 		if err != nil {
-			if httpErr, ok := err.(errors.HTTPError); ok {
+			if httpErr, ok := err.(sharederrors.HTTPError); ok {
 				c.JSON(httpErr.HTTPStatus(), gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
@@ -144,7 +154,7 @@ func main() {
 
 		user, err := userService.UpdateUser(id, req)
 		if err != nil {
-			if httpErr, ok := err.(errors.HTTPError); ok {
+			if httpErr, ok := err.(sharederrors.HTTPError); ok {
 				c.JSON(httpErr.HTTPStatus(), gin.H{"error": err.Error()})
 			} else {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
@@ -164,15 +174,25 @@ func main() {
 		})
 	})
 
+	// Load configuration from environment
+	cfg := config.LoadFromEnv()
+	if os.Getenv("SERVER_PORT") == "" {
+		cfg.Server.Port = "8080"
+	}
+
 	// Create HTTP server
 	srv := &http.Server{
-		Addr:    ":8080",
-		Handler: r,
+		Addr:              cfg.GetServerAddress(),
+		Handler:           r,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       time.Duration(cfg.Server.ReadTimeout) * time.Second,
+		WriteTimeout:      time.Duration(cfg.Server.WriteTimeout) * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
 
 	// Start server in a goroutine
 	go func() {
-		log.Println("User service starting on :8080")
+		log.Printf("User service starting on %s", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)
 		}

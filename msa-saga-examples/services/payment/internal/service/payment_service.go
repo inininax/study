@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"math/rand"
 	"time"
@@ -54,13 +55,16 @@ func (s *paymentService) HandleOrderCreated(ctx context.Context, evt events.Orde
 	// 멱등성 키 생성
 	idempotencyKey := fmt.Sprintf("payment-%d-%s", evt.OrderID, evt.EventID)
 
-	// 이미 처리된 요청인지 확인
+	// 이미 처리된 요청인지 확인 (조회 실패는 fail-closed: ErrNoRows일 때만 신규 진행)
 	existing, err := s.paymentRepo.FindByIdempotencyKey(ctx, idempotencyKey)
 	if err == nil {
 		s.logger.Info("payment already processed",
 			zap.String("idempotencyKey", idempotencyKey),
 			zap.Int64("paymentId", existing.ID))
 		return nil
+	}
+	if !stderrors.Is(err, sql.ErrNoRows) {
+		return errors.Wrap(errors.ErrCodeDatabaseError, "failed to check payment idempotency", err)
 	}
 
 	// 트랜잭션 시작
@@ -90,7 +94,7 @@ func (s *paymentService) HandleOrderCreated(ctx context.Context, evt events.Orde
 		UpdatedAt:          now,
 	}
 
-	if err := s.paymentRepo.Create(ctx, payment); err != nil {
+	if err := s.paymentRepo.CreateTx(ctx, tx, payment); err != nil {
 		return errors.Wrap(errors.ErrCodeDatabaseError, "failed to create payment", err)
 	}
 
@@ -146,13 +150,19 @@ func (s *paymentService) HandleStockReservationFailed(ctx context.Context, evt e
 		zap.Int64("orderId", evt.OrderID),
 		zap.String("reason", evt.Reason))
 
-	// 해당 주문의 결제 조회
+	// 해당 주문의 결제 조회 (미존재는 환불할 것이 없는 비즈니스 상황 → no-op)
 	payment, err := s.paymentRepo.FindByOrderID(ctx, evt.OrderID)
 	if err != nil {
-		s.logger.Error("payment not found for refund",
+		if stderrors.Is(err, sql.ErrNoRows) {
+			s.logger.Warn("payment not found for refund, nothing to do",
+				zap.Int64("orderId", evt.OrderID),
+				zap.String("reason", evt.Reason))
+			return nil
+		}
+		s.logger.Error("failed to find payment for refund",
 			zap.Int64("orderId", evt.OrderID),
 			zap.Error(err))
-		return err
+		return errors.Wrap(errors.ErrCodeDatabaseError, "failed to find payment for refund", err)
 	}
 
 	// 이미 환불된 경우 스킵
@@ -176,8 +186,8 @@ func (s *paymentService) HandleStockReservationFailed(ctx context.Context, evt e
 		return err
 	}
 
-	// 결제 상태 업데이트
-	if err := s.paymentRepo.UpdateStatus(ctx, payment.ID, domain.PaymentStatusRefunded, evt.Reason); err != nil {
+	// 결제 상태 업데이트 (트랜잭션 내)
+	if err := s.paymentRepo.UpdateStatusTx(ctx, tx, payment.ID, domain.PaymentStatusRefunded, evt.Reason); err != nil {
 		return errors.Wrap(errors.ErrCodeDatabaseError, "failed to update payment status", err)
 	}
 
@@ -299,11 +309,14 @@ func (s *paymentService) publishPaymentFailed(
 		return errors.Wrap(errors.ErrCodeDatabaseError, "failed to commit transaction", err)
 	}
 
-	s.logger.Warn("payment failed event published",
+	// 실패 이벤트가 outbox에 커밋+발행되었으면 성공으로 본다.
+	// 비즈니스 결과는 payment.failed 이벤트로 전파되며, 컨슈머가 이를 반영/스킵한다.
+	// 여기서 에러를 반환하면 재처리로 중복 payment.failed 이벤트가 발생한다.
+	s.logger.Warn("payment failed, failure event published durably",
 		zap.Int64("orderId", evt.OrderID),
 		zap.String("reason", reason))
 
-	return fmt.Errorf("payment failed: %s", reason)
+	return nil
 }
 
 // PaymentResult 결제 결과
