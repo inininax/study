@@ -292,6 +292,8 @@ def compare_single_vs_batch(client: weaviate.WeaviateClient):
 
     collection = client.collections.get("Article")
 
+    from weaviate.classes.query import Filter
+
     # 테스트 데이터 (50개)
     test_articles = generate_sample_articles(50)
 
@@ -304,7 +306,9 @@ def compare_single_vs_batch(client: weaviate.WeaviateClient):
     print(f"   소요 시간: {single_time:.2f}초")
 
     # 데이터 정리
-    collection.data.delete_many(where=Filter())
+    collection.data.delete_many(
+        where=Filter.by_property("views").greater_or_equal(0)
+    )
 
     # 2. 배치 삽입
     print("\n2️⃣ 배치 삽입 (50개)...")

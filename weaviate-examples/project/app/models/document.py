@@ -5,7 +5,7 @@
 Pydantic 모델로 요청/응답 데이터 검증
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional
 from datetime import datetime
 from uuid import UUID
@@ -19,7 +19,7 @@ class DocumentBase(BaseModel):
     tags: List[str] = Field(default_factory=list, description="태그 목록")
     metadata: Optional[dict] = Field(default_factory=dict, description="추가 메타데이터")
 
-    @validator("tags")
+    @field_validator("tags")
     def validate_tags(cls, v):
         """태그 검증"""
         if len(v) > 20:

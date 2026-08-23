@@ -7,8 +7,10 @@ Weaviate 클라이언트 관리 및 데이터 작업
 
 import weaviate
 from weaviate.classes.config import Configure, Property, DataType
+from weaviate.classes.init import Auth
 from weaviate.classes.query import Filter, MetadataQuery
 from typing import List, Dict, Any, Optional
+from urllib.parse import urlparse
 from uuid import UUID
 from datetime import datetime
 
@@ -39,14 +41,20 @@ class WeaviateService:
         try:
             logger.info(f"Weaviate 연결 중: {settings.WEAVIATE_URL}")
 
+            parsed = urlparse(settings.WEAVIATE_URL)
+            host = parsed.hostname or "localhost"
+            port = parsed.port or 8080
+            auth = (
+                Auth.api_key(settings.WEAVIATE_API_KEY)
+                if settings.WEAVIATE_API_KEY
+                else None
+            )
+
             # 클라이언트 생성
             self._client = weaviate.connect_to_local(
-                host=settings.WEAVIATE_URL.replace("http://", "")
-                .replace("https://", "")
-                .split(":")[0],
-                port=int(settings.WEAVIATE_URL.split(":")[-1])
-                if ":" in settings.WEAVIATE_URL
-                else 8080,
+                host=host,
+                port=port,
+                auth_credentials=auth,
             )
 
             # 헬스 체크
