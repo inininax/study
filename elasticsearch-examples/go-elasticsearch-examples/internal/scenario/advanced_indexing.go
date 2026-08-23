@@ -119,30 +119,37 @@ func ensureAdvancedIndexingIndex(ctx context.Context, c *esclient.Client) error 
 
 
 // restoreIndexSettings는 인덱싱 완료 후 설정을 원래대로 복구합니다.
-// 참고: Elasticsearch Go 클라이언트 v8의 PutSettings API 사용법이 복잡하므로,
-// 여기서는 로그만 출력하고 실제 설정 복구는 수동으로 수행하도록 안내합니다.
-// 실무에서는 Elasticsearch REST API를 직접 호출하거나 클라이언트 라이브러리의
-// 최신 API를 확인하여 구현해야 합니다.
+// - refresh_interval을 기본값(1s)으로 되돌려 검색 가시성을 회복합니다.
+// - 단일 노드 데모이므로 number_of_replicas는 0을 유지합니다.
 func restoreIndexSettings(ctx context.Context, c *esclient.Client) error {
-	// 실무에서는 다음과 같이 설정을 복구해야 합니다:
-	// PUT /advanced-indexing-demo/_settings
-	// {
-	//   "index": {
-	//     "refresh_interval": "1s",
-	//     "number_of_replicas": 1
-	//   }
-	// }
-	
-	logging.L().Info("indexing completed - settings should be restored manually",
-		"index", advancedIndexingIndex,
-		"note", "refresh_interval and number_of_replicas should be restored via REST API",
-		"restore_command", fmt.Sprintf("PUT /%s/_settings with refresh_interval=1s and number_of_replicas=1", advancedIndexingIndex),
+	settings := map[string]interface{}{
+		"index": map[string]interface{}{
+			"refresh_interval": "1s",
+		},
+	}
+
+	body, err := json.Marshal(settings)
+	if err != nil {
+		return fmt.Errorf("marshal index settings: %w", err)
+	}
+
+	res, err := c.Indices.PutSettings(
+		bytes.NewReader(body),
+		c.Indices.PutSettings.WithContext(ctx),
+		c.Indices.PutSettings.WithIndex(advancedIndexingIndex),
 	)
-	
-	// 실제로는 여기서 REST API를 직접 호출하거나,
-	// 클라이언트 라이브러리의 최신 API를 사용하여 설정을 복구해야 합니다.
-	// 현재는 예제의 목적상 로그만 출력합니다.
-	
+	if err != nil {
+		return fmt.Errorf("put index settings: %w", err)
+	}
+	defer res.Body.Close()
+	if res.IsError() {
+		return fmt.Errorf("put index settings error: %s", res.String())
+	}
+
+	logging.L().Info("restored index settings",
+		"index", advancedIndexingIndex,
+		"refresh_interval", "1s",
+	)
 	return nil
 }
 
