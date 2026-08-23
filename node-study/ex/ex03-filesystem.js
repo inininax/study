@@ -19,6 +19,13 @@ http.createServer(function(req, res) {
 	
 	// async 비동기방식 파일 읽기
 	fs.readFile('./ex03-filesystem.html', function(err, data) {
+		if (err) {
+			res.writeHead(404, {
+				'Content-Type' : 'text/html'
+			});
+			return res.end('404 Not Found');
+		}
+
 		res.writeHead(200, {
 			'Content-Type' : 'text/html'
 		});
