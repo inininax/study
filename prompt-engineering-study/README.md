@@ -15,7 +15,7 @@ Style
   - 명령어 only
 - One-shot learning
   - 명령어 + 예제 제시
-- Few-shot learnin
+- Few-shot learning
   - 명령어 + 예제 제시
 - Chain of Thought
   - 문제 해결 가이드 제공
