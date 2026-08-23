@@ -6,11 +6,12 @@ import 'firebase_options.dart';
 import 'main/mainlist_page.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // config
   await Config.load();
 
   // firebase
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

@@ -11,11 +11,12 @@ import 'intro/intro_page.dart';
 import 'map/map_sample.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // config
   await Config.load();
 
   // firebase
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 
