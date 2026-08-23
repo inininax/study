@@ -98,14 +98,17 @@ class VectorSearcher:
                 search_params = {"metric_type": metric_type}
 
                 # Index type에 따른 파라미터 설정
-                index_info = collection.index()
-                if index_info:
-                    index_type = index_info.params.get("index_type", "")
+                try:
+                    index_info = collection.index()
+                    if index_info:
+                        index_type = index_info.params.get("index_type", "")
 
-                    if index_type == "HNSW":
-                        search_params["params"] = {"ef": 64}
-                    elif index_type in ["IVF_FLAT", "IVF_SQ8"]:
-                        search_params["params"] = {"nprobe": 16}
+                        if index_type == "HNSW":
+                            search_params["params"] = {"ef": 64}
+                        elif index_type in ["IVF_FLAT", "IVF_SQ8"]:
+                            search_params["params"] = {"nprobe": 16}
+                except Exception:
+                    logger.debug("no_index_found_using_default_params")
 
             # 검색 수행
             results = collection.search(

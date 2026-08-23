@@ -80,8 +80,8 @@ class DataInserter:
         with self.pool.get_connection_context() as conn:
             collection = Collection(self.collection_name, using=conn.alias)
 
-            # 데이터 준비
-            data = [vector.tolist()]
+            # 데이터 준비 - list 형식은 컬럼 단위이므로 벡터 리스트의 리스트여야 함
+            data = [[vector.tolist()]]
 
             # 삽입
             mutation_result = collection.insert(data)
