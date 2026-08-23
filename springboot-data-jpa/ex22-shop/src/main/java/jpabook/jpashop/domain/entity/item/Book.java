@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("BOOK")
 @NoArgsConstructor
-@Getter @Setter @EqualsAndHashCode
+@Getter @Setter @EqualsAndHashCode(callSuper = true)
 public class Book extends Item {
     private String author;
     private String isbn;

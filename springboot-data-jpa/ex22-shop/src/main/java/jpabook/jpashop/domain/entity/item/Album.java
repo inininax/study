@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("ALBUM")
 @NoArgsConstructor
-@Getter @Setter @EqualsAndHashCode
+@Getter @Setter @EqualsAndHashCode(callSuper = true)
 public class Album extends Item {
     private String artist;
     private String etc;

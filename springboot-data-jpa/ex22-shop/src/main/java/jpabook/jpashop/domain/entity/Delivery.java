@@ -25,7 +25,8 @@ public class Delivery extends BaseEntity {
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
     private Order order;
 
-    @Enumerated
+    // Address 는 @Embeddable 값 타입이므로 @Embedded 로 매핑한다 (기존 @Enumerated 는 enum 전용)
+    @Embedded
     private Address address;
 
     @Enumerated(EnumType.STRING)

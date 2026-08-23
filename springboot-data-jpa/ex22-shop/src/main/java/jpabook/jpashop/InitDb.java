@@ -6,6 +6,7 @@ import jpabook.jpashop.domain.entity.Order;
 import jpabook.jpashop.domain.entity.OrderItem;
 import jpabook.jpashop.domain.entity.embed.Address;
 import jpabook.jpashop.domain.entity.item.Book;
+import jpabook.jpashop.domain.enums.DeliveryStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +90,8 @@ public class InitDb {
         private Delivery createDelivery(Member member) {
             Delivery delivery = new Delivery();
             delivery.setAddress(member.getAddress());
+            // 배송 준비 상태로 초기화 (READY 가 아니면 cancel() 의 상태 검증 경로가 깨진다)
+            delivery.setStatus(DeliveryStatus.READY);
             return delivery;
         }
     }

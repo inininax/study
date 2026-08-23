@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("MOVIE")
 @NoArgsConstructor
-@Getter @Setter @EqualsAndHashCode
+@Getter @Setter @EqualsAndHashCode(callSuper = true)
 public class Movie extends Item {
     private String director;
     private String actor;
