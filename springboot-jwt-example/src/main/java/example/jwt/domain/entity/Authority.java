@@ -39,7 +39,7 @@ public class Authority extends BaseEntity {
     }
 
     public void addUserAuthority(UserAuthority userAuthority) {
-        if (!this.userAuthorities.contains(userAuthority)) {
+        if (this.userAuthorities.contains(userAuthority)) {
             return;
         }
         this.userAuthorities.add(userAuthority);

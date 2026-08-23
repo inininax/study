@@ -26,14 +26,12 @@ public class TokenProvider {
     private static final String USER_ID_KEY = "id";
     private static final String AUTHORITIES_KEY = "auth";
 
-    private final String secret;
     private final long tokenValidityInMilliseconds;
     private final Key key;
 
     public TokenProvider(@Value("${jwt.secret}") String secret,
                          @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
-        this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds;
+        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
@@ -53,6 +51,11 @@ public class TokenProvider {
                 .compact();
     }
 
+    /**
+     * 서명/만료가 유효해도 필수 클레임(auth, id)이 없으면 인증으로 취급하지 않는다.
+     * null 반환 시 호출부(JwtFilter)가 인증 정보를 저장하지 않아 기존 "토큰 없음" 경로와
+     * 동일하게 401 로 처리된다.
+     */
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -60,7 +63,13 @@ public class TokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+        Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
+        if (authoritiesClaim == null || claims.get(USER_ID_KEY) == null) {
+            log.info("JWT 토큰에 필수 클레임({},{})이 없습니다.", AUTHORITIES_KEY, USER_ID_KEY);
+            return null;
+        }
+
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(authoritiesClaim.toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
