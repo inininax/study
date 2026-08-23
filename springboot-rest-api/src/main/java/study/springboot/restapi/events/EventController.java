@@ -83,7 +83,8 @@ public class EventController {
         Event event = optionalEvent.get();
         EventResource eventResource = new EventResource(event);
         eventResource.add(new Link("/docs/index.html#resources-events-get").withRel("profile"));
-        if (event.getManager().equals(currentUser)) {
+        // 비로그인(null) 요청에서 manager null 비교로 NPE 가 나지 않도록 방어한다
+        if (currentUser != null && currentUser.equals(event.getManager())) {
             eventResource.add(linkTo(EventController.class).slash(event.getId()).withRel("update-event"));
         }
 
@@ -110,7 +111,8 @@ public class EventController {
         }
 
         Event existingEvent = optionalEvent.get();
-        if (!existingEvent.getManager().equals(currentUser)) {
+        // 비로그인(null) 요청은 곧바로 401, manager null 비교 NPE 도 함께 방어한다
+        if (currentUser == null || !currentUser.equals(existingEvent.getManager())) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
