@@ -13,6 +13,10 @@ import java.math.BigDecimal
 interface ProductRepository : ReactiveMongoRepository<Product, String> {
     
     fun findByNameContainingIgnoreCase(name: String, pageable: Pageable): Flux<Product>
+
+    // 전체 문서 대상 DB 레벨 페이징용 (@Query("{}") + Pageable → skip/limit/sort 적용)
+    @Query("{}")
+    fun findAllProducts(pageable: Pageable): Flux<Product>
     
     fun findByCategory(category: String, pageable: Pageable): Flux<Product>
     
@@ -35,6 +39,12 @@ interface ProductRepository : ReactiveMongoRepository<Product, String> {
     fun findAvailableProducts(pageable: Pageable): Flux<Product>
     
     fun countByCategory(category: String): Mono<Long>
-    
+
     fun countByInStockTrue(): Mono<Long>
+
+    fun countByNameContainingIgnoreCase(name: String): Mono<Long>
+
+    fun countByPriceBetween(minPrice: BigDecimal, maxPrice: BigDecimal): Mono<Long>
+
+    fun countByTagsIn(tags: List<String>): Mono<Long>
 }

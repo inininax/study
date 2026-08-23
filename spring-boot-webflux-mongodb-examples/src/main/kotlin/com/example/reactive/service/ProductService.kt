@@ -51,10 +51,11 @@ class ProductService(
     }
 
     suspend fun getAllProducts(page: Int = 0, size: Int = 20, sortBy: String = "createdAt"): PagedResponse<ProductResponse> {
+        // DB 레벨에서 skip/limit 로 페이징한다 (전체 조회 후 메모리에서 자르지 않음)
         val pageable: Pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy))
         val totalElements = productRepository.count().awaitFirst()
-        
-        val products = productRepository.findAll(Sort.by(Sort.Direction.DESC, sortBy))
+
+        val products = productRepository.findAllProducts(pageable)
             .asFlow()
             .map { it.toResponse() }
             .toList()
@@ -68,7 +69,8 @@ class ProductService(
             .asFlow()
             .map { it.toResponse() }
             .toList()
-        val totalElements = products.size.toLong()
+        // 현재 페이지 건수가 아닌 조건 전체 건수로 메타데이터를 만든다
+        val totalElements = productRepository.countByNameContainingIgnoreCase(name).awaitFirst()
 
         return PageUtils.createPagedResponse(products, page, size, totalElements)
     }
@@ -104,28 +106,26 @@ class ProductService(
         size: Int = 20
     ): PagedResponse<ProductResponse> {
         val pageable: Pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "price"))
-        val totalElements = productRepository.count().awaitFirst()
-        
+        val totalElements = productRepository.countByPriceBetween(minPrice, maxPrice).awaitFirst()
+
         val products = productRepository.findByPriceBetween(minPrice, maxPrice, pageable)
             .asFlow()
             .map { it.toResponse() }
             .toList()
-        val actualTotalElements = products.size.toLong()
 
-        return PageUtils.createPagedResponse(products, page, size, actualTotalElements)
+        return PageUtils.createPagedResponse(products, page, size, totalElements)
     }
 
     suspend fun getProductsByTags(tags: List<String>, page: Int = 0, size: Int = 20): PagedResponse<ProductResponse> {
         val pageable: Pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))
-        val totalElements = productRepository.count().awaitFirst()
-        
+        val totalElements = productRepository.countByTagsIn(tags).awaitFirst()
+
         val products = productRepository.findByTagsIn(tags, pageable)
             .asFlow()
             .map { it.toResponse() }
             .toList()
-        val actualTotalElements = products.size.toLong()
 
-        return PageUtils.createPagedResponse(products, page, size, actualTotalElements)
+        return PageUtils.createPagedResponse(products, page, size, totalElements)
     }
 
     suspend fun updateProduct(id: String, request: UpdateProductRequest): ProductResponse {
