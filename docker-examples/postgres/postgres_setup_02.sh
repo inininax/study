@@ -77,6 +77,7 @@ EOL
 create_postgres_conf() {
     log_info "Creating PostgreSQL configuration..."
     cat > "$ROOT_PATH/conf/postgresql.conf" << EOL
+shared_preload_libraries = 'pg_stat_statements'
 shared_buffers = '1GB'
 work_mem = '64MB'
 maintenance_work_mem = '256MB'

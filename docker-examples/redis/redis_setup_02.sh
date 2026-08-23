@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Redis 비밀번호 (환경변수로 재정의 가능)
+REDIS_PASSWORD="${REDIS_PASSWORD:-redis_password}"
+
 # 색상 정의
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -65,7 +68,7 @@ create_directories() {
 create_env_file() {
     log_info "Creating .env file..."
     cat > "$ROOT_PATH/.env" << EOL
-REDIS_PASSWORD=redis_password
+REDIS_PASSWORD=${REDIS_PASSWORD}
 REDIS_PORT=6379
 REDIS_REPLICA_PORT=6380
 SENTINEL_PORT=26379
@@ -87,8 +90,8 @@ supervised systemd
 dir /data
 
 # 보안 설정
-requirepass \${REDIS_PASSWORD}
-masterauth \${REDIS_PASSWORD}
+requirepass ${REDIS_PASSWORD}
+masterauth ${REDIS_PASSWORD}
 
 # 퍼시스턴스 설정
 appendonly yes
@@ -131,10 +134,10 @@ dir /data
 
 # 복제 설정
 replicaof redis-master 6379
-masterauth \${REDIS_PASSWORD}
+masterauth ${REDIS_PASSWORD}
 
 # 보안 설정
-requirepass \${REDIS_PASSWORD}
+requirepass ${REDIS_PASSWORD}
 
 # 퍼시스턴스 설정
 appendonly yes
@@ -160,7 +163,7 @@ sentinel monitor mymaster redis-master 6379 2
 sentinel down-after-milliseconds mymaster 5000
 sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 60000
-sentinel auth-pass mymaster \${REDIS_PASSWORD}
+sentinel auth-pass mymaster ${REDIS_PASSWORD}
 EOL
 }
 

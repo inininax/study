@@ -108,3 +108,4 @@ BACKUP_DIR=/tmp/db-backups ./backup/backup.sh
 - 설정 파일 변경 후에는 `docker compose config`로 Compose 구문을 먼저 확인합니다.
 - 로그는 `docker compose logs -f <service>`로 확인합니다.
 - MongoDB keyfile을 새로 만들 때는 `openssl rand -base64 756 > keyfile/mongo-keyfile && chmod 400 keyfile/mongo-keyfile`를 사용합니다.
+- `mongodb/mongodb_02`는 `./mongodb_setup_02.sh`를 먼저 실행해야 합니다(keyfile 생성 및 소유권 uid 999 설정 포함).

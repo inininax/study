@@ -63,3 +63,6 @@ venv/
 
 # ===== Docker bind-mount 산출물 =====
 docker-study/hellophp/mysql/data/
+
+# Go 빌드 바이너리 (hello-world 데모)
+hello-world/spinning-hexagon-go/spinning-hexagon-go

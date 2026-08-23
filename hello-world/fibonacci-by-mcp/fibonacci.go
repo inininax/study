@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"math"
 )
 
@@ -38,4 +39,15 @@ func addUint64(a, b uint64) (uint64, bool) {
 		return 0, true
 	}
 	return a + b, false
+}
+
+func main() {
+	for i := 0; i <= 9; i++ {
+		result, err := Fibonacci(i)
+		if err != nil {
+			fmt.Printf("F(%d): error: %v\n", i, err)
+			continue
+		}
+		fmt.Printf("F(%d) = %d\n", i, result)
+	}
 }

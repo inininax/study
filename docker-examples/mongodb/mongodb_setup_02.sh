@@ -255,6 +255,9 @@ create_keyfile() {
     log_info "Creating MongoDB keyfile..."
     openssl rand -base64 756 > "$ROOT_PATH/keyfile/mongo-keyfile"
     chmod 400 "$ROOT_PATH/keyfile/mongo-keyfile"
+    if [ "$(uname)" = "Linux" ]; then
+        chown 999:999 "$ROOT_PATH/keyfile/mongo-keyfile"
+    fi
 }
 
 # 백업 스크립트 생성

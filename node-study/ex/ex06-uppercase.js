@@ -1,5 +1,5 @@
 var http = require('http');
-var uc = require('upper-case');
+var uc = require('upper-case').upperCase;
 
 http.createServer(function(req, res) {
 
