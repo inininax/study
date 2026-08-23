@@ -9,7 +9,6 @@ import jpabook.jpashop.domain.entity.item.Book;
 import jpabook.jpashop.domain.entity.Item;
 import jpabook.jpashop.exception.NoEnoughStockException;
 import jpabook.jpashop.repository.OrderRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +64,7 @@ class OrderServiceTest extends StringTestSupport {
                 .as("재고 수량 부족 예외가 발생해야 한다.");
     }
 
-    @Disabled
+    // Delivery @Embedded 매핑 + 시드 READY 상태 수정으로 NPE 해소되어 활성화함
     @Test
     @DisplayName("주문 취소")
     void cancel() {
