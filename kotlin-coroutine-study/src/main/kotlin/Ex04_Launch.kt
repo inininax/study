@@ -44,9 +44,10 @@ fun ex04CancellationException() = runBlocking {
             delay(1_000L)
             printWithThread("try 2")
         } catch (e: CancellationException) {
-            // nothing
+            throw e // 취소 예외는 재던져야 정상 취소
+//            // nothing // swallow하면 취소되지 않는다 (아래 "취소 실패"가 출력됨)
         }
-        printWithThread("취소 실패")
+        printWithThread("취소 실패") // 재던지므로 도달하지 않음
     }
 
     delay(100L)

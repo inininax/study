@@ -18,7 +18,7 @@ fun main() {
 // Expression
 fun getGradeWithSwitch(score: Int): String {
     return when (score) {
-        in 90..99 -> "A"
+        in 90..100 -> "A" // 100점도 A학점에 포함
         in 80..89 -> "B"
         in 70..79 -> "C"
         in 60..69 -> "D"

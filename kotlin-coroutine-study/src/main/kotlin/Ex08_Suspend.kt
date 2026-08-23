@@ -16,13 +16,13 @@ fun ex08Suspend1() = runBlocking {
     printWithThread(result2.await())
 }
 
-fun deferredCall1(): Int {
-    Thread.sleep(1_000L)
+suspend fun deferredCall1(): Int {
+    delay(1_000L) // Thread.sleep 대신 delay로 스레드를 점유하지 않는다
     return 100
 }
 
-fun deferredCall2(num: Int): Int {
-    Thread.sleep(1_000L)
+suspend fun deferredCall2(num: Int): Int {
+    delay(1_000L)
     return num * 2
 }
 
@@ -35,10 +35,10 @@ fun ex08Suspend2() = runBlocking {
 }
 
 suspend fun call1(): Int {
-    return CoroutineScope(Dispatchers.Default).async {
-        Thread.sleep(1_000L)
+    return withContext(Dispatchers.Default) { // 별도 스코프 대신 withContext로 컨텍스트만 전환
+        delay(1_000L)
         100
-    }.await()
+    }
 }
 
 suspend fun call2(num: Int): Int {

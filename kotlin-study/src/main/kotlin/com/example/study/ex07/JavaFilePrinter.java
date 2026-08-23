@@ -13,9 +13,10 @@ public class JavaFilePrinter {
     public void readFile() throws IOException {
         File currentFile = new File(".");
         File file = new File(currentFile.getAbsoluteFile() + "/README.md");
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        System.out.println(reader.readLine());
-        reader.close();
+        // try-with-resources로 예외 발생 시에도 자동 close
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            System.out.println(reader.readLine());
+        }
     }
 
     public void readFile(String path) throws IOException {

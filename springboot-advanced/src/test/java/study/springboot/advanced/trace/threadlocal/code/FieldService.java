@@ -19,6 +19,7 @@ public class FieldService {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt(); // 인터럽트 상태 복원
         }
     }
 }

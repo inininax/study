@@ -16,9 +16,10 @@ fun main() {
 fun readFile() {
     val currentFile = File(".");
     val file = File(currentFile.absolutePath + "/README2.md");
-    val reader = BufferedReader(FileReader(file));
-    println(reader.readLine());
-    reader.close();
+    // use 블록으로 예외 발생 여부와 무관하게 자동 close
+    BufferedReader(FileReader(file)).use { reader ->
+        println(reader.readLine());
+    }
 }
 
 @Throws(IOException::class)

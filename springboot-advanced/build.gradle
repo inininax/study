@@ -8,6 +8,9 @@ group = 'study.springboot'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+// Boot 2.7 BOM의 Lombok(1.18.24)은 JDK 21 javac와 비호환 — 명시적으로 상향
+ext['lombok.version'] = '1.18.30'
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor

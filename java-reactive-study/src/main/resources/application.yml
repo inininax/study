@@ -2,17 +2,23 @@ spring:
   profiles:
     active: local
 server:
-  port: 80
+  port: ${SERVER_PORT:8080}
 logging:
   file:
     name: ./logs/app.log
     path: ./logs
 ---
 spring:
-  profiles: local
+  config:
+    activate:
+      on-profile: local
 ---
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
 ---
 spring:
-  profiles: production
+  config:
+    activate:
+      on-profile: production

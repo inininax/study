@@ -1,6 +1,7 @@
 plugins {
-    id 'org.springframework.boot' version '2.2.1.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    // 2.2.x Boot 플러그인은 Gradle 7+에서 제거된 maven 베이스 플러그인을 참조해 실패함 (Gradle 8 호환선으로 상향)
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
 }
 
