@@ -29,7 +29,7 @@ class Cage5<T>(
 ) where T : Animal, T : Comparable<T> {
     //private val animals: MutableList<T> = mutableListOf()
 
-    fun printAfterSoring() {
+    fun printAfterSorting() {
         this.animals.sorted()
             .map { it.name }
             .let { println(it) }

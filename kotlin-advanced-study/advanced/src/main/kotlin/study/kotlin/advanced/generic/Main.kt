@@ -41,7 +41,7 @@ fun example7() {
         Sparrow(),
     )
     val cage = Cage5(birds)
-    cage.printAfterSoring()
+    cage.printAfterSorting()
 }
 
 /**
