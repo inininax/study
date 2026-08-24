@@ -19,11 +19,22 @@ class ReactiveApplicationTests @Autowired constructor(
 ) {
 
     companion object {
+        /**
+         * CI 등 외부 MongoDB가 제공되면 그 URI를 사용하고(임베디드 다운로드 생략),
+         * 없으면 flapdoodle embedded mongod를 띄운다.
+         */
+        private val externalUri: String? = System.getenv("MONGODB_TEST_URI")
+
         @JvmStatic
         @DynamicPropertySource
         fun mongodbProperties(registry: DynamicPropertyRegistry) {
-            registry.add("spring.data.mongodb.host") { EmbeddedMongo.host }
-            registry.add("spring.data.mongodb.port") { EmbeddedMongo.port.toString() }
+            if (externalUri != null) {
+                registry.add("spring.data.mongodb.uri") { externalUri }
+                println("[MONGO-TEST] using external MongoDB via MONGODB_TEST_URI")
+            } else {
+                registry.add("spring.data.mongodb.host") { EmbeddedMongo.host }
+                registry.add("spring.data.mongodb.port") { EmbeddedMongo.port.toString() }
+            }
         }
     }
 

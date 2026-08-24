@@ -17,6 +17,22 @@ jobs:
       run:
         working-directory: spring-boot-webflux-mongodb-examples
 
+    # flapdoodle 임베디드 대신 실제 MongoDB 서비스 컨테이너 사용
+    # (러너에서 mongod 바이너리 다운로드 실패 이슈 회피 + 프로덕션 유사 환경)
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      MONGODB_TEST_URI: mongodb://localhost:27017/reactive_test_db
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
