@@ -81,9 +81,9 @@
 - [ ] 복합 조건 (AND, OR, NOT)
 - [ ] 범위 검색
 
-**학습 자료** (작성 예정):
-- `lessons/02-intermediate/02_hybrid_search.py` (예정)
-- `lessons/02-intermediate/03_filters.py` (예정)
+**학습 자료**:
+- `lessons/02-intermediate/02_hybrid_search.py`
+- `lessons/02-intermediate/03_filters.py`
 
 #### 6주차: 집계 및 분석
 - [ ] 그룹화 (Group By)
@@ -91,8 +91,8 @@
 - [ ] 통계 추출
 - [ ] 메타 분석
 
-**학습 자료** (작성 예정):
-- `lessons/02-intermediate/04_aggregations.py` (예정)
+**학습 자료**:
+- `lessons/02-intermediate/04_aggregations.py`
 
 **체크포인트**:
 - ✅ 의미론적 검색과 키워드 검색의 차이를 이해한다
@@ -114,7 +114,7 @@
 - [ ] 답변 품질 개선
 
 **학습 자료**:
-- `lessons/03-advanced/01_rag_implementation.py` (작성 예정)
+- `lessons/03-advanced/01_rag_implementation.py`
 
 **실습 프로젝트**:
 - 문서 기반 Q&A 챗봇
@@ -128,7 +128,7 @@
 - [ ] 복제 (Replication)
 
 **학습 자료**:
-- `lessons/03-advanced/02_multi_tenancy.py` (작성 예정)
+- `lessons/03-advanced/02_multi_tenancy.py`
 
 #### 10주차: 성능 최적화
 - [ ] 인덱싱 전략
@@ -139,8 +139,8 @@
 - [ ] 에러 핸들링
 
 **학습 자료**:
-- `lessons/03-advanced/03_performance_optimization.py` (작성 예정)
-- `lessons/03-advanced/04_monitoring.py` (작성 예정)
+- `lessons/03-advanced/03_performance_optimization.py`
+- `lessons/03-advanced/04_monitoring.py`
 
 **체크포인트**:
 - ✅ RAG 패턴을 구현하고 LLM과 통합할 수 있다
