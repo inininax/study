@@ -56,3 +56,19 @@
 1. **Docker 필요 검증 항목**: msa-saga e2e, airflow 스택 기동, ELK/벡터DB 스택, MariaDB 의존 테스트(jwt, ex22-shop 등), Mongo 통합 테스트 — 코드 수정은 정적·컴파일·유닛으로 검증됨
 2. **springboot-rest-api 툴체인**: Boot 2.1.8 + asciidoctor 1.5.8은 Gradle 8과 비호환 — REST Docs/HATEOAS API 마이그레이션이 필요한 대형 변경이라 코드 수정만 적용(격리 하니스에서 26개 테스트 통과 확인)
 3. **보존 정책**: era-pinned 3개 폴더는 AGENTS.md 정책에 따라 의도적으로 미수정
+
+## 5. 콘텐츠 완성 스윕 결과 (2차)
+
+"중단된 프로젝트 완료" 오디트로 발견된 미완성 작업 중 스펙이 존재하던 항목을 모두 구현했습니다.
+
+| 폴더 | 완성된 것 | 검증 |
+|---|---|---|
+| weaviate-examples | 중급 레슨 3종(하이브리드/필터/집계) + 고급 티어 전체 4레슨+README | v4 클라이언트 실임포트 + 생성자 검증 |
+| milvus-examples | level_2 3레슨 + multi-tenant 프로젝트 | py_compile 전수 |
+| qdrant-examples | 04-optimization 벤치마크·캐싱·모니터링 6파일 | py_compile 전수 |
+| kotlin-coroutine-study | 누락 Ex02.kt 작성(시퀀스 연속성 복구) | gradle compileKotlin |
+| kotlin-study | Penguin.fly TODO() 크래시 제거 | 컴파일 |
+| node/shell-study | README 실투성 문서화 | — |
+
+### 잔여 백로그 (L-규모, 의도적 보류)
+msa-saga e2e/Temporal 구현, kotlin-advanced 5개 빈 챕터, python-study 02~04 예제/해답 세트, qdrant real-project RAG 확장, webflux-mongo TODO 체크리스트(JWT/Redis/CI). 필요 시 별도 세션에서 착수 가능합니다.
