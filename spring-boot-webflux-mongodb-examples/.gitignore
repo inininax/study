@@ -60,7 +60,6 @@ Thumbs.db
 ehthumbs.db
 
 ### Docker ###
-.dockerignore
 
 ### Kubernetes ###
 *.yaml.bak

@@ -1,6 +1,9 @@
 {
   "name": "learn-babel-webpack",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "build": "webpack -w"
   },

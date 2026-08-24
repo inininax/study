@@ -18,6 +18,16 @@ https://kangax.github.io/compat-table/es6/<br>
 | ES.Next | Next version |
 <br>
 
+## 실행 요구사항
+
+- **Node.js 14.x** 필수입니다. (`node-sass@5`는 Node 14까지만 호환되며, 모던 Node에서는 설치/빌드가 실패합니다.)
+- nvm 사용 예:
+  ```shell
+  nvm install 14
+  nvm use
+  ```
+- **모던 Node에서 `npm install`이 실패하는 것은 코드 버그가 아니라 환경 문제입니다.** Node 14 환경에서 재시도하세요.
+
 ## Babel + Webpack
 Index
 - [1. Config Babel](./config-babel.md)

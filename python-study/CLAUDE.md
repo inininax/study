@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 03-advanced/      (8 챕터)  데코레이터, 메타클래스, asyncio, 타입 힌트, 테스팅 등
 04-expert/        (6 챕터)  디자인 패턴, FastAPI, 데이터 분석, 자동화, 베스트 프랙티스
 examples/         단계별 실행 가능한 .py 예제 (현재는 01-beginner 만)
-exercises/        단계별 연습 문제 (problems.md) 와 정답 (solutions.py — 01-beginner)
+exercises/        단계별 연습 문제 (problems.md) 와 정답 (solutions.py — 전 단계)
 ```
 
 핵심 불변량:

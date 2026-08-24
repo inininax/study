@@ -158,5 +158,5 @@ suspend fun createUser(@RequestBody request: CreateUserRequest): UserResponse {
 - [ ] 인증/인가 (JWT) 추가
 - [ ] Redis 캐시 연동
 - [ ] 메트릭 및 모니터링
-- [ ] Docker 컨테이너화
-- [ ] CI/CD 파이프라인
+- [x] Docker 컨테이너화
+- [x] CI/CD 파이프라인

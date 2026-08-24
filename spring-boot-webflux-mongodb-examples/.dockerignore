@@ -1,0 +1,11 @@
+build/
+.gradle/
+src/test/
+.git/
+.github/
+.idea/
+.vscode/
+.DS_Store
+README.md
+Dockerfile
+docker-compose*.yml

@@ -5,10 +5,10 @@
 ## 구조
 ```
 exercises/
-├── 01-beginner/        # 초급 연습 문제
-├── 02-intermediate/    # 중급 연습 문제
-├── 03-advanced/        # 고급 연습 문제
-└── 04-expert/          # 전문가 연습 문제
+├── 01-beginner/        # 초급 연습 문제 + solutions.py
+├── 02-intermediate/    # 중급 연습 문제 + solutions.py
+├── 03-advanced/        # 고급 연습 문제 + solutions.py
+└── 04-expert/          # 전문가 연습 문제 + solutions.py
 ```
 
 ## 학습 방법
@@ -27,11 +27,14 @@ vim my_solution.py
 ```
 
 ### 3. 정답과 비교
-정답은 `01-beginner/solutions.py`에 모아 제공됩니다. **먼저 스스로 풀어본 후** 비교하세요.
+정답은 각 단계 폴더의 `solutions.py`에 제공됩니다. **먼저 스스로 풀어본 후** 비교하세요.
 
 ### 4. 테스트 실행
 ```bash
-python3 01-beginner/solutions.py   # assert 기반 자가 점검 (외부 의존성 없음)
+python3 01-beginner/solutions.py      # 초급
+python3 02-intermediate/solutions.py  # 중급
+python3 03-advanced/solutions.py      # 고급 (실행 수 초 소요)
+python3 04-expert/solutions.py        # 전문가 — 외부 라이브러리 없이 stdlib로 등가 구현
 ```
 
 ## 문제 풀이 팁
