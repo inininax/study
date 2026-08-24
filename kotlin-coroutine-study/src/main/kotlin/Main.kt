@@ -4,6 +4,9 @@ fun main() {
     printWithThread("main start") // ex: main @coroutine#1
 
 //    ex01()
+//    ex02()
+//    ex02ThreadSleep()
+//    ex02Sequence()
 //    ex03()
 //    ex03Cancel()
 //    ex03Join()

@@ -20,6 +20,8 @@ class Penguin(
     }
 
     override fun fly() {
-        TODO("Not yet implemented")
+        // 펭귄은 날 수 없다 - Flyable 의 구현 의무만 채우고 no-op 로 안전하게 처리
+        // (TODO() 로 두면 호출 시점에 NotImplementedError 발생)
+        println("펭귄은 날 수 없습니다")
     }
 }
