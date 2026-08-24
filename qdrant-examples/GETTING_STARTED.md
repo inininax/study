@@ -124,7 +124,12 @@ cd 02-vector-search
 
 cat README.md
 
-# TODO: 예제 파일 실행
+# 검색 모듈은 라이브러리 형태로 제공된다
+# (단계 4의 벤치마크와 단계 5의 RAG 파이프라인에서 사용)
+
+# 모듈 임포트 스모크 테스트
+python -c "from search.filters import FilterBuilder; print('FilterBuilder OK')"
+python -c "from search.semantic import SemanticSearchEngine; print('SemanticSearchEngine OK')"
 ```
 
 ### 단계 3: API 서버 (4-5시간)
@@ -147,8 +152,25 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```bash
 cd 04-optimization
 
-# 벤치마크 실행
+cat README.md
+
+# 벤치마크: 검색 성능 측정 (QPS, P50/P95/P99 latency)
 python benchmarks/search_benchmark.py
+
+# 벤치마크: HNSW 인덱스 파라미터(m, ef_construct)별 색인/검색 성능 비교
+python benchmarks/indexing_benchmark.py
+
+# 벤치마크: 배치 크기별 메모리 사용량 프로파일링
+python benchmarks/memory_profiling.py
+
+# 캐싱: Redis 검색 결과 캐시 데모 (Redis 필요)
+python caching/redis_cache.py
+
+# 캐싱: Cache-Aside / Write-Through / TTL Refresh 전략 비교
+python caching/strategies.py
+
+# 모니터링: Prometheus 메트릭 수집 (http://localhost:8001/metrics)
+python monitoring/metrics.py
 ```
 
 ### 단계 5: RAG 프로젝트 (6-8시간)
