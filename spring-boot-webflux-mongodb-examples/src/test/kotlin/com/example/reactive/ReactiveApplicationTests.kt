@@ -65,7 +65,9 @@ class ReactiveApplicationTests @Autowired constructor(
         assertEquals("embedded-mongo-roundtrip", found.name)
         assertEquals(BigDecimal("19.99"), found.price)
 
-        println("[EMBEDDED-MONGO-PROOF] round-trip OK via mongodb://${EmbeddedMongo.host}:${EmbeddedMongo.port} -> id=${found.id} name=${found.name}")
+        // NOTE: 이 println은 EmbeddedMongo.host 에 접근하지 않는다 — 접근 시 lazy 초기화가
+        // 실행되어 외부 Mongo 사용 중(CI)에도 임베디드 다운로드를 유발한다.
+        println("[MONGO-TEST-PROOF] round-trip OK -> id=${found.id} name=${found.name}")
 
         productRepository.deleteAll().block(timeout)
     }
